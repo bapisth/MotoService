@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="80dp"
+             android:layout_height="80dp"
+             android:layout_centerHorizontal="true">
+
+    <ImageView
+        android:id="@+id/logo_white"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
+        android:fitsSystemWindows="true"
+        android:adjustViewBounds="true"
+        android:layout_gravity="center"
+        android:src="@drawable/app_logo" />
+</FrameLayout>
+<!--<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+           android:id="@+id/logo_white"
+           android:layout_width="200dp"
+           android:layout_height="@dimen/materialviewpager_logoHeight"
+           android:fitsSystemWindows="true"
+           android:adjustViewBounds="true"
+           android:layout_centerHorizontal="true"
+           android:src="@drawable/logo_white" />-->
+<!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/logo_white"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/materialviewpager_logoHeight"
+    android:text="@string/app_name"
+    android:textSize="30sp"
+    android:textColor="@android:color/white"/>-->

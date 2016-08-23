@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "98631133161",
+    "firebase_url": "https://motoservice-ef94a.firebaseio.com",
+    "project_id": "motoservice-ef94a",
+    "storage_bucket": "motoservice-ef94a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98631133161:android:a2ed52cf2817e9c6",
+        "android_client_info": {
+          "package_name": "com.urja.motoservice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98631133161-m8eoolki2o8c8177ml7uca99qk2lv9fh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.urja.motoservice",
+            "certificate_hash": "B490B303023366CA9E1C5CB32EAB7E20EF895D25"
+          }
+        },
+        {
+          "client_id": "98631133161-d6arv4t1bjko0tumevk63tqf7t9f6pno.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNqsLFogF9rcc7178aW6uT1tHJaoT32yw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98631133161-d6arv4t1bjko0tumevk63tqf7t9f6pno.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
