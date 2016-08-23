@@ -19,6 +19,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -150,7 +151,7 @@ public class DashboardActivity extends AppCompatActivity {
     private void initializeDrawer(Bundle savedInstanceState) {
         final IProfile profile = new ProfileDrawerItem().withName(mName)
                 .withEmail(CurrentLoggedInUser.getCurrentFirebaseUser().getEmail())
-                .withIcon(GoogleMaterial.Icon.gmd_account)
+                //.withIcon(GoogleMaterial.Icon.gmd_account)
                 .withIdentifier(100);
         // Create the AccountHeader
         headerResult = new AccountHeaderBuilder()
@@ -158,13 +159,13 @@ public class DashboardActivity extends AppCompatActivity {
                 .withTranslucentStatusBar(true)
                 .withHeaderBackground(R.drawable.header)
                 .withSavedInstance(savedInstanceState)
-                .addProfiles(
+                /*.addProfiles(
                         profile,
                         //don't ask but google uses 14dp for the add account icon in gmail but 20dp for the normal icons (like manage account)
                         new ProfileSettingDrawerItem().withName("Add Account").withDescription("Add new GitHub Account").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_plus).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING),
                         new ProfileSettingDrawerItem().withName("Manage Account").withIcon(GoogleMaterial.Icon.gmd_settings).withIdentifier(100001)
-                )
-                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                )*/
+                /*.withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
                         //sample usage of the onProfileChanged listener
@@ -183,7 +184,7 @@ public class DashboardActivity extends AppCompatActivity {
                         //false if you have not consumed the event and it should close the drawer
                         return false;
                     }
-                })
+                })*/
                 .withSavedInstance(savedInstanceState)
                 .build();
 
@@ -197,10 +198,10 @@ public class DashboardActivity extends AppCompatActivity {
                 .withAccountHeader(headerResult) //set the AccountHeader we created earlier for the header
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.drawer_item_home).withIcon(FontAwesome.Icon.faw_home).withBadge("99").withIdentifier(1),
-                        new PrimaryDrawerItem().withName("Menu 2").withIcon(FontAwesome.Icon.faw_gamepad),
-                        new PrimaryDrawerItem().withName("Menu 3").withIcon(FontAwesome.Icon.faw_eye).withBadge("6").withIdentifier(2),
+                        //new PrimaryDrawerItem().withName("Menu 2").withIcon(FontAwesome.Icon.faw_gamepad),
+                        //new PrimaryDrawerItem().withName("Menu 3").withIcon(FontAwesome.Icon.faw_eye).withBadge("6").withIdentifier(2),
 
-                        new SectionDrawerItem().withName("Transactio History"),
+                        new SectionDrawerItem().withName("Transaction History"),
 
                         new SecondaryDrawerItem().withName(R.string.drawer_item_settings).withIcon(FontAwesome.Icon.faw_cog),
                         new SecondaryDrawerItem().withName("Help").withIcon(FontAwesome.Icon.faw_question).withEnabled(false),
@@ -242,7 +243,8 @@ public class DashboardActivity extends AppCompatActivity {
                                 DashboardActivity.this.startActivity(intent);
                                 finish();
                             }else if (intent != null){
-                                DashboardActivity.this.startActivity(intent);
+                                //DashboardActivity.this.startActivity(intent);
+                                Toast.makeText(DashboardActivity.this, "Module Not Implemented!!", Toast.LENGTH_SHORT).show();
                             }
                         }
 
