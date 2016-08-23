@@ -48,57 +48,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         auth = FirebaseAuth.getInstance();
 
         final FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser != null) {
-            Log.e(TAG, "onCreate: User is Authenticated!!"+ currentUser);
-            //startActivity(new Intent(LoginActivity.this, MainActivity.class));
-
-
-            //Gets the data as per the user Id "mCustomerRef.orderByChild(mCurrentUserId+"/name")"
-            //mCustomerRef.orderByChild("name").addChildEventListener(new ChildEventListener() {
-            /*mCustomerRef.orderByKey().equalTo(CurrentLoggedInUser.getCurrentFirebaseUser().getUid()).addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildKey) {
-                    Log.d(TAG, "onChildAdded: "+dataSnapshot.getKey());
-                    mCustomer = dataSnapshot.getValue(Customer.class);
-                    mCurrrentKey = dataSnapshot.getKey();
-                    if (mCurrrentKey!= null && currentUser!=null && mCurrrentKey.equalsIgnoreCase(currentUser.getUid()))
-                        if (mCustomer != null){
-
-                            Log.d(TAG, "onChildAdded: Name="+ mCustomer.getName());
-                            Log.d(TAG, "onChildAdded: currentKey="+ mCurrrentKey);
-                            Log.d(TAG, "onChildAdded: previousChildKey="+previousChildKey);
-
-                            CurrentLoggedInUser.setCurrentFirebaseUser(currentUser);
-                            CurrentLoggedInUser.setName(mCustomer.getName());
-                            CurrentLoggedInUser.setMobile(mCustomer.getMobile());
-                            startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                            finish();
-
-                        }
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-
-            });*/
-        }
 
         // set the view now
         setContentView(R.layout.activity_login);
