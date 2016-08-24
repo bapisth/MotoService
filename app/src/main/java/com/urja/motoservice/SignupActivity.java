@@ -18,10 +18,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.urja.motoservice.model.Customer;
 import com.urja.motoservice.model.CustomerAddress;
+import com.urja.motoservice.utils.CurrentLoggedInUser;
 import com.urja.motoservice.utils.DatabaseConstants;
 import java.util.Date;
 
@@ -39,6 +41,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private DatabaseReference mCustomerAddressRef = mdatabaseRootRef.child(DatabaseConstants.TABLE_CUSTOMER_ADDRESS);
     private static final String TAG = MainActivity.class.getSimpleName();
     private ProgressDialog mProgressDialog;
+    FirebaseUser mCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,16 +90,19 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), R.string.warning_email, Toast.LENGTH_SHORT).show();
+                    mProgressDialog.dismiss();
                     return;
                 }
 
                 if (TextUtils.isEmpty(password)) {
                     Toast.makeText(getApplicationContext(), R.string.warning_password, Toast.LENGTH_SHORT).show();
+                    mProgressDialog.dismiss();
                     return;
                 }
 
                 if (password.length() < 6) {
                     Toast.makeText(getApplicationContext(), R.string.minimum_password, Toast.LENGTH_SHORT).show();
+                    mProgressDialog.dismiss();
                     return;
                 }
 
@@ -121,7 +127,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                     mProgressDialog.dismiss();
 
                                     //startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                                    startActivity(new Intent(SignupActivity.this, UserProfileActivity.class));
+                                    startActivity(new Intent(SignupActivity.this, DashboardActivity.class));
                                     finish();
                                 }
                             }
@@ -142,8 +148,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private void updateUserData() {
         String fullName = this.fullName.getText().toString();
         String mobile = this.mobile.getText().toString();
-        if (mCurrentUserId == null)
-            mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if (mCurrentUserId == null) {
+            mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+            CurrentLoggedInUser.setCurrentFirebaseUser(mCurrentUser);
+            mCurrentUserId = mCurrentUser.getUid();
+        }
+
 
         mCustomer = new Customer();
         mCustomer.setName(fullName);

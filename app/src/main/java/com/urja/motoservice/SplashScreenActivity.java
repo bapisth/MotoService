@@ -1,6 +1,7 @@
 package com.urja.motoservice;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +28,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
     // Set Duration of the Splash Screen
-    private final  long delay = 3000;
+    private final  long delay = 1000;
     private FirebaseAuth mAuth;
     private UserSession mUserSession;
     private Customer mCustomer;
@@ -42,6 +43,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser currentUser = mAuth.getCurrentUser();
+        Log.e(TAG, "onCreate: currentUser"+currentUser);
         Timer runSplash = new Timer();
         TimerTask showSplashScreen = new TimerTask() {
             @Override
