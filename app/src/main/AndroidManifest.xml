@@ -18,48 +18,54 @@
         <activity
             android:name=".SignupActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".DashboardActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".UserProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".TestUserProfileActivity"
             android:label="@string/title_activity_test_user_profile"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".VehicleServiceListActivity"
             android:label="VehicleServiceListActivity"
             android:parentActivityName=".DashboardActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ChooseServiceActivity"
             android:parentActivityName=".DashboardActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DashboardActivity"/>
+                android:value=".DashboardActivity" />
         </activity>
         <activity
             android:name=".ConfirmRequestActivity"
             android:label="@string/title_activity_choose_service"
             android:parentActivityName=".ChooseServiceActivity"
-            android:theme="@style/AppTheme.NoActionBar"><!--android:parentActivityName=".ChooseServiceActivity"-->
+            android:theme="@style/AppTheme.NoActionBar">
+            <!-- android:parentActivityName=".ChooseServiceActivity" -->
         </activity>
         <activity
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CustomerCarDetailsActivity"
+            android:label="@string/title_activity_customer_car_details"
+            android:parentActivityName=".ConfirmRequestActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.urja.motoservice.ConfirmRequestActivity" />
+        </activity>
     </application>
 
 </manifest>

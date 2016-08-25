@@ -4,26 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <!-- Header aligned to top -->
-    <!--<RelativeLayout
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="#AFA7EF"
-        android:gravity="center">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="Header"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-    </RelativeLayout>-->
-
+    android:layout_height="wrap_content"
+    tools:context=".ConfirmRequestActivity"
+    tools:showIn="@layout/activity_confirm_request">
     <!-- Footer aligned to bottom -->
     <RelativeLayout
         android:id="@+id/footer"
@@ -35,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:id="@+id/confirm"
-            android:text="Confirm"
+            android:text="@string/paynow"
             android:textColor="@color/textColorPrimary"
             android:gravity="center"
             android:backgroundTint="@color/colorAccent"/>
@@ -44,7 +27,7 @@
     <!-- Content below header and above footer -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@id/footer"
         android:gravity="center"><!--android:layout_below="@id/header"-->
 
@@ -58,25 +41,3 @@
 
 </RelativeLayout>
 
-
-    <!--
-    <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.urja.carservices.ConfirmRequestActivity"
-        tools:showIn="@layout/activity_confirm_request">
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/requestedServiceRecyclerView">
-
-        </android.support.v7.widget.RecyclerView>
-        <include layout="@layout/footer"></include>
-    </RelativeLayout>
-    -->

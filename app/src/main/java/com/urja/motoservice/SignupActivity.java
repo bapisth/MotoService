@@ -172,5 +172,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         child.setValue("date", new Date().toString());
         child.setValue(mCustomerAddress);
         child.push();
+
+        CurrentLoggedInUser.setName(fullName);
+        CurrentLoggedInUser.setMobile(mobile);
     }
 }

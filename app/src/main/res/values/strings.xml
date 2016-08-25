@@ -11,6 +11,7 @@
     <string name="message_progress_dialog">Please wait ...</string>
     <string name="book_service">Request Service</string>
     <string name="choose_vehicle_type">Choose Your Vehicle Type</string>
+    <string name="paynow">Pay Now</string>
 
     <!--Drawer Labels-->
     <string name="drawer_item_home">Home</string>
@@ -123,4 +124,5 @@
         "Cleaning and Polish of Interior plastic parts, Glass Cleaning and Wash"
     </string>
     <string name="title_activity_confirm_request">ConfirmRequestActivity</string>
+    <string name="title_activity_customer_car_details">CustomerCarDetailsActivity</string>
 </resources>

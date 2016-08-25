@@ -125,7 +125,7 @@ public class ChooseServiceActivity extends AppCompatActivity {
                 Intent intent  = new Intent(ChooseServiceActivity.this, ConfirmRequestActivity.class );
                 startActivity(intent);
 
-                finish();
+                //finish();
                 //
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/

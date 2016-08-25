@@ -25,12 +25,12 @@
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:itemTextAppearance">@style/AppTheme.ItemStyle</item>
+        <!--<item name="android:itemTextAppearance">@style/AppTheme.ItemStyle</item>-->
         <item name="android:alertDialogTheme">@style/AppTheme.AlertStyle</item>
         <item name="android:popupMenuStyle">@style/AppTheme.MenuStyle</item>
 
         <!--Material Viewpager-->
-        <item name="android:textColorPrimary">@android:color/white</item>
+        <!--<item name="android:textColorPrimary">@color/colorPrimary</item>-->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:windowTranslucentStatus" tools:targetApi="21">true</item>
         <item name="windowActionBar">false</item>
@@ -50,9 +50,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.ItemStyle" parent="android:TextAppearance.Widget.IconMenu.Item">
         <item name="android:textColor">@color/white</item>
@@ -108,8 +108,7 @@
     </style>
 
     <!--Material ViewPager theme-->
-    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light">
-    </style>
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light"></style>
 
     <style name="AppTheme.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <!-- White arrow -->
@@ -124,7 +123,7 @@
     <!--Checkbox Styling-->
     <style name="CheckBoxStyle" parent="Theme.AppCompat.Light">
         <item name="colorControlNormal">@color/material_lime_a700</item>
-        <item name="colorControlActivated">@color/errorColor</item>
+        <item name="colorControlActivated">@color/material_green_500</item>
     </style>
 
 </resources>

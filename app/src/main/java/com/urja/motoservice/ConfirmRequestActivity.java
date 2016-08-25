@@ -56,17 +56,19 @@ public class ConfirmRequestActivity extends AppCompatActivity implements BaseQui
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_request);
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initCollapsingToolbar();
+        //initCollapsingToolbar();
 
         mButton = (Button) findViewById(R.id.confirm);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addTransactionToServer(ConfirmRequestActivity.this);
+                //addTransactionToServer(ConfirmRequestActivity.this);
+                Intent intent = new Intent(ConfirmRequestActivity.this, CustomerCarDetailsActivity.class);
+                startActivity(intent);
             }
         });
 
