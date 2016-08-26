@@ -1,5 +1,6 @@
 package com.urja.motoservice;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,6 +8,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -30,12 +33,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.urja.motoservice.adapters.SectionAdapter;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
+import com.urja.motoservice.database.dao.DaoSession;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
 import com.urja.motoservice.model.ServiceTypeSection;
 import com.urja.motoservice.utils.DatabaseConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.greenrobot.dao.query.DeleteQuery;
+import de.greenrobot.dao.query.WhereCondition;
 
 public class ConfirmRequestActivity extends AppCompatActivity {
 
@@ -49,6 +56,8 @@ public class ConfirmRequestActivity extends AppCompatActivity {
     private Button mButton;
     private String mCurrentUserId = null;
     private ServiceRequestDao mServiceRequestDao = null;
+
+
 
 
     @Override
@@ -75,12 +84,30 @@ public class ConfirmRequestActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.requestedServiceRecyclerView);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        SectionAdapter sectionAdapter = new SectionAdapter(R.layout.item_section_content, R.layout.def_section_head, mContentItems);
+        final SectionAdapter sectionAdapter = new SectionAdapter(R.layout.item_section_content, R.layout.def_section_head, mContentItems);
         //sectionAdapter.setOnRecyclerViewItemClickListener(this);
         sectionAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                Toast.makeText(ConfirmRequestActivity.this, "onItemChildClick", Toast.LENGTH_LONG).show();
+            public void onItemChildClick(final BaseQuickAdapter adapter, final View view, final int position) {
+                Toast.makeText(ConfirmRequestActivity.this, "onItemChildClick"+position, Toast.LENGTH_LONG).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ConfirmRequestActivity.this, R.style.AppTheme_AlertStyle);
+                builder.setTitle("Confirm");
+                builder.setMessage("Do you want to Delete?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(TAG, "onClick: You clicked yes.. data going to be deleted");
+                        adapter.remove(position);
+                        TextView itemCode = (TextView) view.findViewById(R.id.item_code);
+                        String code ="";
+                        if (itemCode!=null && itemCode.getText()!=null)
+                            code = itemCode.getText().toString();
+                        deleteRecordFromDatabase(mServiceRequestList.get(position).getCode());
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                builder.setNegativeButton("No", null);
+                builder.show();
             }
         });
 
@@ -162,6 +189,22 @@ public class ConfirmRequestActivity extends AppCompatActivity {
         }
     }
 
+    public void deleteRecordFromDatabase(String itemCode){
+        Log.d(TAG, "deleteRecordFromDatabase: inside method");
+        ServiceRequestDao serviceRequestDao = DbHelper.getInstance(ConfirmRequestActivity.this).getDaoSession().getServiceRequestDao();
+        //DaoSession daoSession = DBInitializer.getNewDaoSession(PersonListActivity.this);
+        //PersonDao personDao = daoSession.getPersonDao();
+        //Query query = personDao.queryBuilder().where( new WhereCondition.StringCondition("_ID="+personId)).build();
+
+        DeleteQuery deleteQuery  = serviceRequestDao.queryBuilder().where(new WhereCondition.StringCondition(String.valueOf("code='"+itemCode+"'"))).buildDelete();
+        Log.d(TAG, "deleteRecordFromDatabase: delete query is:"+deleteQuery.toString());
+        deleteQuery.executeDeleteWithoutDetachingEntities();
+        Log.d(TAG, "deleteRecordFromDatabase: Item removed successfully from the database.....");
+        Toast.makeText(ConfirmRequestActivity.this, "The Contact with id"+itemCode+" successfully deleted",Toast.LENGTH_SHORT).show();
+
+
+        //personDao.delete();
+    }
 
     /*@Override
     public void onItemClick(View view, int i) {
