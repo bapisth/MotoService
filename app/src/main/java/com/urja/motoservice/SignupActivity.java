@@ -59,7 +59,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         //progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
         fullName = (EditText) findViewById(R.id.fullName);
-        mobile = (EditText) findViewById(R.id.mobile);
+        //mobile = (EditText) findViewById(R.id.mobile);
 
         //Event Listeners
         btnResetPassword.setOnClickListener(this);
@@ -147,7 +147,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     private void updateUserData() {
         String fullName = this.fullName.getText().toString();
-        String mobile = this.mobile.getText().toString();
+        //String mobile = this.mobile.getText().toString();
         if (mCurrentUserId == null) {
             mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
             CurrentLoggedInUser.setCurrentFirebaseUser(mCurrentUser);
@@ -157,7 +157,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         mCustomer = new Customer();
         mCustomer.setName(fullName);
-        mCustomer.setMobile(mobile);
+        //mCustomer.setMobile(mobile);
 
         mCustomerAddress = new CustomerAddress();
         mCustomerAddress.setCity("Bhubaneswar");
@@ -174,6 +174,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         child.push();
 
         CurrentLoggedInUser.setName(fullName);
-        CurrentLoggedInUser.setMobile(mobile);
+        //CurrentLoggedInUser.setMobile(mobile);
     }
 }

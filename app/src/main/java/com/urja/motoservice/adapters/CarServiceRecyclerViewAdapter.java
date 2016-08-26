@@ -120,7 +120,6 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        Toast.makeText(mContext, "boolean value : "+b, Toast.LENGTH_SHORT).show();
                         EventBus.getDefault().post(new ServiceEventModel(b, object));
                     }
                 });

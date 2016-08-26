@@ -1,4 +1,4 @@
-package com.urja.motoservice;
+package com.urja.motoservice.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.urja.motoservice.DashboardActivity;
+import com.urja.motoservice.R;
 import com.urja.motoservice.adapters.SectionAdapter;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
@@ -107,44 +110,105 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkFieldValue())
+                if (isFormValid()){
+                    mCustomerTransactionAddress = new CustomerTransactionAddress();
+                    mCustomerTransactionAddress.setAddressLine1(mCustomerAddressline1.getText().toString());
+                    mCustomerTransactionAddress.setAddressLine2(mCustomerAaddressline2.getText().toString());
+                    mCustomerTransactionAddress.setLandmark(mCustomerLandmark.getText().toString());
+                    mCustomerTransactionAddress.setCity(mCustomerCity.getText().toString());
+                    mCustomerTransactionAddress.setState(mCustomerCity.getText().toString());
+                    mCustomerTransactionAddress.setPin(mCustomerPin.getText().toString());
+                    mCustomerTransactionAddress.setCarNumber(mCustomerCarNumber.getText().toString());
+                    mCustomerTransactionAddress.setMobileNumber(mCustomerMobileNumber.getText().toString());
                     addTransactionToServer(getActivity());
-                else
+                }else
                     Toast.makeText(getActivity(), "Fields Cannont be Blank!", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
-    private boolean checkFieldValue() {
-        String addressLine1 = mCustomerAddressline1.getText().toString();
-        String addressLine2 = mCustomerAaddressline2.getText().toString();
-        String landmark = mCustomerLandmark.getText().toString();
-        String city = mCustomerCity.getText().toString();
-        String state = mCustomerState.getText().toString();
-        String pin = mCustomerPin.getText().toString();
-        String carNumber = mCustomerCarNumber.getText().toString();
-        String mobileNumber = mCustomerMobileNumber.getText().toString();
-        boolean result = false;
+    private boolean isFormValid(){
+        //check AddressLine1
+        boolean addressLine1 = checkAddressLine1();
 
-        if (addressLine1=="" || addressLine2=="" || landmark=="" || city==""
-                || state=="" || pin=="" || carNumber=="" || mobileNumber=="" || mPaymentOptionChecked==null)
-            result = false;
-        else if (addressLine1!="" && addressLine2!="" && landmark!="" && city!=""
-                && state!="" && pin!="" && carNumber!="" && mobileNumber!="" && mPaymentOptionChecked!=null){
-            mCustomerTransactionAddress = new CustomerTransactionAddress();
-            mCustomerTransactionAddress.setAddressLine1(addressLine1);
-            mCustomerTransactionAddress.setAddressLine2(addressLine2);
-            mCustomerTransactionAddress.setLandmark(landmark);
-            mCustomerTransactionAddress.setCity(city);
-            mCustomerTransactionAddress.setState(state);
-            mCustomerTransactionAddress.setPin(pin);
-            mCustomerTransactionAddress.setCarNumber(carNumber);
-            mCustomerTransactionAddress.setMobileNumber(mobileNumber);
-            result = true;
-        }
-        return result;
+        //check Addressline2
+        boolean addressLine2 = checkAddressLine2();
+
+        //check landmark
+        boolean landmark = checkLandmark();
+
+        //check city
+        boolean city = checkCity();
+
+        //check state
+        boolean state = checkState();
+
+        //check Pin
+        boolean pin = checkPin();
+
+        //check carNumber
+        boolean carNumber = checkCarNumber();
+
+        //check mobileNumber
+        boolean mobileNumber = checkMobileNumber();
+
+        //check radio group is checked
+        boolean isPaymentChoosen= checkPaymentType();
+
+        return (addressLine1 && addressLine2 && landmark && city && state && pin && carNumber && mobileNumber && isPaymentChoosen);
+
+
     }
+
+    private boolean checkPaymentType() {
+        if (mPaymentOptionChecked == null || mPaymentOptionChecked=="")
+            return false;
+        return true;
+    }
+
+    private boolean checkEditText(EditText et) {
+        String field = et.getText().toString();
+
+        if (TextUtils.isEmpty(field)) {
+            et.setError("Required");
+            return false;
+        } else {
+            et.setError(null);
+            return true;
+        }
+    }
+
+    private boolean checkAddressLine1() {
+        return checkEditText(mCustomerAddressline1);
+    }
+    private boolean checkAddressLine2() {
+        return checkEditText(mCustomerAaddressline2);
+    }
+
+    private boolean checkLandmark() {
+        return checkEditText(mCustomerLandmark);
+    }
+
+    private boolean checkCity() {
+        return checkEditText(mCustomerCity);
+    }
+
+    private boolean checkState() {
+        return checkEditText(mCustomerState);
+    }
+
+    private boolean checkPin() {
+        return checkEditText(mCustomerPin);
+    }
+
+    private boolean checkCarNumber() {
+        return checkEditText(mCustomerCarNumber);
+    }
+    private boolean checkMobileNumber() {
+        return checkEditText(mCustomerMobileNumber);
+    }
+
 
     private List<ServiceRequest> readServiceRequestData() {
         mServiceRequestDao = DbHelper.getInstance(getActivity()).getServiceRequestDao();

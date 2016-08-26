@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/app_welcoe_screen"
     android:fitsSystemWindows="true"
-    tools:context=".SignupActivity"
-    android:background="@color/colorPrimaryDark">
+    tools:context=".LoginActivity">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="vertical"
@@ -15,20 +18,23 @@
         android:layout_height="match_parent"
         android:paddingTop="56dp"
         android:paddingLeft="24dp"
-        android:paddingRight="24dp">
+        android:paddingRight="24dp"
+        android:layout_gravity="center_vertical"
+        android:weightSum="1">
 
         <ImageView android:src="@drawable/app_logo"
-                   android:layout_width="wrap_content"
-                   android:layout_height="72dp"
+                   android:layout_width="@dimen/logo_w_h"
+                   android:layout_height="@dimen/logo_w_h"
                    android:layout_marginBottom="24dp"
-                   android:layout_gravity="center_horizontal" />
+                   android:layout_gravity="center_horizontal"
+            android:layout_weight="0.33" />
 
         <!-- Name Label -->
-        <android.support.design.widget.TextInputLayout
+        <!--<android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp">-->
             <!--<EditText android:id="@+id/input_name"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
@@ -37,43 +43,56 @@
             <EditText
                 android:id="@+id/fullName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
+                android:paddingLeft="@dimen/dp_4"
                 android:hint="@string/hint_name"
                 android:inputType="textPersonName"
-                android:textColor="@color/white"/>
-        </android.support.design.widget.TextInputLayout>
+                android:textColor="@color/textColorPrimary"
+                android:background="@color/white"
+                android:nextFocusDown="@id/email"/>
+
+
+        <!--</android.support.design.widget.TextInputLayout>-->
 
         <!--  Email Label -->
-        <android.support.design.widget.TextInputLayout
+        <!--<android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp">-->
             <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:hint="@string/email"
-                android:textColor="@color/white"
-                android:inputType="textEmailAddress"/>
-        </android.support.design.widget.TextInputLayout>
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:paddingLeft="@dimen/dp_4"
+                android:textColor="@color/textColorPrimary"
+                android:background="@color/white"
+                android:inputType="textEmailAddress"
+                android:nextFocusDown="@id/password"/>
+        <!--</android.support.design.widget.TextInputLayout>-->
 
         <!-- Password Label -->
-        <android.support.design.widget.TextInputLayout
+        <!--<android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp">-->
             <EditText android:id="@+id/password"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:inputType="textPassword"
-                      android:textColor="@color/white"
-                      android:hint="@string/hint_password"/>
-        </android.support.design.widget.TextInputLayout>
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingLeft="@dimen/dp_4"
+                android:inputType="textPassword"
+                android:textColor="@color/textColorPrimary"
+                android:background="@color/white"
+                android:layout_marginBottom="8dp"
+                android:hint="@string/hint_password"/>
+        <!--</android.support.design.widget.TextInputLayout>-->
 
-        <!--  Email Label -->
-        <android.support.design.widget.TextInputLayout
+        <!--  Mobile Label -->
+        <!--<android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -84,8 +103,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_mobile"
                 android:textColor="@color/white"
-                android:inputType="textEmailAddress"/>
-        </android.support.design.widget.TextInputLayout>
+                android:inputType="textEmailAddress"
+                android:nextFocusDown="@id/sign_up_button"/>
+        </android.support.design.widget.TextInputLayout>-->
 
         <!-- Signup Button -->
         <Button
@@ -96,10 +116,10 @@
             android:layout_marginTop="20dp"
             android:background="@color/colorAccent"
             android:text="@string/action_sign_in_short"
-            android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="#FFFFFF"
             android:textSize="18sp"
-            android:elevation="0dp"/>
+            android:elevation="0dp"
+            android:textAllCaps="false"/>
 
         <Button
             android:id="@+id/btn_reset_password"
@@ -132,6 +152,7 @@
 
     </LinearLayout>
 </ScrollView>
+    </android.support.design.widget.CoordinatorLayout>
 
 <!--
 <?xml version="1.0" encoding="utf-8"?>
