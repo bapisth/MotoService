@@ -37,7 +37,7 @@ import com.urja.motoservice.utils.DatabaseConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConfirmRequestActivity extends AppCompatActivity implements BaseQuickAdapter.OnRecyclerViewItemClickListener {
+public class ConfirmRequestActivity extends AppCompatActivity {
 
     static final boolean GRID_LAYOUT = false;
     private static final String TAG = ConfirmRequestActivity.class.getSimpleName();
@@ -76,7 +76,7 @@ public class ConfirmRequestActivity extends AppCompatActivity implements BaseQui
         mRecyclerView = (RecyclerView) findViewById(R.id.requestedServiceRecyclerView);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         SectionAdapter sectionAdapter = new SectionAdapter(R.layout.item_section_content, R.layout.def_section_head, mContentItems);
-        sectionAdapter.setOnRecyclerViewItemClickListener(this);
+        //sectionAdapter.setOnRecyclerViewItemClickListener(this);
         sectionAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -163,11 +163,14 @@ public class ConfirmRequestActivity extends AppCompatActivity implements BaseQui
     }
 
 
-    @Override
+    /*@Override
     public void onItemClick(View view, int i) {
         Toast.makeText(ConfirmRequestActivity.this, "Item Clicked!!" + i + "-" + mServiceRequestList.get(i), Toast.LENGTH_SHORT).show();
 
-        /*//Creating the instance of PopupMenu
+
+
+    }*/
+    /*//Creating the instance of PopupMenu
         PopupMenu popup = new PopupMenu(ConfirmRequestActivity.this, view.getRootView());
         //Inflating the Popup using xml file
         popup.getMenuInflater().inflate(R.menu.popup_menu_confirm_service, popup.getMenu());
@@ -181,6 +184,4 @@ public class ConfirmRequestActivity extends AppCompatActivity implements BaseQui
                 return true;
             }
         });*/
-
-    }
 }

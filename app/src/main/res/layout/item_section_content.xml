@@ -15,6 +15,16 @@
     card_view:cardUseCompatPadding="true"><!--card_view:cardBackgroundColor="@color/colorAccent"-->
 
     <ImageView
+        android:id="@+id/close_btn"
+        android:layout_width="@dimen/dp_22"
+        android:layout_height="@dimen/dp_22"
+        android:layout_marginRight="@dimen/dp_22"
+        android:layout_gravity="top|right"
+        android:background="@drawable/circular_close_button"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:layout_marginBottom="10dp"/>
+
+    <ImageView
         android:id="@+id/iv"
         android:layout_width="@dimen/def_height"
         android:layout_height="@dimen/def_height"
