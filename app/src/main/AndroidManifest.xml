@@ -41,7 +41,7 @@
         <activity
             android:name=".ChooseServiceActivity"
             android:parentActivityName=".DashboardActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.TextAppearance">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DashboardActivity" />

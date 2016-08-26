@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/footer"
-        android:gravity="center"><!--android:layout_below="@id/header"-->
+        android:layout_alignParentTop="true"><!--android:layout_below="@id/header"-->
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"

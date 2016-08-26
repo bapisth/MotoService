@@ -45,6 +45,11 @@
         <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="21">true</item>
     </style>
 
+    <style name="AppTheme.TextAppearance" parent="AppTheme">
+        <item name="android:itemTextAppearance">@style/AppTheme.ItemStyle</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

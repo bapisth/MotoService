@@ -10,10 +10,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -163,6 +165,22 @@ public class ConfirmRequestActivity extends AppCompatActivity implements BaseQui
 
     @Override
     public void onItemClick(View view, int i) {
+        Toast.makeText(ConfirmRequestActivity.this, "Item Clicked!!" + i + "-" + mServiceRequestList.get(i), Toast.LENGTH_SHORT).show();
+
+        /*//Creating the instance of PopupMenu
+        PopupMenu popup = new PopupMenu(ConfirmRequestActivity.this, view.getRootView());
+        //Inflating the Popup using xml file
+        popup.getMenuInflater().inflate(R.menu.popup_menu_confirm_service, popup.getMenu());
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(ConfirmRequestActivity.this, "", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });*/
 
     }
 }
