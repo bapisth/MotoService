@@ -2,90 +2,214 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_margin="@dimen/activity_horizontal_margin"
     tools:context="com.urja.motoservice.CustomerCarDetailsActivityFragment"
     tools:showIn="@layout/activity_customer_car_details">
     <RelativeLayout
+        android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/address_container">
-
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Customer Address"
-            android:gravity="left|center_vertical"
-            android:background="@drawable/button_background"
-            android:id="@+id/label_customer"
-            />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_10"
-            android:layout_below="@id/label_customer">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@drawable/edittext_background"/>
-        </RelativeLayout>
+            android:layout_height="60dp"
+            android:id="@+id/confirm"
+            android:text="@string/confirm"
+            android:textColor="@color/textColorPrimary"
+            android:gravity="center"
+            android:backgroundTint="@color/colorAccent"/>
     </RelativeLayout>
-
-    <RelativeLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/address_container"
-        android:id="@+id/car_container">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Car Number"
-            android:gravity="left|center_vertical"
-            android:background="@drawable/button_background"
-            android:id="@+id/label_car_number"
-            />
-        <RelativeLayout
+        android:layout_height="match_parent"
+        android:fillViewport="false"
+        android:layout_above="@+id/footer">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_margin="@dimen/dp_10"
-            android:layout_below="@id/label_car_number">
-            <EditText
+            android:layout_marginBottom="20dp"
+            >
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/edittext_background"/>
-        </RelativeLayout>
-    </RelativeLayout>
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_background">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/label_customer_address"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="Address"
+                        android:textSize="25sp"
+                        android:textColor="@color/cyan"
+                        android:gravity="center"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_margin="@dimen/dp_10"
+                        android:id="@+id/customer_addressline1"
+                        android:layout_below="@id/label_customer_address"
+                        android:hint="AddressLine 1"
+                        />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/address_container"
-        android:id="@+id/mobile_container">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_margin="@dimen/dp_10"
+                        android:id="@+id/customer_addressline2"
+                        android:layout_below="@id/customer_addressline1"
+                        android:hint="AddressLine 2"
+                        />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Mobile Number"
-            android:gravity="left|center_vertical"
-            android:background="@drawable/button_background"
-            android:id="@+id/label_mobile_number"
-            />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_10"
-            android:layout_below="@id/label_mobile_number">
-            <EditText
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_margin="@dimen/dp_10"
+                        android:id="@+id/customer_landmark"
+                        android:layout_below="@id/customer_addressline2"
+                        android:hint="land Mark"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_margin="@dimen/dp_10"
+                        android:id="@+id/customer_city"
+                        android:layout_below="@id/customer_landmark"
+
+                        android:hint="City"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_margin="@dimen/dp_10"
+                        android:id="@+id/customer_state"
+                        android:layout_below="@id/customer_city"
+
+                        android:hint="State"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_margin="@dimen/dp_10"
+                        android:id="@+id/customer_pin"
+                        android:layout_below="@id/customer_state"
+                        android:hint="Pin"
+                        />
+                </RelativeLayout>
+
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/edittext_background"/>
-        </RelativeLayout>
-    </RelativeLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_background">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/label_car_number"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="Car Number"
+                        android:textSize="25sp"
+                        android:textColor="@color/cyan"
+                        android:gravity="center"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_margin="@dimen/dp_10"
+                        android:id="@+id/customer_car_number"
+                        android:layout_below="@id/label_car_number"
+                        android:hint="OD XXX XXXX"
+                        />
+
+                </RelativeLayout>
 
 
 
+            </android.support.v7.widget.CardView>
 
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_background">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/label_mobile_number"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="Mobile Number"
+                        android:textSize="25sp"
+                        android:textColor="@color/cyan"
+                        android:gravity="center"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_margin="@dimen/dp_10"
+                        android:id="@+id/customer_mobile_number"
+                        android:layout_below="@id/label_mobile_number"
+                        android:hint="1234567890"
+                        />
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginBottom="40dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_background">
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/payment_type_group"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="Mobile Number"
+                        android:textSize="25sp"
+                        android:textColor="@color/cyan"
+                        android:gravity="center">
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/immediate_service"
+                            android:text="Immediate Service"
+                            android:theme="@style/CheckBoxStyle"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cash_delivery"
+                            android:text="Cash on Delivery"
+                            android:theme="@style/CheckBoxStyle"/>
+
+                    </RadioGroup>
+
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+
+
+    </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

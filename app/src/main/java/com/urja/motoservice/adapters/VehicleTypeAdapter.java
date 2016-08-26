@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.StringLoader;
 import com.urja.motoservice.ChooseServiceActivity;
 import com.urja.motoservice.R;
 import com.urja.motoservice.model.Vehicle;
@@ -39,6 +40,7 @@ import java.util.List;
 
 public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.MyViewHolder> {
 
+    private static final String TAG = VehicleTypeAdapter.class.getSimpleName();
     private Context mContext;
     private List<Vehicle> mVehicleList;
     private LayoutInflater mLayoutInflater;
@@ -81,6 +83,7 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
         holder.title.setText("Not Available");
         holder.count.setText(12 + " songs"); //remove
 
+        Log.e(TAG, "onBindViewHolder: "+vehicle.getDownloadPath());
         // loading album cover using Glide library
         Glide.with(mContext).load(vehicle.getDownloadPath()).into(holder.thumbnail);
 

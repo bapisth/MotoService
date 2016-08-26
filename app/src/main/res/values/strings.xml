@@ -12,6 +12,7 @@
     <string name="book_service">Request Service</string>
     <string name="choose_vehicle_type">Choose Your Vehicle Type</string>
     <string name="paynow">Pay Now</string>
+    <string name="confirm">Confirm</string>
 
     <!--Drawer Labels-->
     <string name="drawer_item_home">Home</string>
@@ -114,7 +115,7 @@
     <string name="tab_service_repairs">Service Repairs</string>
     <string name="tab_tyre_wheel">Tyre Wheels</string>
     <string name="tab_dent_paint">Dent Paint</string>
-    <string name="title_activity_choose_service">ChooseService</string>
+    <string name="title_activity_choose_service">Choose Service</string>
     <string name="tab_accessories">Accessories</string>
 
     <string name="tab_wash_desc">
@@ -123,6 +124,6 @@
         "Dash Board Dressing, Tyre Dressing, Floor Cleaning, Boot Cleaning, "
         "Cleaning and Polish of Interior plastic parts, Glass Cleaning and Wash"
     </string>
-    <string name="title_activity_confirm_request">ConfirmRequestActivity</string>
-    <string name="title_activity_customer_car_details">CustomerCarDetailsActivity</string>
+    <string name="title_activity_confirm_request">Confirm Request</string>
+    <string name="title_activity_customer_car_details">Enter Details</string>
 </resources>

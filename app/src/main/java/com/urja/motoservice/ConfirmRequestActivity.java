@@ -49,9 +49,6 @@ public class ConfirmRequestActivity extends AppCompatActivity implements BaseQui
     private ServiceRequestDao mServiceRequestDao = null;
 
 
-    private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mTransactionRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_TRANSACTION);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,23 +91,6 @@ public class ConfirmRequestActivity extends AppCompatActivity implements BaseQui
 
 
     }
-
-    private void addTransactionToServer(ConfirmRequestActivity confirmRequestActivity) {
-        if (mCurrentUserId == null)
-            mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            mTransactionRef.child(mCurrentUserId).push().setValue(mServiceRequestList).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    Toast.makeText(ConfirmRequestActivity.this, "Request Added to the server!!", Toast.LENGTH_SHORT).show();
-                    mServiceRequestDao.deleteAll();
-                    startActivity(new Intent(ConfirmRequestActivity.this, DashboardActivity.class));
-
-                    finish();
-                }
-            });
-
-    }
-
 
     /**
      * Initializing collapsing toolbar
