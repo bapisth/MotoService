@@ -7,7 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public class CustomerCarDetailsActivity extends AppCompatActivity {
+import com.urja.motoservice.fragment.Ask4CarNumberDialogFragment;
+
+public class CustomerCarDetailsActivity extends AppCompatActivity implements Ask4CarNumberDialogFragment.Ask4CarNumberDialogListener {
+    public static final String TAG = CustomerCarDetailsActivity.class.getSimpleName();
+    private String mCarNumber = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +20,14 @@ public class CustomerCarDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Ask4CarNumberDialogFragment  ask4CarNumberDialogFragment = new Ask4CarNumberDialogFragment();
+        ask4CarNumberDialogFragment.show(getSupportFragmentManager(), TAG);
+        ask4CarNumberDialogFragment.setCancelable(false);
     }
 
+    @Override
+    public void onSubmit(String carNumber) {
+        this.mCarNumber =  carNumber;
+    }
 }

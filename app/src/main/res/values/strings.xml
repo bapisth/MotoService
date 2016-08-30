@@ -12,6 +12,7 @@
     <string name="book_service">Request Service</string>
     <string name="choose_vehicle_type">Choose Your Vehicle Type</string>
     <string name="paynow">Pay Now</string>
+    <string name="next"><![CDATA[Next >>]]></string>
     <string name="confirm">Confirm</string>
 
     <!--Drawer Labels-->
@@ -126,4 +127,8 @@
     </string>
     <string name="title_activity_confirm_request">Confirm Request</string>
     <string name="title_activity_customer_car_details">Enter Details</string>
+    <string name="message_network_not_available">
+        "Unable to connect.\n"
+        "Please Check Internet Connectivity"
+    </string>
 </resources>

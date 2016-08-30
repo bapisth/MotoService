@@ -89,25 +89,31 @@ public class ConfirmRequestActivity extends AppCompatActivity {
         sectionAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
             @Override
             public void onItemChildClick(final BaseQuickAdapter adapter, final View view, final int position) {
-                Toast.makeText(ConfirmRequestActivity.this, "onItemChildClick"+position, Toast.LENGTH_LONG).show();
-                AlertDialog.Builder builder = new AlertDialog.Builder(ConfirmRequestActivity.this, R.style.AppTheme_AlertStyle);
-                builder.setTitle("Confirm");
-                builder.setMessage("Do you want to Delete?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(TAG, "onClick: You clicked yes.. data going to be deleted");
-                        adapter.remove(position);
-                        TextView itemCode = (TextView) view.findViewById(R.id.item_code);
-                        String code ="";
-                        if (itemCode!=null && itemCode.getText()!=null)
-                            code = itemCode.getText().toString();
-                        deleteRecordFromDatabase(mServiceRequestList.get(position).getCode());
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-                builder.setNegativeButton("No", null);
-                builder.show();
+                //Toast.makeText(ConfirmRequestActivity.this, "onItemChildClick"+position, Toast.LENGTH_LONG).show();
+
+                if (adapter.getItemCount() >1){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ConfirmRequestActivity.this, R.style.AppTheme_AlertStyle);
+                    builder.setTitle("Confirm");
+                    builder.setMessage("Do you want to Delete?");
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(TAG, "onClick: You clicked yes.. data going to be deleted");
+                            adapter.remove(position);
+                            TextView itemCode = (TextView) view.findViewById(R.id.item_code);
+                            String code ="";
+                            if (itemCode!=null && itemCode.getText()!=null)
+                                code = itemCode.getText().toString();
+                            deleteRecordFromDatabase(mServiceRequestList.get(position).getCode());
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                    builder.setNegativeButton("No", null);
+                    builder.show();
+                }else{
+                    com.urja.motoservice.utils.AlertDialog.Alert(ConfirmRequestActivity.this,"", "Choose atleast one service!!");
+                }
+
             }
         });
 
@@ -190,41 +196,9 @@ public class ConfirmRequestActivity extends AppCompatActivity {
     }
 
     public void deleteRecordFromDatabase(String itemCode){
-        Log.d(TAG, "deleteRecordFromDatabase: inside method");
         ServiceRequestDao serviceRequestDao = DbHelper.getInstance(ConfirmRequestActivity.this).getDaoSession().getServiceRequestDao();
-        //DaoSession daoSession = DBInitializer.getNewDaoSession(PersonListActivity.this);
-        //PersonDao personDao = daoSession.getPersonDao();
-        //Query query = personDao.queryBuilder().where( new WhereCondition.StringCondition("_ID="+personId)).build();
-
         DeleteQuery deleteQuery  = serviceRequestDao.queryBuilder().where(new WhereCondition.StringCondition(String.valueOf("code='"+itemCode+"'"))).buildDelete();
-        Log.d(TAG, "deleteRecordFromDatabase: delete query is:"+deleteQuery.toString());
         deleteQuery.executeDeleteWithoutDetachingEntities();
-        Log.d(TAG, "deleteRecordFromDatabase: Item removed successfully from the database.....");
-        Toast.makeText(ConfirmRequestActivity.this, "The Contact with id"+itemCode+" successfully deleted",Toast.LENGTH_SHORT).show();
-
-
-        //personDao.delete();
     }
 
-    /*@Override
-    public void onItemClick(View view, int i) {
-        Toast.makeText(ConfirmRequestActivity.this, "Item Clicked!!" + i + "-" + mServiceRequestList.get(i), Toast.LENGTH_SHORT).show();
-
-
-
-    }*/
-    /*//Creating the instance of PopupMenu
-        PopupMenu popup = new PopupMenu(ConfirmRequestActivity.this, view.getRootView());
-        //Inflating the Popup using xml file
-        popup.getMenuInflater().inflate(R.menu.popup_menu_confirm_service, popup.getMenu());
-
-        //registering popup with OnMenuItemClickListener
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(ConfirmRequestActivity.this, "", Toast.LENGTH_SHORT).show();
-
-                return true;
-            }
-        });*/
 }

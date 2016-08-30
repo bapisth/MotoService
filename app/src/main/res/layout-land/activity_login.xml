@@ -134,15 +134,14 @@
                         android:background="@color/white"
                         android:drawableLeft="@mipmap/ic_lock_outline_black_24dp"
                         android:drawableTint="@color/colorAccent"
-                        android:layout_below="@+id/email"
+                        android:layout_alignBottom="@+id/btn_reset_password"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginTop="20dp" />
+                        android:layout_alignParentStart="true" />
                     <EditText
                             android:id="@+id/email"
                             android:layout_width="282dp"
                             android:layout_height="50dp"
-                        android:hint="@string/hint_email"
+                            android:hint="@string/hint_email"
                             android:inputType="textEmailAddress"
                             android:drawableLeft="@mipmap/ic_account_circle_black_24dp"
                             android:drawableTint="@color/colorAccent"
@@ -150,8 +149,7 @@
                             android:textColorHint="@color/textColorPrimary"
                             android:background="@color/white"
                             android:maxLines="1"
-                        android:layout_marginTop="20dp"
-                        android:layout_below="@+id/imageView9"
+                        android:layout_alignBottom="@+id/btn_signup"
                         android:layout_alignLeft="@+id/password"
                         android:layout_alignStart="@+id/password" />
                     <!--</android.support.design.widget.TextInputLayout>-->
@@ -165,15 +163,18 @@
 
                     <Button
                         android:id="@+id/btn_login"
+                        android:layout_marginTop="@dimen/dp_10"
                         android:layout_width="282dp"
                         android:layout_height="wrap_content"
                         android:background="@color/colorAccent"
                         android:text="@string/btn_login"
                         android:textColor="@android:color/black"
                         android:elevation="0dp"
+                        android:textAllCaps="false"
                         android:layout_alignParentBottom="true"
                         android:layout_alignLeft="@+id/password"
-                        android:layout_alignStart="@+id/password" />
+                        android:layout_alignStart="@+id/password"
+                        />
 
                 <Button
                     android:id="@+id/btn_reset_password"
@@ -184,6 +185,7 @@
                     android:textSize="18sp"
                     android:textColor="@color/white"
                     android:fontFamily="cursive"
+                    android:textAllCaps="false"
                     android:layout_above="@+id/btn_login"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
@@ -201,6 +203,7 @@
                     android:padding="@dimen/dp_4"
                     android:textSize="18sp"
                     android:textColor="@color/white"
+                    android:textAllCaps="false"
                     android:fontFamily="cursive"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/imageView9"

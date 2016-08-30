@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:id="@+id/confirm"
-            android:text="@string/paynow"
+            android:text="@string/next"
             android:textColor="@color/textColorPrimary"
             android:gravity="center"
             android:backgroundTint="@color/colorAccent"/>

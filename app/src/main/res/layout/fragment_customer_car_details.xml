@@ -56,6 +56,10 @@
                         android:id="@+id/customer_addressline1"
                         android:layout_below="@id/label_customer_address"
                         android:hint="AddressLine 1"
+                        android:nextFocusForward="@+id/customer_addressline2"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:ems="10"
                         />
 
                     <EditText
@@ -65,6 +69,10 @@
                         android:id="@+id/customer_addressline2"
                         android:layout_below="@id/customer_addressline1"
                         android:hint="AddressLine 2"
+                        android:nextFocusForward="@+id/customer_landmark"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:ems="10"
                         />
 
                     <EditText
@@ -74,6 +82,10 @@
                         android:id="@+id/customer_landmark"
                         android:layout_below="@id/customer_addressline2"
                         android:hint="land Mark"
+                        android:nextFocusForward="@+id/customer_city"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:ems="10"
                         />
 
                     <EditText
@@ -82,8 +94,11 @@
                         android:layout_margin="@dimen/dp_10"
                         android:id="@+id/customer_city"
                         android:layout_below="@id/customer_landmark"
-
                         android:hint="City"
+                        android:nextFocusForward="@+id/customer_state"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:ems="10"
                         />
                     <EditText
                         android:layout_width="match_parent"
@@ -93,6 +108,10 @@
                         android:layout_below="@id/customer_city"
 
                         android:hint="State"
+                        android:nextFocusForward="@+id/customer_pin"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:ems="10"
                         />
                     <EditText
                         android:layout_width="match_parent"
@@ -101,6 +120,10 @@
                         android:id="@+id/customer_pin"
                         android:layout_below="@id/customer_state"
                         android:hint="Pin"
+                        android:nextFocusForward="@+id/customer_car_number"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:ems="10"
                         />
                 </RelativeLayout>
 
@@ -115,7 +138,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/edittext_background">
+                    android:background="@drawable/edittext_background"
+                    android:visibility="gone">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -133,6 +157,10 @@
                         android:id="@+id/customer_car_number"
                         android:layout_below="@id/label_car_number"
                         android:hint="OD XXX XXXX"
+                        android:nextFocusForward="@+id/customer_mobile_number"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:ems="10"
                         />
 
                 </RelativeLayout>
@@ -166,6 +194,9 @@
                         android:id="@+id/customer_mobile_number"
                         android:layout_below="@id/label_mobile_number"
                         android:hint="1234567890"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:ems="10"
                         />
 
                 </RelativeLayout>
@@ -185,18 +216,18 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/payment_type_group"
                         android:layout_marginTop="@dimen/dp_10"
-                        android:text="Mobile Number"
                         android:textSize="25sp"
                         android:textColor="@color/cyan"
-                        android:gravity="center">
+                        android:gravity="left"
+                        android:nextFocusForward="@+id/confirm">
                         <RadioButton
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/immediate_service"
                             android:text="Immediate Service"
                             android:theme="@style/CheckBoxStyle"/>
                         <RadioButton
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/cash_delivery"
                             android:text="Cash on Delivery"

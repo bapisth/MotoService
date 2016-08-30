@@ -148,7 +148,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         boolean pin = checkPin();
 
         //check carNumber
-        boolean carNumber = checkCarNumber();
+        //boolean carNumber = checkCarNumber();
 
         //check mobileNumber
         boolean mobileNumber = checkMobileNumber();
@@ -156,7 +156,8 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         //check radio group is checked
         boolean isPaymentChoosen= checkPaymentType();
 
-        return (addressLine1 && addressLine2 && landmark && city && state && pin && carNumber && mobileNumber && isPaymentChoosen);
+        //return (addressLine1 && addressLine2 && landmark && city && state && pin && carNumber && mobileNumber && isPaymentChoosen);
+        return (addressLine1 && addressLine2 && landmark && city && state && pin && mobileNumber && isPaymentChoosen);
 
 
     }

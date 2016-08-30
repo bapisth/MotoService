@@ -104,12 +104,12 @@
                     android:orientation="horizontal"
                     android:layout_below="@id/container1"
                     android:gravity="bottom|center"
-
+                    android:weightSum="2"
                     android:layout_alignParentBottom="true"
                     >
                     <Button
                         android:id="@+id/btn_reset_password"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_background"
                         android:text="@string/btn_forgot_password"
@@ -118,7 +118,8 @@
                         android:textColor="@color/white"
                         android:fontFamily="cursive"
                         android:layout_marginRight="4dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:layout_gravity="bottom" />
 
                     <!--&lt;!&ndash; Link to Login Screen &ndash;&gt;-->
 
@@ -128,11 +129,10 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_background"
                         android:text="@string/btn_link_to_register"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textColor="@color/white"
                         android:layout_marginLeft="4dp"
                         android:textAllCaps="false"
-                        android:padding="@dimen/dp_4"
                         android:fontFamily="cursive"
                         android:layout_weight="1"/>
                 </LinearLayout>

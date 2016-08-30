@@ -24,8 +24,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.urja.motoservice.model.Customer;
+import com.urja.motoservice.utils.AlertDialog;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
 import com.urja.motoservice.utils.DatabaseConstants;
+import com.urja.motoservice.utils.NetworkService;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -43,6 +45,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Check if the Network Connectivity
+        NetworkService.Initialize(getApplicationContext());
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -99,8 +104,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 mProgressDialog.show();
 
                 //authenticate user
-                OnCompleteListener<AuthResult> onCompleteListener = getOnCompleteListener(password);
-                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, onCompleteListener);
+                if (NetworkService.Network){
+                    OnCompleteListener<AuthResult> onCompleteListener = getOnCompleteListener(password);
+                    auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, onCompleteListener);
+                }else {
+                    AlertDialog.Alert(this, "", getString(R.string.message_network_not_available));
+                }
+
             }
             break;
             case R.id.btn_reset_password:

@@ -31,12 +31,6 @@ public class SectionAdapter extends BaseSectionQuickAdapter<ServiceTypeSection> 
         helper.setText(R.id.header, item.header);
         helper.setVisible(R.id.more,item.isMore());
         helper.setOnClickListener(R.id.more,new OnItemChildClickListener());
-        helper.setOnClickListener(R.id.close_btn, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
     }
 
 
