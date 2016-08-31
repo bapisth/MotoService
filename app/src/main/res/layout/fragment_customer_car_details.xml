@@ -41,17 +41,18 @@
                     android:background="@drawable/edittext_background">
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:id="@+id/label_customer_address"
                         android:layout_marginTop="@dimen/dp_10"
                         android:text="Address"
                         android:textSize="25sp"
-                        android:textColor="@color/cyan"
+                        android:textColor="@color/white"
+                        android:background="@color/colorPrimaryDark"
                         android:gravity="center"
                         />
                     <EditText
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_margin="@dimen/dp_10"
                         android:id="@+id/customer_addressline1"
                         android:layout_below="@id/label_customer_address"
@@ -64,7 +65,7 @@
 
                     <EditText
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_margin="@dimen/dp_10"
                         android:id="@+id/customer_addressline2"
                         android:layout_below="@id/customer_addressline1"
@@ -77,7 +78,7 @@
 
                     <EditText
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_margin="@dimen/dp_10"
                         android:id="@+id/customer_landmark"
                         android:layout_below="@id/customer_addressline2"
@@ -90,7 +91,7 @@
 
                     <EditText
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_margin="@dimen/dp_10"
                         android:id="@+id/customer_city"
                         android:layout_below="@id/customer_landmark"
@@ -102,7 +103,7 @@
                         />
                     <EditText
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_margin="@dimen/dp_10"
                         android:id="@+id/customer_state"
                         android:layout_below="@id/customer_city"
@@ -115,7 +116,7 @@
                         />
                     <EditText
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_margin="@dimen/dp_10"
                         android:id="@+id/customer_pin"
                         android:layout_below="@id/customer_state"
@@ -142,17 +143,18 @@
                     android:visibility="gone">
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:id="@+id/label_car_number"
                         android:layout_marginTop="@dimen/dp_10"
                         android:text="Car Number"
                         android:textSize="25sp"
-                        android:textColor="@color/cyan"
+                        android:textColor="@color/white"
+                        android:background="@color/colorPrimaryDark"
                         android:gravity="center"
                         />
                     <EditText
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_margin="@dimen/dp_10"
                         android:id="@+id/customer_car_number"
                         android:layout_below="@id/label_car_number"
@@ -179,17 +181,18 @@
                     android:background="@drawable/edittext_background">
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:id="@+id/label_mobile_number"
                         android:layout_marginTop="@dimen/dp_10"
                         android:text="Mobile Number"
                         android:textSize="25sp"
-                        android:textColor="@color/cyan"
+                        android:textColor="@color/white"
+                        android:background="@color/colorPrimaryDark"
                         android:gravity="center"
                         />
                     <EditText
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_margin="@dimen/dp_10"
                         android:id="@+id/customer_mobile_number"
                         android:layout_below="@id/label_mobile_number"
@@ -211,11 +214,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_background">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:id="@+id/label_payment_type"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="Payment Type"
+                        android:textSize="25sp"
+                        android:textColor="@color/white"
+                        android:background="@color/colorPrimaryDark"
+                        android:gravity="center"
+                        />
                     <RadioGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/payment_type_group"
+                        android:layout_below="@+id/label_payment_type"
                         android:layout_marginTop="@dimen/dp_10"
+                        android:paddingLeft="@dimen/dp_10"
                         android:textSize="25sp"
                         android:textColor="@color/cyan"
                         android:gravity="left"
