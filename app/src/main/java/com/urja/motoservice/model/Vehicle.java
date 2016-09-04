@@ -22,6 +22,10 @@ public class Vehicle {
         this.path = path;
     }
 
+    public Long getCode() {
+        return code;
+    }
+
     public String getDownloadPath() {
         return downloadPath;
     }

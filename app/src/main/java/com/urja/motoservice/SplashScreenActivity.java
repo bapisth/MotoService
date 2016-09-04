@@ -79,7 +79,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                                         CurrentLoggedInUser.setCurrentFirebaseUser(currentUser);
                                         CurrentLoggedInUser.setName(mCustomer.getName());
                                         CurrentLoggedInUser.setMobile(mCustomer.getMobile());
-                                        startActivity(new Intent(SplashScreenActivity.this, DashboardActivity.class));
+                                        //startActivity(new Intent(SplashScreenActivity.this, DashboardActivity.class));
+                                        startActivity(new Intent(SplashScreenActivity.this, WelcomeDashboardActivity.class));
                                         finish();
 
                                     }

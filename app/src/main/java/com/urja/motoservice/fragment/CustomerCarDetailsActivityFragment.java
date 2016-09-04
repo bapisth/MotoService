@@ -22,8 +22,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.urja.motoservice.DashboardActivity;
 import com.urja.motoservice.R;
+import com.urja.motoservice.WelcomeDashboardActivity;
 import com.urja.motoservice.adapters.SectionAdapter;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
@@ -234,7 +234,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         progressDialog.dismiss();
-                        startActivity(new Intent(getActivity(), DashboardActivity.class));
+                        startActivity(new Intent(getActivity(), WelcomeDashboardActivity.class));
                         getActivity().finish();
                     }
                 });

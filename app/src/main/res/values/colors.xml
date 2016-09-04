@@ -86,4 +86,32 @@
     <color name="material_drawer_dark_selected">#202020</color>
     <color name="material_drawer_dark_selected_text">@color/material_drawer_primary</color>
     <color name="material_drawer_dark_header_selection_text">#FFF</color>
+    <color name="list_item_title">#fff</color>
+    <color name="counter_text_color">#c5c4c4</color>
+    <color name="list_divider">#272727</color>
+
+    <color name="list_background">#303030</color>
+    <color name="list_background_pressed">#992416</color>
+    <color name="counter_text_bg">#626262</color>
+
+    <integer-array name="androidcolors">
+
+        <item>@color/white</item>
+        <item>@color/divider</item>
+        <item>@color/primary_light</item>
+
+        <item>@color/material_green_50</item>
+        <item >@color/material_green_500</item>
+        <item>@color/material_green_700</item>
+        <item>@color/material_green_a200</item>
+        <item>@color/material_lime_a700</item>
+        <item>@color/material_purple_a700</item>
+    </integer-array>
+
+    <color name="app_background_color">#FAFAFA</color>
+    <color name="divider_color">#C7C7CC</color>
+
+    <color name="item_selected_background_color">#C7C7CC</color>
+    <color name="image_placeholder_background_color">#C7C7CC</color>
+
 </resources>

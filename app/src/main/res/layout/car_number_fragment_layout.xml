@@ -24,6 +24,8 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="12dp"
         android:fontFamily="sans-serif"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
         android:maxLines="1"
         />
     <View
@@ -37,14 +39,24 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="0dp"
-        android:measureWithLargestChild="true" >
+        android:measureWithLargestChild="true"
+        android:weightSum="10">
+        <Button
+            android:id="@+id/cancel_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:text="Cancel"
+            />
         <Button
             android:id="@+id/ok_button"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:layout_weight="1.0"
-            android:text="OK"
+            android:layout_weight="5"
+            android:text="Ok"
             />
+
     </LinearLayout>
 </LinearLayout>

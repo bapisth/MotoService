@@ -10,6 +10,8 @@ public class ServiceRequest {
     private String groupname;
     private String code;
     private String desc;
+    private String vehiclegroup;
+    private String carnumber;
 
     public ServiceRequest() {
     }
@@ -18,11 +20,13 @@ public class ServiceRequest {
         this.id = id;
     }
 
-    public ServiceRequest(Long id, String groupname, String code, String desc) {
+    public ServiceRequest(Long id, String groupname, String code, String desc, String vehiclegroup, String carnumber) {
         this.id = id;
         this.groupname = groupname;
         this.code = code;
         this.desc = desc;
+        this.vehiclegroup = vehiclegroup;
+        this.carnumber = carnumber;
     }
 
     public Long getId() {
@@ -55,6 +59,22 @@ public class ServiceRequest {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String getVehiclegroup() {
+        return vehiclegroup;
+    }
+
+    public void setVehiclegroup(String vehiclegroup) {
+        this.vehiclegroup = vehiclegroup;
+    }
+
+    public String getCarnumber() {
+        return carnumber;
+    }
+
+    public void setCarnumber(String carnumber) {
+        this.carnumber = carnumber;
     }
 
 }

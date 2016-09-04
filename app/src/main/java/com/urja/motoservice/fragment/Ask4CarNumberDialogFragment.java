@@ -2,6 +2,7 @@ package com.urja.motoservice.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.urja.motoservice.R;
+import com.urja.motoservice.WelcomeDashboardActivity;
 
 public class Ask4CarNumberDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -27,6 +29,7 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
     private EditText mPassword;
     private Button mReset;
     private Button mOkButton;
+    private Button mCancelButton;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,8 +38,10 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
 
         mCarNumber = (EditText) view.findViewById(R.id.car_number);
         mOkButton = (Button) view.findViewById(R.id.ok_button);
+        mCancelButton = (Button) view.findViewById(R.id.cancel_button);
 
         mOkButton.setOnClickListener(this);
+        mCancelButton.setOnClickListener(this);
 
         return view;
     }
@@ -55,11 +60,21 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
     }
 
     public void onClick(View v) {
-            if (mCarNumber.getText().toString().length() < 1 || mCarNumber.getText().toString().equals("")) {
-                mCarNumber.setError("Required!!");
-                return;
-            }else {
-                this.dismiss();
-            }
+        switch (v.getId()){
+            case R.id.ok_button:
+                if (mCarNumber.getText().toString().length() < 1 || mCarNumber.getText().toString().equals("")) {
+                    mCarNumber.setError("Required!!");
+                    return;
+                }else {
+                    mListener.onSubmit(mCarNumber.getText().toString());
+                    this.dismiss();
+                }
+                break;
+            case R.id.cancel_button:
+                startActivity(new Intent(getActivity(), WelcomeDashboardActivity.class));
+                getActivity().finish();
+                break;
+        }
+
     }
 }

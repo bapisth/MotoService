@@ -13,12 +13,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
 import com.urja.motoservice.fragment.AccessoriesFragment;
+import com.urja.motoservice.fragment.Ask4CarNumberDialogFragment;
 import com.urja.motoservice.fragment.DentPaintFragment;
 import com.urja.motoservice.fragment.ServiceRepairFragment;
 import com.urja.motoservice.fragment.TyreWheelFragment;
@@ -29,6 +31,7 @@ import com.urja.motoservice.model.ServiceEventModel;
 import com.urja.motoservice.model.ServiceRepair;
 import com.urja.motoservice.model.TyreWheel;
 import com.urja.motoservice.model.WashDetailing;
+import com.urja.motoservice.utils.AppConstants;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,7 +40,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChooseServiceActivity extends AppCompatActivity {
+public class ChooseServiceActivity extends AppCompatActivity  implements Ask4CarNumberDialogFragment.Ask4CarNumberDialogListener  {
 
 
     private static final String TAG = ChooseServiceActivity.class.getSimpleName();
@@ -57,6 +60,14 @@ public class ChooseServiceActivity extends AppCompatActivity {
     private List<ServiceRequest> mServiceRequestList = new ArrayList<>();
     private ServiceRequest mServiceRequest = null;
 
+    private FloatingActionMenu menuLabelsRight;
+    private com.github.clans.fab.FloatingActionButton mAddMore;
+    private com.github.clans.fab.FloatingActionButton mNext;
+    private List<FloatingActionMenu> menus = new ArrayList<>();
+    private long mVehicleGroupId;
+    private String mCarNumber = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,73 +76,28 @@ public class ChooseServiceActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        Ask4CarNumberDialogFragment  ask4CarNumberDialogFragment = new Ask4CarNumberDialogFragment();
+        ask4CarNumberDialogFragment.show(getSupportFragmentManager(), TAG);
+        ask4CarNumberDialogFragment.setCancelable(false);
+
+        menuLabelsRight = (FloatingActionMenu) findViewById(R.id.menu_labels_right);
+        mAddMore = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.add_more);
+        mNext = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.next);
+        mAddMore.setOnClickListener(clickListener);
+        mNext.setOnClickListener(clickListener);
+
+        Intent intent = getIntent();
+        Log.d(TAG, "onCreate: "+intent.getLongExtra(AppConstants.CAR_ID, -1));
+        mVehicleGroupId = intent.getLongExtra(AppConstants.CAR_ID, -1);
+
+        /*
+        com.github.clans.fab.FloatingActionButton fab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mWashDetailingList.size()==0 && mTyreWheelList.size()==0 && mServiceRepairList.size()==0  && mDentPaintList.size()==0  && mAccessoriesList.size()==0 ){
-                    Toast.makeText(ChooseServiceActivity.this, "Choose Any of the Service!!!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                ServiceRequestDao serviceRequestDao = DbHelper.getInstance(ChooseServiceActivity.this).getServiceRequestDao();
-                for (WashDetailing washDetailing: mWashDetailingList){
-                    mServiceRequest = new ServiceRequest();
-                    mServiceRequest.setCode(washDetailing.getCode());
-                    mServiceRequest.setDesc(washDetailing.getDesc());
-                    mServiceRequest.setGroupname(WASH_DETAILING);
-
-                    mServiceRequestList.add(mServiceRequest);
-                }
-
-                for (TyreWheel tyreWheel: mTyreWheelList){
-                    mServiceRequest = new ServiceRequest();
-                    mServiceRequest.setCode(tyreWheel.getCode());
-                    mServiceRequest.setDesc(tyreWheel.getDesc());
-                    mServiceRequest.setGroupname(TYRE_WHEEL);
-
-                    mServiceRequestList.add(mServiceRequest);
-                }
-
-                for (ServiceRepair serviceRepair: mServiceRepairList){
-                    mServiceRequest = new ServiceRequest();
-                    mServiceRequest.setCode(serviceRepair.getCode());
-                    mServiceRequest.setDesc(serviceRepair.getDesc());
-                    mServiceRequest.setGroupname(SERVICE_REPAIR);
-
-                    mServiceRequestList.add(mServiceRequest);
-                }
-
-                for (DentPaint dentPaint: mDentPaintList){
-                    mServiceRequest = new ServiceRequest();
-                    mServiceRequest.setCode(dentPaint.getCode());
-                    mServiceRequest.setDesc(dentPaint.getDesc());
-                    mServiceRequest.setGroupname(DENT_PAINT);
-
-                    mServiceRequestList.add(mServiceRequest);
-                }
-
-                for (Accessories accessories: mAccessoriesList){
-                    mServiceRequest = new ServiceRequest();
-                    mServiceRequest.setCode(accessories.getCode());
-                    mServiceRequest.setDesc(accessories.getDesc());
-                    mServiceRequest.setGroupname(ACCESSORIES);
-
-                    mServiceRequestList.add(mServiceRequest);
-                }
-
-                //Insert into service request table
-                serviceRequestDao.insertInTx(mServiceRequestList);
-
-                Intent intent  = new Intent(ChooseServiceActivity.this, ConfirmRequestActivity.class );
-                startActivity(intent);
-
-                //finish();
-                //
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
+                goToServiceCheckList();
             }
-        });
+        });*/
 
 
         mViewPager = (MaterialViewPager) findViewById(R.id.materialViewPager);
@@ -148,9 +114,6 @@ public class ChooseServiceActivity extends AppCompatActivity {
             actionBar.setDisplayUseLogoEnabled(false);
             actionBar.setHomeButtonEnabled(true);
         }
-
-
-
 
         mViewPager.getViewPager().setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
 
@@ -248,6 +211,82 @@ public class ChooseServiceActivity extends AppCompatActivity {
         }
     }
 
+    private void goToServiceCheckList() {
+        if (mWashDetailingList.size()==0 && mTyreWheelList.size()==0 && mServiceRepairList.size()==0  && mDentPaintList.size()==0  && mAccessoriesList.size()==0 ){
+            Toast.makeText(ChooseServiceActivity.this, "Choose Any of the Service!!!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ServiceRequestDao serviceRequestDao = DbHelper.getInstance(ChooseServiceActivity.this).getServiceRequestDao();
+        for (WashDetailing washDetailing: mWashDetailingList){
+            mServiceRequest = new ServiceRequest();
+            mServiceRequest.setCode(washDetailing.getCode());
+            mServiceRequest.setDesc(washDetailing.getDesc());
+            mServiceRequest.setGroupname(WASH_DETAILING);
+            mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
+            mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
+
+            mServiceRequestList.add(mServiceRequest);
+        }
+
+        for (TyreWheel tyreWheel: mTyreWheelList){
+            mServiceRequest = new ServiceRequest();
+            mServiceRequest.setCode(tyreWheel.getCode());
+            mServiceRequest.setDesc(tyreWheel.getDesc());
+            mServiceRequest.setGroupname(TYRE_WHEEL);
+            mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
+            mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
+
+            mServiceRequestList.add(mServiceRequest);
+        }
+
+        for (ServiceRepair serviceRepair: mServiceRepairList){
+            mServiceRequest = new ServiceRequest();
+            mServiceRequest.setCode(serviceRepair.getCode());
+            mServiceRequest.setDesc(serviceRepair.getDesc());
+            mServiceRequest.setGroupname(SERVICE_REPAIR);
+            mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
+            mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
+
+            mServiceRequestList.add(mServiceRequest);
+        }
+
+        for (DentPaint dentPaint: mDentPaintList){
+            mServiceRequest = new ServiceRequest();
+            mServiceRequest.setCode(dentPaint.getCode());
+            mServiceRequest.setDesc(dentPaint.getDesc());
+            mServiceRequest.setGroupname(DENT_PAINT);
+            mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
+            mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
+
+            mServiceRequestList.add(mServiceRequest);
+        }
+
+        for (Accessories accessories: mAccessoriesList){
+            mServiceRequest = new ServiceRequest();
+            mServiceRequest.setCode(accessories.getCode());
+            mServiceRequest.setDesc(accessories.getDesc());
+            mServiceRequest.setGroupname(ACCESSORIES);
+            mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
+            mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
+
+
+            mServiceRequestList.add(mServiceRequest);
+        }
+
+        //Insert into service request table
+        serviceRequestDao.insertInTx(mServiceRequestList);
+
+        //Intent intent  = new Intent(ChooseServiceActivity.this, ConfirmRequestActivity.class );
+        Intent intent  = new Intent(ChooseServiceActivity.this, ModifyChoosenServiceRquestActivity.class );
+        startActivity(intent);
+
+        //finish();
+        //
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -302,5 +341,24 @@ public class ChooseServiceActivity extends AppCompatActivity {
     protected void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.add_more:
+                    startActivityFromChild(ChooseServiceActivity.this, new Intent(ChooseServiceActivity.this, WelcomeDashboardActivity.class), 123);
+                    break;
+                case R.id.next:
+                    goToServiceCheckList();
+                    break;
+            }
+        }
+    };
+
+    @Override
+    public void onSubmit(String carNumber) {
+        this.mCarNumber = carNumber;
     }
 }

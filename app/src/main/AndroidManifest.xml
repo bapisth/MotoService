@@ -21,6 +21,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".DashboardDataActivity"
+            android:label="Dashboard Data Activity"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".SignupActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme" />
@@ -29,35 +33,42 @@
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".DashboardActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
             android:name=".UserProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".TestUserProfileActivity"
             android:label="@string/title_activity_test_user_profile"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".VehicleServiceListActivity"
             android:label="VehicleServiceListActivity"
-            android:parentActivityName=".DashboardActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".DashboardDataActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ChooseServiceActivity"
-            android:parentActivityName=".DashboardActivity"
+            android:parentActivityName=".DashboardDataActivity"
             android:theme="@style/AppTheme.TextAppearance">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DashboardActivity" />
+                android:value=".DashboardDataActivity" />
         </activity>
         <activity
             android:name=".ConfirmRequestActivity"
             android:label="@string/title_activity_choose_service"
             android:parentActivityName=".ChooseServiceActivity"
             android:theme="@style/AppTheme.NoActionBar">
+
             <!-- android:parentActivityName=".ChooseServiceActivity" -->
         </activity>
+        <activity
+            android:name=".ModifyChoosenServiceRquestActivity"
+            android:label="@string/title_activity_choose_service"
+            android:parentActivityName=".ChooseServiceActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!-- android:parentActivityName=".ChooseServiceActivity" -->
+        </activity>
+
         <activity
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
@@ -71,6 +82,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.urja.motoservice.ConfirmRequestActivity" />
         </activity>
+        <activity
+            android:name=".WelcomeDashboardActivity"
+            android:label="@string/title_activity_welcome_dashboard"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

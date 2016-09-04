@@ -127,7 +127,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                     mProgressDialog.dismiss();
 
                                     //startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                                    startActivity(new Intent(SignupActivity.this, DashboardActivity.class));
+                                    startActivity(new Intent(SignupActivity.this, WelcomeDashboardActivity.class));
                                     finish();
                                 }
                             }

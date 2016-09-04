@@ -44,7 +44,7 @@ import java.util.List;
 import de.greenrobot.dao.query.DeleteQuery;
 import de.greenrobot.dao.query.WhereCondition;
 
-public class ConfirmRequestActivity extends AppCompatActivity {
+public class ConfirmRequestActivity extends AppCompatActivity implements DialogInterface.OnClickListener{
 
     static final boolean GRID_LAYOUT = false;
     private static final String TAG = ConfirmRequestActivity.class.getSimpleName();
@@ -56,6 +56,10 @@ public class ConfirmRequestActivity extends AppCompatActivity {
     private Button mButton;
     private String mCurrentUserId = null;
     private ServiceRequestDao mServiceRequestDao = null;
+    private BaseQuickAdapter mBaseQuickAdapter = null;
+    private View mBaseQuickAdapterView = null;
+    private int mItemSelectedPosition ;
+    private SectionAdapter mSectionAdapter = null;
 
 
 
@@ -84,47 +88,59 @@ public class ConfirmRequestActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.requestedServiceRecyclerView);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        final SectionAdapter sectionAdapter = new SectionAdapter(R.layout.item_section_content, R.layout.def_section_head, mContentItems);
+        mSectionAdapter = new SectionAdapter(R.layout.item_section_content, R.layout.def_section_head, mContentItems);
         //sectionAdapter.setOnRecyclerViewItemClickListener(this);
-        sectionAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
+        mSectionAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
             @Override
             public void onItemChildClick(final BaseQuickAdapter adapter, final View view, final int position) {
                 //Toast.makeText(ConfirmRequestActivity.this, "onItemChildClick"+position, Toast.LENGTH_LONG).show();
+                mBaseQuickAdapter = adapter;
+                mBaseQuickAdapterView = view;
+                mItemSelectedPosition = position;
+                AlertDialog.Builder builder = new AlertDialog.Builder(ConfirmRequestActivity.this, R.style.AppTheme_AlertStyle);
+                builder.setTitle("Confirm");
+                builder.setMessage("Do you want to Delete?");
 
-                if (adapter.getItemCount() >1){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ConfirmRequestActivity.this, R.style.AppTheme_AlertStyle);
-                    builder.setTitle("Confirm");
-                    builder.setMessage("Do you want to Delete?");
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Log.d(TAG, "onClick: You clicked yes.. data going to be deleted");
-                            adapter.remove(position);
-                            TextView itemCode = (TextView) view.findViewById(R.id.item_code);
-                            String code ="";
-                            if (itemCode!=null && itemCode.getText()!=null)
-                                code = itemCode.getText().toString();
-                            deleteRecordFromDatabase(mServiceRequestList.get(position).getCode());
-                            adapter.notifyDataSetChanged();
+                switch (view.getId()){
+                    case R.id.more:
+                        if (adapter.getItemCount() <1) {
+                            com.urja.motoservice.utils.AlertDialog.Alert(ConfirmRequestActivity.this, "", "Choose atleast one service!!");
+                        }else{
+                            builder.setPositiveButton("Yes",ConfirmRequestActivity.this);
+                            builder.setNegativeButton("No", null);
+                            builder.show();
+                            /*deleteRecordFromDatabaseByVehicleGroup(mServiceRequestList.get(mItemSelectedPosition).getVehiclegroup());
+                            adapter.notifyDataSetChanged();*/
                         }
-                    });
-                    builder.setNegativeButton("No", null);
-                    builder.show();
-                }else{
-                    com.urja.motoservice.utils.AlertDialog.Alert(ConfirmRequestActivity.this,"", "Choose atleast one service!!");
+                        break;
+                    case R.id.close_btn:
+                        if (adapter.getItemCount() >1){
+                            builder.setPositiveButton("Yes",ConfirmRequestActivity.this);
+                            builder.setNegativeButton("No", null);
+                            builder.show();
+                        }else{
+                            com.urja.motoservice.utils.AlertDialog.Alert(ConfirmRequestActivity.this,"", "Choose atleast one service!!");
+                        }
+                        break;
                 }
 
             }
         });
 
-        mRecyclerView.setAdapter(sectionAdapter);
+        mRecyclerView.setAdapter(mSectionAdapter);
 
 
 
         //read the saved data from the sqlite database
-        readServiceRequestData(sectionAdapter);
+        readServiceRequestData(mSectionAdapter);
 
 
+    }
+
+    private void deleteRecordFromDatabaseByVehicleGroup(String vehiclegroup) {
+        ServiceRequestDao serviceRequestDao = DbHelper.getInstance(ConfirmRequestActivity.this).getDaoSession().getServiceRequestDao();
+        DeleteQuery deleteQuery  = serviceRequestDao.queryBuilder().where(new WhereCondition.StringCondition(String.valueOf("vehiclegroup='"+vehiclegroup+"'"))).buildDelete();
+        deleteQuery.executeDeleteWithoutDetachingEntities();
     }
 
     /**
@@ -164,15 +180,24 @@ public class ConfirmRequestActivity extends AppCompatActivity {
     private void readServiceRequestData(SectionAdapter sectionAdapter) {
         mServiceRequestDao = DbHelper.getInstance(ConfirmRequestActivity.this).getServiceRequestDao();
         mServiceRequestList = mServiceRequestDao.loadAll();
+        mServiceRequestList = mServiceRequestDao.queryBuilder().orderAsc(ServiceRequestDao.Properties.Vehiclegroup).list();
 
         List<ServiceTypeSection> serviceTypeSections = null;
         ServiceTypeSection  serviceTypeSection=null;
-        for (ServiceRequest serviceRequest :mServiceRequestList){
-            Log.e(TAG, "onCreate: "+serviceRequest.getCode()+ ":" + serviceRequest.getDesc());
-            serviceTypeSection = new ServiceTypeSection(true, getSectionHeaderDescriptio(serviceRequest.getGroupname()), true);
-            mContentItems.add(new ServiceTypeSection(serviceRequest));
-        }
+        String tempVehicleGroup="";
 
+        if (mServiceRequestList != null){
+            for (ServiceRequest serviceRequest :mServiceRequestList){
+                if (!tempVehicleGroup.equalsIgnoreCase(serviceRequest.getVehiclegroup())){
+                    tempVehicleGroup=serviceRequest.getVehiclegroup();
+                    serviceTypeSection = new ServiceTypeSection(true, getSectionHeaderDescriptio(serviceRequest.getGroupname()), true);
+                    mContentItems.add(serviceTypeSection);
+                    continue;
+                }
+                serviceTypeSection = new ServiceTypeSection(serviceRequest);
+                mContentItems.add(new ServiceTypeSection(serviceRequest));
+            }
+        }
         sectionAdapter.notifyDataSetChanged();
     }
 
@@ -201,4 +226,36 @@ public class ConfirmRequestActivity extends AppCompatActivity {
         deleteQuery.executeDeleteWithoutDetachingEntities();
     }
 
+    @Override
+    public void onClick(DialogInterface dialogInterface, int position) {
+        Log.d(TAG, "onClick: You clicked yes.. data going to be deleted"+mItemSelectedPosition);
+
+        switch (mBaseQuickAdapterView.getId()){
+            case R.id.more:
+                String vehiclegroup = mServiceRequestList.get(mItemSelectedPosition).getVehiclegroup();
+                deleteRecordFromDatabaseByVehicleGroup(vehiclegroup);
+                Log.e(TAG, "onClick: Size="+mServiceRequestList.size());
+                ServiceRequest  serviceRequest = null;
+                for(int i=0; i<mServiceRequestList.size(); i++) {
+                    serviceRequest = mServiceRequestList.get(i);
+                    if(serviceRequest.getVehiclegroup().equalsIgnoreCase(vehiclegroup)) {
+                        mServiceRequestList.remove(i);
+                        mBaseQuickAdapter.remove(i);
+                    }
+                }
+                Log.e(TAG, "onClick: Size="+mServiceRequestList.size());
+                break;
+            case R.id.close_btn:
+                mBaseQuickAdapter.remove(mItemSelectedPosition);
+                mBaseQuickAdapter.notifyItemRemoved(mItemSelectedPosition);
+                TextView itemCode = (TextView) mBaseQuickAdapterView.findViewById(R.id.item_code);
+                String code ="";
+                if (itemCode!=null && itemCode.getText()!=null)
+                    code = itemCode.getText().toString();
+                deleteRecordFromDatabase(mServiceRequestList.get(mItemSelectedPosition).getCode());
+                break;
+        }
+
+        mBaseQuickAdapter.notifyDataSetChanged();
+    }
 }

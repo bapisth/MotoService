@@ -21,8 +21,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.model.Customer;
 import com.urja.motoservice.utils.AlertDialog;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
@@ -128,8 +132,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // the auth state listener will be notified and logic to handle the
                 // signed in user can be handled in the listener.
                 //progressBar.setVisibility(View.GONE);
-                mProgressDialog.dismiss();
+
                 if (!task.isSuccessful()) {
+                    mProgressDialog.dismiss();
                     // there was an error
                     if (password.length() < 6) {
                         inputPassword.setError(getString(R.string.minimum_password));
@@ -138,10 +143,60 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 } else {
                     //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    CurrentLoggedInUser.setCurrentFirebaseUser(auth.getCurrentUser());
-                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                    startActivity(intent);
-                    finish();
+                    final FirebaseUser currentUser = auth.getCurrentUser();
+                    CurrentLoggedInUser.setCurrentFirebaseUser(currentUser);
+
+                    //Get the Customer details from the Customer Object from the server
+                    mCustomerRef.orderByKey().equalTo(currentUser.getUid()).addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String previousChildKey) {
+                            Log.d(TAG, "onChildAdded: "+dataSnapshot.getKey());
+                            mCustomer = dataSnapshot.getValue(Customer.class);
+                            mCurrrentKey = dataSnapshot.getKey();
+                            if (mCurrrentKey!= null && currentUser!=null && mCurrrentKey.equalsIgnoreCase(currentUser.getUid()))
+                                if (mCustomer != null){
+
+                                    Log.d(TAG, "onChildAdded: Name="+ mCustomer.getName());
+                                    Log.d(TAG, "onChildAdded: currentKey="+ mCurrrentKey);
+                                    Log.d(TAG, "onChildAdded: previousChildKey="+previousChildKey);
+
+                                    CurrentLoggedInUser.setCurrentFirebaseUser(currentUser);
+                                    CurrentLoggedInUser.setName(mCustomer.getName());
+                                    CurrentLoggedInUser.setMobile(mCustomer.getMobile());
+
+                                    //Dismiss the progress bar
+                                    mProgressDialog.dismiss();
+                                    //startActivity(new Intent(SplashScreenActivity.this, DashboardActivity.class));
+                                    startActivity(new Intent(LoginActivity.this, WelcomeDashboardActivity.class));
+                                    finish();
+
+                                }
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+
+                    });
+
+
+
                 }
             }
         };

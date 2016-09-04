@@ -1,7 +1,10 @@
+/*
 package com.urja.motoservice;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -11,6 +14,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -87,6 +91,8 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         //Get the Currentlogged in UserId
+        if (CurrentLoggedInUser.getCurrentFirebaseUser() ==null)
+            CurrentLoggedInUser.setCurrentFirebaseUser(mAuth.getCurrentUser());
         mCurrentUserId = CurrentLoggedInUser.getCurrentFirebaseUser().getUid();
         mName = CurrentLoggedInUser.getName();
         mMobile = CurrentLoggedInUser.getMobile();
@@ -153,19 +159,26 @@ public class DashboardActivity extends AppCompatActivity {
                 .withEmail(CurrentLoggedInUser.getCurrentFirebaseUser().getEmail())
                 //.withIcon(GoogleMaterial.Icon.gmd_account)
                 .withIdentifier(100);
+
+        //Pick Color from the header jpg as the background
+        Bitmap  bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.header);
+        Palette palette = Palette.from(bitmap).generate();
         // Create the AccountHeader
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withTranslucentStatusBar(true)
-                .withHeaderBackground(R.drawable.header)
+                .withHeaderBackground(R.drawable.prop_background)
                 .withSavedInstance(savedInstanceState)
-                /*.addProfiles(
+                */
+/*.addProfiles(
                         profile,
                         //don't ask but google uses 14dp for the add account icon in gmail but 20dp for the normal icons (like manage account)
                         new ProfileSettingDrawerItem().withName("Add Account").withDescription("Add new GitHub Account").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_plus).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING),
                         new ProfileSettingDrawerItem().withName("Manage Account").withIcon(GoogleMaterial.Icon.gmd_settings).withIdentifier(100001)
-                )*/
-                /*.withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                )*//*
+
+                */
+/*.withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
                         //sample usage of the onProfileChanged listener
@@ -184,7 +197,8 @@ public class DashboardActivity extends AppCompatActivity {
                         //false if you have not consumed the event and it should close the drawer
                         return false;
                     }
-                })*/
+                })*//*
+
                 .withSavedInstance(savedInstanceState)
                 .build();
 
@@ -195,7 +209,8 @@ public class DashboardActivity extends AppCompatActivity {
                 .withHasStableIds(true)
                 .withItemAnimator(new AlphaCrossFadeAnimator())
                 .withSavedInstance(savedInstanceState)
-                .withAccountHeader(headerResult) //set the AccountHeader we created earlier for the header
+                //.withAccountHeader(headerResult) //set the AccountHeader we created earlier for the header
+                .withHeader(R.layout.header_logo)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.drawer_item_home).withIcon(FontAwesome.Icon.faw_home).withBadge("99").withIdentifier(1),
                         //new PrimaryDrawerItem().withName("Menu 2").withIcon(FontAwesome.Icon.faw_gamepad),
@@ -265,10 +280,12 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-    /**
+    */
+/**
      * Initializing collapsing toolbar
      * Will show and hide the toolbar title on scroll
-     */
+     *//*
+
     private void initCollapsingToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -299,7 +316,8 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-    /*private void initializeToolbar() {
+    */
+/*private void initializeToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -322,7 +340,8 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-    }*/
+    }*//*
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -343,9 +362,11 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-    /**
+    */
+/**
      * RecyclerView item decoration - give equal margin around grid item
-     */
+     *//*
+
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;
@@ -381,11 +402,14 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-    /**
+    */
+/**
      * Converting dp to pixel
-     */
+     *//*
+
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 }
+*/

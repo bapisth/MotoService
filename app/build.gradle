@@ -25,6 +25,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:design:24.1.1'
     compile 'com.android.support:support-v4:24.1.1'
+    compile 'com.android.support:palette-v7:24.1.1'
+
+    //TextView Style
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
     // FirebaseUI Dependencies
     compile 'com.google.firebase:firebase-core:9.4.0'
@@ -40,12 +44,12 @@ dependencies {
     // Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
 
-    //Material Drawer
+    /*//Material Drawer
     compile('com.mikepenz:materialdrawer:5.3.6@aar') {
         transitive = true
-    }
+    }*/
 
-    //used to provide different itemAnimators for the RecyclerView
+    /*//used to provide different itemAnimators for the RecyclerView
     //https://github.com/mikepenz/ItemAnimators
     compile 'com.mikepenz:itemanimators:0.2.4@aar'
 
@@ -53,7 +57,10 @@ dependencies {
     // https://github.com/mikepenz/Android-Iconics
     compile 'com.mikepenz:google-material-typeface:2.2.0.1@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.6.0.3@aar'
-    compile 'com.mikepenz:octicons-typeface:3.0.0.1@aar'
+    compile 'com.mikepenz:octicons-typeface:3.0.0.1@aar'*/
+
+    //Recyclerview Adapter
+    compile 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.0.4'
 
     //Material Viewpager
     compile ('com.github.florent37:materialviewpager:1.2.0@aar'){
@@ -65,6 +72,11 @@ dependencies {
 
     //EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
+
+    //Floating Action Button
+    compile 'com.github.clans:fab:1.6.4'
+
+
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'org.greenrobot.greendao'

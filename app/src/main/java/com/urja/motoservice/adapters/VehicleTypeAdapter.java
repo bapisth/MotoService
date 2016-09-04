@@ -35,6 +35,7 @@ import com.bumptech.glide.load.model.StringLoader;
 import com.urja.motoservice.ChooseServiceActivity;
 import com.urja.motoservice.R;
 import com.urja.motoservice.model.Vehicle;
+import com.urja.motoservice.utils.AppConstants;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
     private View mContentView;
     private PopupWindow mPopupWindow;
     private ViewGroup mViewGroup;
+    private long mServiceID = -1;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, count;
@@ -78,10 +80,10 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         Vehicle vehicle = mVehicleList.get(position);
         holder.title.setText("Not Available");
-        holder.count.setText(12 + " songs"); //remove
+        holder.count.setText("Rs. "+12); //remove
 
         Log.e(TAG, "onBindViewHolder: "+vehicle.getDownloadPath());
         // loading album cover using Glide library
@@ -90,7 +92,7 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopupMenu(holder.overflow);
+                showPopupMenu(holder.overflow, position);
                 //showPopupWindow(holder.overflow);
             }
         });
@@ -173,11 +175,13 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
     /**
      * Showing popup menu when tapping on 3 dots
      */
-    private void showPopupMenu(View view) {
+    private void showPopupMenu(View view, final int position) {
         // inflate menu
         PopupMenu popup = new PopupMenu(mContext, view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_book, popup.getMenu());
+        Vehicle vehicle = mVehicleList.get(position);
+        mServiceID = mVehicleList.get(position).getCode();
         popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
         popup.show();
     }
@@ -194,7 +198,9 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.action_request_service:
-                    mContext.startActivity(new Intent(mContext, ChooseServiceActivity.class));
+                    Intent intent = new Intent(mContext, ChooseServiceActivity.class);
+                    intent.putExtra(AppConstants.CAR_ID, mServiceID);
+                    mContext.startActivity(intent);
                     return true;
                 default:
             }
