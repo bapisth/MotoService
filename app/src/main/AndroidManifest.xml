@@ -46,11 +46,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ChooseServiceActivity"
-            android:parentActivityName=".DashboardDataActivity"
-            android:theme="@style/AppTheme.TextAppearance">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DashboardDataActivity" />
+            android:theme="@style/AppTheme.TextAppearance"
+            android:launchMode="singleTop">
         </activity>
         <activity
             android:name=".ConfirmRequestActivity"
@@ -78,14 +75,16 @@
             android:label="@string/title_activity_customer_car_details"
             android:parentActivityName=".ConfirmRequestActivity"
             android:theme="@style/AppTheme">
-            <meta-data
+            <!--<meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.urja.motoservice.ConfirmRequestActivity" />
+                android:value="com.urja.motoservice.ConfirmRequestActivity" />-->
         </activity>
         <activity
             android:name=".WelcomeDashboardActivity"
             android:label="@string/title_activity_welcome_dashboard"
-            android:theme="@style/AppTheme"></activity>
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme"/>
+        <receiver android:name=".utils.NetworkService" android:enabled="true"/>
     </application>
 
 </manifest>

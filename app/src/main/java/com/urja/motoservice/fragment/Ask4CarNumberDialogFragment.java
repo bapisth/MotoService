@@ -2,11 +2,14 @@ package com.urja.motoservice.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,8 @@ import com.urja.motoservice.R;
 import com.urja.motoservice.WelcomeDashboardActivity;
 
 public class Ask4CarNumberDialogFragment extends DialogFragment implements View.OnClickListener {
+    private static final String TAG = Ask4CarNumberDialogFragment.class.getSimpleName();
+
 
     public interface Ask4CarNumberDialogListener {
         void onSubmit(String carNumber);
@@ -46,6 +51,25 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
+                if ((keyCode ==  android.view.KeyEvent.KEYCODE_BACK)) {
+                    // To dismiss the fragment when the back-button is pressed.
+                    dismiss();
+                    startActivity(new Intent(getActivity(), WelcomeDashboardActivity.class));
+                    getActivity().finish();
+                    return true;
+                } else// Otherwise, do nothing else
+                    return false;
+            }
+        });
+    }
+
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         // Verify that the host activity implements the callback interface
@@ -57,6 +81,11 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
             throw new ClassCastException(activity.toString()
                     + " must implement AuthenticationDialogListener");
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Toast.makeText(getActivity(), "Activity Result", Toast.LENGTH_SHORT).show();
     }
 
     public void onClick(View v) {
@@ -77,4 +106,6 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
         }
 
     }
+
+
 }

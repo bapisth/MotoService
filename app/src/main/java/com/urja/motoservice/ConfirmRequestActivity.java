@@ -36,6 +36,7 @@ import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.database.dao.DaoSession;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
 import com.urja.motoservice.model.ServiceTypeSection;
+import com.urja.motoservice.utils.AppConstants;
 import com.urja.motoservice.utils.DatabaseConstants;
 
 import java.util.ArrayList;
@@ -205,15 +206,15 @@ public class ConfirmRequestActivity extends AppCompatActivity implements DialogI
         if (groupname==null)
             return "";
         switch (groupname){
-            case ChooseServiceActivity.WASH_DETAILING:
+            case AppConstants.WASH_DETAILING:
                 return "Wash Detailing";
-            case ChooseServiceActivity.TYRE_WHEEL:
+            case AppConstants.TYRE_WHEEL:
                 return "Tyre Wheel";
-            case ChooseServiceActivity.SERVICE_REPAIR:
+            case AppConstants.SERVICE_REPAIR:
                 return "Service Repair";
-            case ChooseServiceActivity.DENT_PAINT:
+            case AppConstants.DENT_PAINT:
                 return "Dent Paint";
-            case ChooseServiceActivity.ACCESSORIES:
+            case AppConstants.ACCESSORIES:
                 return "Accessories";
             default:
                 return "";

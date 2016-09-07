@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -30,7 +31,10 @@ import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
 import com.urja.motoservice.model.CustomerTransactionAddress;
 import com.urja.motoservice.model.ServiceTypeSection;
+import com.urja.motoservice.model.TransactionComplete;
 import com.urja.motoservice.utils.DatabaseConstants;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -133,7 +137,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         boolean addressLine1 = checkAddressLine1();
 
         //check Addressline2
-        boolean addressLine2 = checkAddressLine2();
+        //boolean addressLine2 = checkAddressLine2();
 
         //check landmark
         boolean landmark = checkLandmark();
@@ -157,7 +161,8 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         boolean isPaymentChoosen= checkPaymentType();
 
         //return (addressLine1 && addressLine2 && landmark && city && state && pin && carNumber && mobileNumber && isPaymentChoosen);
-        return (addressLine1 && addressLine2 && landmark && city && state && pin && mobileNumber && isPaymentChoosen);
+        //return (addressLine1 && addressLine2 && landmark && city && state && pin && mobileNumber && isPaymentChoosen);
+        return (addressLine1 && landmark && city && state && pin && mobileNumber && isPaymentChoosen);
 
 
     }
@@ -183,9 +188,9 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     private boolean checkAddressLine1() {
         return checkEditText(mCustomerAddressline1);
     }
-    private boolean checkAddressLine2() {
+    /*private boolean checkAddressLine2() {
         return checkEditText(mCustomerAaddressline2);
-    }
+    }*/
 
     private boolean checkLandmark() {
         return checkEditText(mCustomerLandmark);
@@ -234,11 +239,17 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         progressDialog.dismiss();
-                        startActivity(new Intent(getActivity(), WelcomeDashboardActivity.class));
+                        EventBus.getDefault().post(new TransactionComplete(true));
+                        ActivityCompat.finishAffinity(getActivity());
+                        Intent intent = new Intent(getActivity(), WelcomeDashboardActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                         getActivity().finish();
                     }
                 });
             }
         });
     }
+
+
 }
