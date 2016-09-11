@@ -37,7 +37,7 @@ public class ServiceRepairFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private List<Object> mContentItems = new ArrayList<>();
     private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mServiceRepairRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CAR_SERVICE+"/"+DatabaseConstants.TABLE_SERVICE_REPAIRING);
+    private DatabaseReference mServiceRepairRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CAR_SERVICE + "/" + DatabaseConstants.TABLE_SERVICE_REPAIRING);
 
     public static ServiceRepairFragment newInstance() {
         return new ServiceRepairFragment();
@@ -78,9 +78,9 @@ public class ServiceRepairFragment extends Fragment {
         mServiceRepairRef.orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    Log.d(TAG, "onDataChange: Key="+snapshot.getKey());
-                    Log.d(TAG, "onDataChange: value="+snapshot.getValue());
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: Key=" + snapshot.getKey());
+                    Log.d(TAG, "onDataChange: value=" + snapshot.getValue());
                     mContentItems.add(new ServiceRepair(snapshot.getKey(), snapshot.getValue().toString()));
                 }
                 mAdapter.notifyDataSetChanged();

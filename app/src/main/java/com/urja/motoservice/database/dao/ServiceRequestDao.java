@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
-
 import com.urja.motoservice.database.ServiceRequest;
 
 import de.greenrobot.dao.AbstractDao;
@@ -15,7 +14,7 @@ import de.greenrobot.dao.internal.DaoConfig;
 
 /**
  * DAO for table "SERVICE_REQUEST".
-*/
+ */
 public class ServiceRequestDao extends AbstractDao<ServiceRequest, Long> {
 
     public static final String TABLENAME = "SERVICE_REQUEST";
@@ -23,7 +22,7 @@ public class ServiceRequestDao extends AbstractDao<ServiceRequest, Long> {
     /**
      * Properties of entity ServiceRequest.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Groupname = new Property(1, String.class, "groupname", false, "GROUPNAME");
@@ -31,20 +30,24 @@ public class ServiceRequestDao extends AbstractDao<ServiceRequest, Long> {
         public final static Property Desc = new Property(3, String.class, "desc", false, "DESC");
         public final static Property Vehiclegroup = new Property(4, String.class, "vehiclegroup", false, "VEHICLEGROUP");
         public final static Property Carnumber = new Property(5, String.class, "carnumber", false, "CARNUMBER");
-    };
+    }
+
+    ;
 
 
     public ServiceRequestDao(DaoConfig config) {
         super(config);
     }
-    
+
     public ServiceRequestDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
     }
 
-    /** Creates the underlying database table. */
+    /**
+     * Creates the underlying database table.
+     */
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
-        String constraint = ifNotExists? "IF NOT EXISTS ": "";
+        String constraint = ifNotExists ? "IF NOT EXISTS " : "";
         db.execSQL("CREATE TABLE " + constraint + "\"SERVICE_REQUEST\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"GROUPNAME\" TEXT," + // 1: groupname
@@ -54,69 +57,79 @@ public class ServiceRequestDao extends AbstractDao<ServiceRequest, Long> {
                 "\"CARNUMBER\" TEXT);"); // 5: carnumber
     }
 
-    /** Drops the underlying database table. */
+    /**
+     * Drops the underlying database table.
+     */
     public static void dropTable(SQLiteDatabase db, boolean ifExists) {
         String sql = "DROP TABLE " + (ifExists ? "IF EXISTS " : "") + "\"SERVICE_REQUEST\"";
         db.execSQL(sql);
     }
 
-    /** @inheritdoc */
+    /**
+     * @inheritdoc
+     */
     @Override
     protected void bindValues(SQLiteStatement stmt, ServiceRequest entity) {
         stmt.clearBindings();
- 
+
         Long id = entity.getId();
         if (id != null) {
             stmt.bindLong(1, id);
         }
- 
+
         String groupname = entity.getGroupname();
         if (groupname != null) {
             stmt.bindString(2, groupname);
         }
- 
+
         String code = entity.getCode();
         if (code != null) {
             stmt.bindString(3, code);
         }
- 
+
         String desc = entity.getDesc();
         if (desc != null) {
             stmt.bindString(4, desc);
         }
- 
+
         String vehiclegroup = entity.getVehiclegroup();
         if (vehiclegroup != null) {
             stmt.bindString(5, vehiclegroup);
         }
- 
+
         String carnumber = entity.getCarnumber();
         if (carnumber != null) {
             stmt.bindString(6, carnumber);
         }
     }
 
-    /** @inheritdoc */
+    /**
+     * @inheritdoc
+     */
     @Override
     public Long readKey(Cursor cursor, int offset) {
         return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
-    }    
+    }
 
-    /** @inheritdoc */
+    /**
+     * @inheritdoc
+     */
     @Override
     public ServiceRequest readEntity(Cursor cursor, int offset) {
         ServiceRequest entity = new ServiceRequest( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // groupname
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // code
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // desc
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // vehiclegroup
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // carnumber
+                cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+                cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // groupname
+                cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // code
+                cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // desc
+                cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // vehiclegroup
+                cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // carnumber
         );
         return entity;
     }
-     
-    /** @inheritdoc */
+
+    /**
+     * @inheritdoc
+     */
     @Override
     public void readEntity(Cursor cursor, ServiceRequest entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
@@ -125,29 +138,35 @@ public class ServiceRequestDao extends AbstractDao<ServiceRequest, Long> {
         entity.setDesc(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setVehiclegroup(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setCarnumber(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-     }
-    
-    /** @inheritdoc */
+    }
+
+    /**
+     * @inheritdoc
+     */
     @Override
     protected Long updateKeyAfterInsert(ServiceRequest entity, long rowId) {
         entity.setId(rowId);
         return rowId;
     }
-    
-    /** @inheritdoc */
+
+    /**
+     * @inheritdoc
+     */
     @Override
     public Long getKey(ServiceRequest entity) {
-        if(entity != null) {
+        if (entity != null) {
             return entity.getId();
         } else {
             return null;
         }
     }
 
-    /** @inheritdoc */
+    /**
+     * @inheritdoc
+     */
     @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
-    
+
 }

@@ -1,5 +1,6 @@
 package com.urja.motoservice;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +15,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class ResetPasswordActivity extends AppCompatActivity implements View.OnClickListener{
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+public class ResetPasswordActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText inputEmail;
     private Button btnReset, btnBack;
     private FirebaseAuth auth;
     private ProgressBar progressBar;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +48,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_reset_password://Reset password
                 String email = inputEmail.getText().toString().trim();
 

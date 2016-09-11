@@ -37,7 +37,7 @@ public class AccessoriesFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private List<Object> mContentItems = new ArrayList<>();
     private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mAccessoriesRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CAR_SERVICE+"/"+DatabaseConstants.TABLE_ACCESSORIES);
+    private DatabaseReference mAccessoriesRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CAR_SERVICE + "/" + DatabaseConstants.TABLE_ACCESSORIES);
 
     public static AccessoriesFragment newInstance() {
         return new AccessoriesFragment();
@@ -79,9 +79,9 @@ public class AccessoriesFragment extends Fragment {
         mAccessoriesRef.orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    Log.d(TAG, "onDataChange: Key="+snapshot.getKey());
-                    Log.d(TAG, "onDataChange: value="+snapshot.getValue());
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: Key=" + snapshot.getKey());
+                    Log.d(TAG, "onDataChange: value=" + snapshot.getValue());
                     mContentItems.add(new Accessories(snapshot.getKey(), snapshot.getValue().toString()));
                 }
                 mAdapter.notifyDataSetChanged();

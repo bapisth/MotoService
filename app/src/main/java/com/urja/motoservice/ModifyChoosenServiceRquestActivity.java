@@ -1,29 +1,27 @@
 package com.urja.motoservice;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
+//import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.urja.motoservice.adapters.SectionAdapter;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
-import com.urja.motoservice.model.ServiceEventModel;
 import com.urja.motoservice.model.ServiceTypeSection;
 import com.urja.motoservice.model.TransactionComplete;
 import com.urja.motoservice.utils.AppConstants;
@@ -43,8 +41,9 @@ import de.greenrobot.dao.query.WhereCondition;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implements DialogInterface.OnClickListener{
+public class ModifyChoosenServiceRquestActivity extends AppCompatActivity {
 
     static final boolean GRID_LAYOUT = false;
     private static final String TAG = ModifyChoosenServiceRquestActivity.class.getSimpleName();
@@ -56,15 +55,20 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
     private Button mButton;
     private String mCurrentUserId = null;
     private ServiceRequestDao mServiceRequestDao = null;
-    private BaseQuickAdapter mBaseQuickAdapter = null;
+    //private BaseQuickAdapter mBaseQuickAdapter = null;
     private View mBaseQuickAdapterView = null;
-    private int mItemSelectedPosition ;
+    private int mItemSelectedPosition;
     private SectionAdapter mSectionAdapter = null;
     /*==================================================*/
     private SectionedRecyclerViewAdapter mGridCollapseSectionAdapter;
     private ExpandableVehicleSection expandableVehicleSection;
     private List<ServiceRequest> serviceListByCarNumber;
-    private String mSectionTitle="";
+    private String mSectionTitle = "";
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
 
     @Override
@@ -88,7 +92,6 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(ModifyChoosenServiceRquestActivity.this, "Inside onResume method.", Toast.LENGTH_SHORT).show();
         initializeRecyclerView();
     }
 
@@ -113,7 +116,7 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
             public void onClick(View view) {
                 //addTransactionToServer(ConfirmRequestActivity.this);
                 List<ServiceRequest> requestList = mServiceRequestDao.loadAll();
-                if (requestList.size() < 1){
+                if (requestList.size() < 1) {
                     Toast.makeText(ModifyChoosenServiceRquestActivity.this, "You need to add atleast one service.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -123,43 +126,45 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
         });
 
         //Initialize Recycler View
-        initializeRecyclerView();
+        //Code for Grid Collapsing RecyclerView Layout
+        mGridCollapseSectionAdapter = new SectionedRecyclerViewAdapter();
+        //initializeRecyclerView();
 
 
     }
 
     private void initializeRecyclerView() {
-        //Code for Grid Collapsing RecyclerView Layout
-        mGridCollapseSectionAdapter = new SectionedRecyclerViewAdapter();
-
         //mServiceRequestList = mServiceRequestDao.loadAll();
         QueryBuilder<ServiceRequest> serviceRequestQueryBuilder = mServiceRequestDao.queryBuilder();
-        serviceRequestQueryBuilder.LOG_SQL =true;
-        serviceRequestQueryBuilder.LOG_VALUES =true;
+        serviceRequestQueryBuilder.LOG_SQL = true;
+        serviceRequestQueryBuilder.LOG_VALUES = true;
 
+        mServiceRequestList = new ArrayList<>();
         mServiceRequestList = serviceRequestQueryBuilder.orderAsc(ServiceRequestDao.Properties.Carnumber).list();
 
         String tempCarNumber = "";
 
         //Find out the Section Header as per the vehicle number
-        int count =0;
+        int count = 0;
         //List<ExpandableVehicleSection> expandableVehicleSections = new ArrayList<>();
-        for (ServiceRequest  serviceRequest : mServiceRequestList){
-            if (!tempCarNumber.equalsIgnoreCase(serviceRequest.getCarnumber())){
+        for (ServiceRequest serviceRequest : mServiceRequestList) {
+            if (!tempCarNumber.equalsIgnoreCase(serviceRequest.getCarnumber())) {
 
-                tempCarNumber=serviceRequest.getCarnumber();
+                tempCarNumber = serviceRequest.getCarnumber();
                 mSectionTitle = AppConstants.VEHICLE_GRID_TITLE + tempCarNumber;
                 serviceListByCarNumber = new ArrayList<>();
                 serviceListByCarNumber = getServiceListByCarNumber(tempCarNumber);
 
                 expandableVehicleSection = new ExpandableVehicleSection(mSectionTitle, serviceListByCarNumber) {
                     private static final String TAG = "ModifyChoosenServiceRquestActivity";
+
                     @Override
-                    protected void onItemClick(int sectionPosition, String vehicleNumber) {
+                    protected void onItemClick(int sectionPosition, String vehicleNumber, String serviceCode) {
                         //Get the Object as per the position from the list
                         ServiceRequest request = mServiceRequestList.get(sectionPosition);
                         //If there is only one record as per the VehicleNumber than remove the section
-                        deleteRecordFromDatabase(String.valueOf(request.getCode()), vehicleNumber, mSectionTitle);
+                        String itemCode = String.valueOf(request.getCode());
+                        deleteRecordFromDatabase(serviceCode, vehicleNumber, mSectionTitle);
                         mGridCollapseSectionAdapter.notifyDataSetChanged();
                     }
                 };
@@ -172,7 +177,7 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
         glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                switch(mGridCollapseSectionAdapter.getSectionItemViewType(position)) {
+                switch (mGridCollapseSectionAdapter.getSectionItemViewType(position)) {
                     case SectionedRecyclerViewAdapter.VIEW_TYPE_HEADER:
                         return 2;
                     default:
@@ -184,21 +189,21 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
         mRecyclerView.setAdapter(mGridCollapseSectionAdapter);
 
         //read the saved data from the sqlite database
-        readServiceRequestData(mSectionAdapter);
+        //readServiceRequestData(mSectionAdapter);
     }
 
     private List<ServiceRequest> getServiceListByCarNumber(String tempCarNumber) {
         List<ServiceRequest> serviceRequestList = new ArrayList<>();
         QueryBuilder<ServiceRequest> requestQueryBuilder = mServiceRequestDao.queryBuilder();
-        requestQueryBuilder.LOG_SQL=true;
-        requestQueryBuilder.LOG_VALUES=true;
+        requestQueryBuilder.LOG_SQL = true;
+        requestQueryBuilder.LOG_VALUES = true;
         serviceRequestList = requestQueryBuilder.where(ServiceRequestDao.Properties.Carnumber.eq(tempCarNumber)).list();
         return serviceRequestList;
     }
 
     private void deleteRecordFromDatabaseByVehicleGroup(String vehiclegroup) {
         ServiceRequestDao serviceRequestDao = DbHelper.getInstance(ModifyChoosenServiceRquestActivity.this).getDaoSession().getServiceRequestDao();
-        DeleteQuery deleteQuery  = serviceRequestDao.queryBuilder().where(new WhereCondition.StringCondition(String.valueOf("vehiclegroup='"+vehiclegroup+"'"))).buildDelete();
+        DeleteQuery deleteQuery = serviceRequestDao.queryBuilder().where(new WhereCondition.StringCondition(String.valueOf("vehiclegroup='" + vehiclegroup + "'"))).buildDelete();
         deleteQuery.executeDeleteWithoutDetachingEntities();
     }
 
@@ -219,6 +224,7 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
             int scrollRange = -1;
+
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (scrollRange == -1) {
@@ -240,14 +246,14 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
         mServiceRequestList = mServiceRequestDao.queryBuilder().orderAsc(ServiceRequestDao.Properties.Vehiclegroup).list();
 
         List<ServiceTypeSection> serviceTypeSections = null;
-        ServiceTypeSection  serviceTypeSection=null;
+        ServiceTypeSection serviceTypeSection = null;
         mGridCollapseSectionAdapter.notifyDataSetChanged();
     }
 
     private String getSectionHeaderDescriptio(String groupname) {
-        if (groupname==null)
+        if (groupname == null)
             return "";
-        switch (groupname){
+        switch (groupname) {
             case AppConstants.WASH_DETAILING:
                 return "Wash Detailing";
             case AppConstants.TYRE_WHEEL:
@@ -263,75 +269,43 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
         }
     }
 
-    public void deleteRecordFromDatabase(String itemCode, String vehicleNumber, String mSectionTitle){
-        Toast.makeText(ModifyChoosenServiceRquestActivity.this, "Deleting Record From Database!!", Toast.LENGTH_SHORT).show();
+    public void deleteRecordFromDatabase(String itemCode, String vehicleNumber, String mSectionTitle) {
         ServiceRequestDao serviceRequestDao = DbHelper.getInstance(ModifyChoosenServiceRquestActivity.this).getDaoSession().getServiceRequestDao();
         QueryBuilder<ServiceRequest> queryBuilder = serviceRequestDao.queryBuilder();
         queryBuilder.LOG_SQL = true;
         queryBuilder.LOG_VALUES = true;
         //DeleteQuery deleteQuery  = queryBuilder.where(new WhereCondition.StringCondition(String.valueOf("code='"+itemCode+"'"))).buildDelete();
-        List<ServiceRequest> serviceRequestList  = queryBuilder.where(ServiceRequestDao.Properties.Code.eq(itemCode), ServiceRequestDao.Properties.Carnumber.eq(vehicleNumber)).list();
+        List<ServiceRequest> serviceRequestList = queryBuilder.where(ServiceRequestDao.Properties.Code.eq(itemCode), ServiceRequestDao.Properties.Carnumber.eq(vehicleNumber)).list();
 
         //Get all the records of that same vehicle group
         QueryBuilder<ServiceRequest> queryBuilder2 = serviceRequestDao.queryBuilder();
-        List<ServiceRequest> countList = queryBuilder2.where(new WhereCondition.StringCondition(String.valueOf("carnumber='"+vehicleNumber+"'"))).list();
+        queryBuilder2.LOG_SQL=true;
+        queryBuilder2.LOG_VALUES=true;
 
-        Log.d(TAG, "deleteRecordFromDatabase: count = "+ countList.size());
-        if (countList.size() == 1){
-            Log.d(TAG, "deleteRecordFromDatabase: SIZE = "+ serviceRequestList.size());
+        List<ServiceRequest> countList = queryBuilder2.where(new WhereCondition.StringCondition(String.valueOf("carnumber='" + vehicleNumber + "'"))).list();
+        Log.e(TAG, "deleteRecordFromDatabase: "+serviceRequestList.size() );
+        serviceRequestDao.delete(serviceRequestList.get(0));//Assuming only one record will be fetced
+        if (countList.size() == 1) {
             // i.e for that particular vehicle number there is only one vehicle
             // so we do not require the Section, hence remove the section
             Section section = null;
             LinkedHashMap<String, Section> sectionsMap = mGridCollapseSectionAdapter.getSectionsMap();
             for (Map.Entry<String, Section> entry : sectionsMap.entrySet()) {
                 String key = entry.getKey();
-                if (key.equalsIgnoreCase(AppConstants.VEHICLE_GRID_TITLE+vehicleNumber)){
+                if (key.equalsIgnoreCase(AppConstants.VEHICLE_GRID_TITLE + vehicleNumber)) {
                     section = entry.getValue();
                     break;
                 }
             }
-            mGridCollapseSectionAdapter.removeSection(AppConstants.VEHICLE_GRID_TITLE+vehicleNumber);
-
-        }
-        serviceRequestDao.deleteInTx(serviceRequestList);
-    }
-
-    @Override
-    public void onClick(DialogInterface dialogInterface, int position) {
-        Log.d(TAG, "onClick: You clicked yes.. data going to be deleted"+mItemSelectedPosition);
-
-        switch (mBaseQuickAdapterView.getId()){
-            case R.id.more:
-                String vehiclegroup = mServiceRequestList.get(mItemSelectedPosition).getVehiclegroup();
-                deleteRecordFromDatabaseByVehicleGroup(vehiclegroup);
-                Log.e(TAG, "onClick: Size="+mServiceRequestList.size());
-                ServiceRequest  serviceRequest = null;
-                for(int i=0; i<mServiceRequestList.size(); i++) {
-                    serviceRequest = mServiceRequestList.get(i);
-                    if(serviceRequest.getVehiclegroup().equalsIgnoreCase(vehiclegroup)) {
-                        mServiceRequestList.remove(i);
-                        mBaseQuickAdapter.remove(i);
-                    }
-                }
-                Log.e(TAG, "onClick: Size="+mServiceRequestList.size());
-                break;
-            case R.id.close_btn:
-                mBaseQuickAdapter.remove(mItemSelectedPosition);
-                mBaseQuickAdapter.notifyItemRemoved(mItemSelectedPosition);
-                TextView itemCode = (TextView) mBaseQuickAdapterView.findViewById(R.id.item_code);
-                String code ="";
-                if (itemCode!=null && itemCode.getText()!=null)
-                    code = itemCode.getText().toString();
-                //deleteRecordFromDatabase(mServiceRequestList.get(mItemSelectedPosition).getCode(), vehicleNumber);
-                break;
+            mGridCollapseSectionAdapter.removeSection(AppConstants.VEHICLE_GRID_TITLE + vehicleNumber);
         }
 
-        mBaseQuickAdapter.notifyDataSetChanged();
+        //serviceRequestDao.deleteInTx(serviceRequestList);
     }
 
     abstract class ExpandableVehicleSection extends StatelessSection {
         String title;
-        List<ServiceRequest> list;
+        List<ServiceRequest> list = new ArrayList<>();
         boolean expanded = true;
 
         public ExpandableVehicleSection(String title, List<ServiceRequest> list) {
@@ -343,7 +317,7 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
 
         @Override
         public int getContentItemsTotal() {
-            return expanded? this.list.size() : 0;
+            return expanded ? this.list.size() : 0;
         }
 
         @Override
@@ -355,8 +329,9 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
         public void onBindItemViewHolder(final RecyclerView.ViewHolder holder, int position) {
             final ItemViewHolder itemHolder = (ItemViewHolder) holder;
 
-            String name = list.get(position).getDesc();
-            String category = list.get(position).getGroupname();
+            final ServiceRequest serviceRequest = list.get(position);
+            String name = serviceRequest.getDesc();
+            String category = serviceRequest.getGroupname();
 
             itemHolder.tvItem.setText(name);
             itemHolder.tvSubItem.setText(category);
@@ -366,17 +341,19 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity implem
                 @Override
                 public void onClick(View v) {
                     String vehicleNumber = "";
+                    String serviceCode = "";
                     int sectionPosition = mGridCollapseSectionAdapter.getSectionPosition(itemHolder.getAdapterPosition());
                     /*Toast.makeText(ModifyChoosenServiceRquestActivity.this, String.format("Clicked on position #%s of Section %s", sectionPosition, title),
                             Toast.LENGTH_SHORT).show();*/
                     vehicleNumber = title.split(AppConstants.VEHICLE_GRID_TITLE)[1];
-                    onItemClick(sectionPosition, vehicleNumber);
+                    serviceCode = serviceRequest.getCode();
+                    onItemClick(sectionPosition, vehicleNumber, serviceCode);
                     list.remove(sectionPosition);
                 }
             });
         }
 
-        protected abstract void onItemClick(int sectionPosition, String vehicleNumber);
+        protected abstract void onItemClick(int sectionPosition, String vehicleNumber, String serviceCode);
 
         /*public void addItem(int position, String item) {
             list.add(position, item);

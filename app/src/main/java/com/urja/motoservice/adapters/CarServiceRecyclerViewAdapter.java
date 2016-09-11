@@ -1,7 +1,6 @@
 package com.urja.motoservice.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.urja.motoservice.R;
 import com.urja.motoservice.model.Accessories;
 import com.urja.motoservice.model.DentPaint;
@@ -22,7 +21,6 @@ import com.urja.motoservice.model.WashDetailing;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by BAPI1 on 19/08/16.
@@ -95,23 +93,23 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 break;
             case TYPE_CELL:
                 final Object object = contents.get(position);
-                if (contents != null && object instanceof  WashDetailing){
+                if (contents != null && object instanceof WashDetailing) {
                     WashDetailing washDetailing = (WashDetailing) object;
                     mCode.setText(washDetailing.getCode());
                     mCheckBox.setText(washDetailing.getDesc());
-                }else if (contents != null && object instanceof ServiceRepair){
+                } else if (contents != null && object instanceof ServiceRepair) {
                     ServiceRepair serviceRepair = (ServiceRepair) object;
                     mCode.setText(serviceRepair.getCode());
                     mCheckBox.setText(serviceRepair.getDesc());
-                }else if (contents != null && object instanceof TyreWheel){
+                } else if (contents != null && object instanceof TyreWheel) {
                     TyreWheel tyreWheel = (TyreWheel) object;
                     mCode.setText(tyreWheel.getCode());
                     mCheckBox.setText(tyreWheel.getDesc());
-                }else if (contents != null && object instanceof DentPaint){
+                } else if (contents != null && object instanceof DentPaint) {
                     DentPaint dentPaint = (DentPaint) object;
                     mCode.setText(dentPaint.getCode());
                     mCheckBox.setText(dentPaint.getDesc());
-                }else if (contents != null && object instanceof Accessories){
+                } else if (contents != null && object instanceof Accessories) {
                     Accessories accessories = (Accessories) object;
                     mCode.setText(accessories.getCode());
                     mCheckBox.setText(accessories.getDesc());

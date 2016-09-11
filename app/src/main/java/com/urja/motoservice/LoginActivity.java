@@ -1,11 +1,10 @@
 package com.urja.motoservice;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -26,12 +25,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.model.Customer;
 import com.urja.motoservice.utils.AlertDialog;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
 import com.urja.motoservice.utils.DatabaseConstants;
 import com.urja.motoservice.utils.NetworkService;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -45,6 +45,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mCustomerRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CUSTOMER);// Add Name and Phone number to 'Customer' object
     private String mCurrrentKey;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +91,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_signup:
                 startActivity(new Intent(LoginActivity.this, SignupActivity.class));
                 break;
-            case R.id.btn_login:{
+            case R.id.btn_login: {
                 String email = inputEmail.getText().toString();
                 final String password = inputPassword.getText().toString();
 
@@ -108,10 +113,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 mProgressDialog.show();
 
                 //authenticate user
-                if (NetworkService.Network){
+                if (NetworkService.Network) {
                     OnCompleteListener<AuthResult> onCompleteListener = getOnCompleteListener(password);
                     auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, onCompleteListener);
-                }else {
+                } else {
                     AlertDialog.Alert(this, "", getString(R.string.message_network_not_available));
                 }
 
@@ -150,15 +155,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     mCustomerRef.orderByKey().equalTo(currentUser.getUid()).addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String previousChildKey) {
-                            Log.d(TAG, "onChildAdded: "+dataSnapshot.getKey());
+                            Log.d(TAG, "onChildAdded: " + dataSnapshot.getKey());
                             mCustomer = dataSnapshot.getValue(Customer.class);
                             mCurrrentKey = dataSnapshot.getKey();
-                            if (mCurrrentKey!= null && currentUser!=null && mCurrrentKey.equalsIgnoreCase(currentUser.getUid()))
-                                if (mCustomer != null){
+                            if (mCurrrentKey != null && currentUser != null && mCurrrentKey.equalsIgnoreCase(currentUser.getUid()))
+                                if (mCustomer != null) {
 
-                                    Log.d(TAG, "onChildAdded: Name="+ mCustomer.getName());
-                                    Log.d(TAG, "onChildAdded: currentKey="+ mCurrrentKey);
-                                    Log.d(TAG, "onChildAdded: previousChildKey="+previousChildKey);
+                                    Log.d(TAG, "onChildAdded: Name=" + mCustomer.getName());
+                                    Log.d(TAG, "onChildAdded: currentKey=" + mCurrrentKey);
+                                    Log.d(TAG, "onChildAdded: previousChildKey=" + previousChildKey);
 
                                     CurrentLoggedInUser.setCurrentFirebaseUser(currentUser);
                                     CurrentLoggedInUser.setName(mCustomer.getName());
@@ -194,7 +199,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
 
                     });
-
 
 
                 }

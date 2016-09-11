@@ -50,7 +50,7 @@
         android:id="@+id/fab_save"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_margin="@dimen/dp_10"
+        android:layout_margin="10dp"
         app:layout_anchorGravity="bottom|right"
         app:srcCompat="@mipmap/ic_save_black_24dp"
         android:layout_marginLeft="@dimen/fab_margin"

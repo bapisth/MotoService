@@ -83,7 +83,8 @@
                             android:maxLines="1"
                             android:background="@color/white"
                             android:drawableLeft="@mipmap/ic_lock_outline_black_24dp"
-                            android:drawableTint="@color/colorAccent"/>
+                            android:drawableTint="@color/colorAccent"
+                            android:typeface="normal"/>
                     <!--</android.support.design.widget.TextInputLayout>-->
 
 

@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.urja.motoservice.R;
 import com.urja.motoservice.database.ServiceRequest;
@@ -33,7 +32,7 @@ public class ExpandableVehicleSection extends StatelessSection {
 
     @Override
     public int getContentItemsTotal() {
-        return expanded? list.size() : 0;
+        return expanded ? list.size() : 0;
     }
 
     @Override

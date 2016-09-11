@@ -37,7 +37,7 @@ public class TyreWheelFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private List<Object> mContentItems = new ArrayList<>();
     private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mTyreWheelRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CAR_SERVICE+"/"+DatabaseConstants.TABLE_TYRE_WHEELS);
+    private DatabaseReference mTyreWheelRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CAR_SERVICE + "/" + DatabaseConstants.TABLE_TYRE_WHEELS);
 
     public static TyreWheelFragment newInstance() {
         return new TyreWheelFragment();
@@ -77,18 +77,20 @@ public class TyreWheelFragment extends Fragment {
     private void fetchTyreWheelServiceData(TyreWheelFragment tyreWheelFragment) {
         mTyreWheelRef.orderByKey().addValueEventListener(new ValueEventListener() {
             TyreWheel mTyreWheel = null;
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    Log.d(TAG, "onDataChange: Key="+snapshot.getKey());
-                    Log.d(TAG, "onDataChange: value="+snapshot.getValue());
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: Key=" + snapshot.getKey());
+                    Log.d(TAG, "onDataChange: value=" + snapshot.getValue());
                     mContentItems.add(new TyreWheel(snapshot.getKey(), snapshot.getValue().toString()));
                 }
                 mAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
     }
 }

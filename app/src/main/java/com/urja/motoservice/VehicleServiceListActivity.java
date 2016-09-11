@@ -1,14 +1,22 @@
 package com.urja.motoservice;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class VehicleServiceListActivity extends AppCompatActivity {
     private static final String TAG = VehicleServiceListActivity.class.getSimpleName();
     private Toolbar mToolbar;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

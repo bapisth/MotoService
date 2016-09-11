@@ -1,23 +1,27 @@
 package com.urja.motoservice;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Toast;
 
-import com.urja.motoservice.fragment.Ask4CarNumberDialogFragment;
 import com.urja.motoservice.model.TransactionComplete;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class CustomerCarDetailsActivity extends AppCompatActivity {
     public static final String TAG = CustomerCarDetailsActivity.class.getSimpleName();
     private String mCarNumber = null;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +44,7 @@ public class CustomerCarDetailsActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(TransactionComplete transactionComplete) {
-        Toast.makeText(CustomerCarDetailsActivity.this, "Transaction Complete Event CustomerCarDetailsActivity"+ transactionComplete.isTransactionComplete(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(CustomerCarDetailsActivity.this, "Transaction Complete Event CustomerCarDetailsActivity" + transactionComplete.isTransactionComplete(), Toast.LENGTH_SHORT).show();
         if (transactionComplete.isTransactionComplete()) //If the transaction is completed, then stop the Activity
             finish();
     }

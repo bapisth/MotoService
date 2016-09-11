@@ -1,27 +1,26 @@
 package com.urja.motoservice;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -43,9 +42,11 @@ import com.urja.motoservice.utils.DatabaseConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class WelcomeDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    
+
     private TextView mPersonName;
     private TextView mPersonEmail;
     private String mEmail;
@@ -57,7 +58,7 @@ public class WelcomeDashboardActivity extends AppCompatActivity
     private final int IDENTIFIER_SIGNOUT = 101;
     private ProgressBar mProgressBar;
     private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mVehicleTypesRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_VEHICLE+"/"+DatabaseConstants.TABLE_VEHICLE_TYPE);// Add Name and Phone number to 'Customer' object
+    private DatabaseReference mVehicleTypesRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_VEHICLE + "/" + DatabaseConstants.TABLE_VEHICLE_TYPE);// Add Name and Phone number to 'Customer' object
 
     private static String mName = "";
     private static String mMobile;
@@ -71,19 +72,23 @@ public class WelcomeDashboardActivity extends AppCompatActivity
     private ImageView mPersonImage;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_welcome_dashboard);
 
         //Get the Currentlogged in UserId
-        if (CurrentLoggedInUser.getCurrentFirebaseUser() ==null)
+        if (CurrentLoggedInUser.getCurrentFirebaseUser() == null)
             CurrentLoggedInUser.setCurrentFirebaseUser(mAuth.getCurrentUser());
 
         mCurrentUserId = CurrentLoggedInUser.getCurrentFirebaseUser().getUid();
         mName = CurrentLoggedInUser.getName();
         mEmail = CurrentLoggedInUser.getCurrentFirebaseUser().getEmail();
-
 
 
         //Initialize toolbar
@@ -111,15 +116,13 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         fetchAndShowVehicles();
 
 
-
-
     }
 
     private void fetchAndShowVehicles() {
         mVehicleTypesRef.orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     mVehicle = snapshot.getValue(Vehicle.class);
                     mVehicleList.add(mVehicle);
                 }
@@ -150,14 +153,14 @@ public class WelcomeDashboardActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View hView =  navigationView.getHeaderView(0);
-        mPersonName = (TextView)hView.findViewById(R.id.person_name);
-        mPersonEmail = (TextView)hView.findViewById(R.id.person_email);
-        mPersonImage = (ImageView)hView.findViewById(R.id.person_name_img);
+        View hView = navigationView.getHeaderView(0);
+        mPersonName = (TextView) hView.findViewById(R.id.person_name);
+        mPersonEmail = (TextView) hView.findViewById(R.id.person_email);
+        mPersonImage = (ImageView) hView.findViewById(R.id.person_name_img);
 
         Log.d(TAG, "initializeDrawer() called with: " + "mName = [" + mName + "]");
 
-        TextDrawable textDrawable = TextDrawable.builder().buildRound(mName.substring(0,1).toUpperCase(), ColorGenerator.MATERIAL.getRandomColor());
+        TextDrawable textDrawable = TextDrawable.builder().buildRound(mName.substring(0, 1).toUpperCase(), ColorGenerator.MATERIAL.getRandomColor());
         mPersonImage.setBackground(textDrawable);
         mPersonImage.setImageDrawable(textDrawable);
 
@@ -224,7 +227,7 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         if (intent != null && id == R.id.nav_signout) {
             WelcomeDashboardActivity.this.startActivity(intent);
             finish();
-        }else if (intent != null){
+        } else if (intent != null) {
             //DashboardActivity.this.startActivity(intent);
             Toast.makeText(WelcomeDashboardActivity.this, "Module Not Implemented!!", Toast.LENGTH_SHORT).show();
         }

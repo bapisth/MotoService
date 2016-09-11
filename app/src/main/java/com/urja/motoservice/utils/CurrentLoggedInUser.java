@@ -1,8 +1,6 @@
 package com.urja.motoservice.utils;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Created by BAPI1 on 8/14/2016.

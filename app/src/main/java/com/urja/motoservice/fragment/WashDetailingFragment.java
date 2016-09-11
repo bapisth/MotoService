@@ -38,7 +38,7 @@ public class WashDetailingFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private List<Object> mContentItems = new ArrayList<>();
     private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mCarServiceWashTypesRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CAR_SERVICE+"/"+DatabaseConstants.TABLE_WASH_DETAILING);
+    private DatabaseReference mCarServiceWashTypesRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CAR_SERVICE + "/" + DatabaseConstants.TABLE_WASH_DETAILING);
     private FirebaseAuth firebaseAuth;
 
     public static WashDetailingFragment newInstance() {
@@ -83,18 +83,20 @@ public class WashDetailingFragment extends Fragment {
 
         mCarServiceWashTypesRef.orderByKey().addValueEventListener(new ValueEventListener() {
             WashDetailing mWashDetailing = null;
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    Log.d(TAG, "onDataChange: Key="+snapshot.getKey());
-                    Log.d(TAG, "onDataChange: value="+snapshot.getValue());
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: Key=" + snapshot.getKey());
+                    Log.d(TAG, "onDataChange: value=" + snapshot.getValue());
                     mContentItems.add(new WashDetailing(snapshot.getKey(), snapshot.getValue().toString()));
                 }
                 mAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
 
     }

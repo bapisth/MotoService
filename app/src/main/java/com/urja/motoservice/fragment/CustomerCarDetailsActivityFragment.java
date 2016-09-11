@@ -2,14 +2,13 @@ package com.urja.motoservice.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +24,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.urja.motoservice.R;
 import com.urja.motoservice.WelcomeDashboardActivity;
-import com.urja.motoservice.adapters.SectionAdapter;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
 import com.urja.motoservice.model.CustomerTransactionAddress;
-import com.urja.motoservice.model.ServiceTypeSection;
 import com.urja.motoservice.model.TransactionComplete;
 import com.urja.motoservice.utils.DatabaseConstants;
 
@@ -65,7 +62,6 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     private DatabaseReference mTransactionRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_TRANSACTION);
 
 
-
     public CustomerCarDetailsActivityFragment() {
     }
 
@@ -96,7 +92,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         mPaymentTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (radioGroup.getCheckedRadioButtonId()){
+                switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.immediate_service:
                         mPaymentOptionChecked = IMMEDIATE;
                         break;
@@ -114,7 +110,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isFormValid()){
+                if (isFormValid()) {
                     mCustomerTransactionAddress = new CustomerTransactionAddress();
                     mCustomerTransactionAddress.setAddressLine1(mCustomerAddressline1.getText().toString());
                     mCustomerTransactionAddress.setAddressLine2(mCustomerAaddressline2.getText().toString());
@@ -125,14 +121,14 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
                     mCustomerTransactionAddress.setCarNumber(mCustomerCarNumber.getText().toString());
                     mCustomerTransactionAddress.setMobileNumber(mCustomerMobileNumber.getText().toString());
                     addTransactionToServer(getActivity());
-                }else
+                } else
                     Toast.makeText(getActivity(), "Fields Cannont be Blank!", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
-    private boolean isFormValid(){
+    private boolean isFormValid() {
         //check AddressLine1
         boolean addressLine1 = checkAddressLine1();
 
@@ -158,7 +154,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         boolean mobileNumber = checkMobileNumber();
 
         //check radio group is checked
-        boolean isPaymentChoosen= checkPaymentType();
+        boolean isPaymentChoosen = checkPaymentType();
 
         //return (addressLine1 && addressLine2 && landmark && city && state && pin && carNumber && mobileNumber && isPaymentChoosen);
         //return (addressLine1 && addressLine2 && landmark && city && state && pin && mobileNumber && isPaymentChoosen);
@@ -168,7 +164,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     }
 
     private boolean checkPaymentType() {
-        if (mPaymentOptionChecked == null || mPaymentOptionChecked=="")
+        if (mPaymentOptionChecked == null || mPaymentOptionChecked == "")
             return false;
         return true;
     }
@@ -211,6 +207,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     private boolean checkCarNumber() {
         return checkEditText(mCustomerCarNumber);
     }
+
     private boolean checkMobileNumber() {
         return checkEditText(mCustomerMobileNumber);
     }
@@ -231,24 +228,24 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         final DatabaseReference transactionDataRef = mTransactionRef.child(mCurrentUserId).push();
         transactionDataRef.setValue(readServiceRequestData())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                //Toast.makeText(getActivity(), "Request Added to the server!!", Toast.LENGTH_SHORT).show();
-                mServiceRequestDao.deleteAll();
-                transactionDataRef.child("CarPickAddress").push().setValue(mCustomerTransactionAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        progressDialog.dismiss();
-                        EventBus.getDefault().post(new TransactionComplete(true));
-                        ActivityCompat.finishAffinity(getActivity());
-                        Intent intent = new Intent(getActivity(), WelcomeDashboardActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        getActivity().finish();
+                        //Toast.makeText(getActivity(), "Request Added to the server!!", Toast.LENGTH_SHORT).show();
+                        mServiceRequestDao.deleteAll();
+                        transactionDataRef.child("CarPickAddress").push().setValue(mCustomerTransactionAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                progressDialog.dismiss();
+                                EventBus.getDefault().post(new TransactionComplete(true));
+                                ActivityCompat.finishAffinity(getActivity());
+                                Intent intent = new Intent(getActivity(), WelcomeDashboardActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+                        });
                     }
                 });
-            }
-        });
     }
 
 

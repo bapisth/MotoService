@@ -163,7 +163,7 @@
 
                     <Button
                         android:id="@+id/btn_login"
-                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_marginTop="10dp"
                         android:layout_width="282dp"
                         android:layout_height="wrap_content"
                         android:background="@color/colorAccent"
@@ -200,7 +200,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_background"
                     android:text="@string/btn_link_to_register"
-                    android:padding="@dimen/dp_4"
+                    android:padding="4dp"
                     android:textSize="18sp"
                     android:textColor="@color/white"
                     android:textAllCaps="false"

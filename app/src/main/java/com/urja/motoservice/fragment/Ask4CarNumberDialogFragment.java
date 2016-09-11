@@ -1,14 +1,10 @@
 package com.urja.motoservice.fragment;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +54,7 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
         getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
-                if ((keyCode ==  android.view.KeyEvent.KEYCODE_BACK)) {
+                if ((keyCode == android.view.KeyEvent.KEYCODE_BACK)) {
                     // To dismiss the fragment when the back-button is pressed.
                     dismiss();
                     startActivity(new Intent(getActivity(), WelcomeDashboardActivity.class));
@@ -89,12 +85,12 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
     }
 
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.ok_button:
                 if (mCarNumber.getText().toString().length() < 1 || mCarNumber.getText().toString().equals("")) {
                     mCarNumber.setError("Required!!");
                     return;
-                }else {
+                } else {
                     mListener.onSubmit(mCarNumber.getText().toString());
                     this.dismiss();
                 }

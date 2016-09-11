@@ -2,6 +2,7 @@ package com.urja.motoservice.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
 import com.urja.motoservice.database.dao.DaoMaster;
 import com.urja.motoservice.database.dao.DaoSession;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
@@ -43,7 +44,7 @@ public class DbHelper {
         return this.daoSession;
     }
 
-    public ServiceRequestDao getServiceRequestDao(){
+    public ServiceRequestDao getServiceRequestDao() {
         return this.daoSession.getServiceRequestDao();
     }
 }
