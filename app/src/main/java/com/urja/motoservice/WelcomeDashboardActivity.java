@@ -1,6 +1,5 @@
 package com.urja.motoservice;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -8,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -35,6 +35,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.adapters.VehicleTypeAdapter;
+import com.urja.motoservice.fragment.TransactionDetailActivityFragment;
+import com.urja.motoservice.fragment.dummy.DummyContent;
 import com.urja.motoservice.model.Vehicle;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
 import com.urja.motoservice.utils.DatabaseConstants;
@@ -42,10 +44,8 @@ import com.urja.motoservice.utils.DatabaseConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
 public class WelcomeDashboardActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, TransactionDetailActivityFragment.OnListFragmentInteractionListener {
 
     private TextView mPersonName;
     private TextView mPersonEmail;
@@ -70,11 +70,6 @@ public class WelcomeDashboardActivity extends AppCompatActivity
     private Vehicle mVehicle;
 
     private ImageView mPersonImage;
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,13 +206,14 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Intent intent = null;
+        Fragment fragment = null;
 
         if (id == R.id.nav_help) {
             // Handle the camera action
         } else if (id == R.id.nav_transaction) {
-
-        } else if (id == R.id.nav_manage) {
-
+                intent = new Intent(WelcomeDashboardActivity.this, TransactionDetailActivity.class);
+        } else if (id == R.id.nav_manage_profile) {
+            intent = new Intent(WelcomeDashboardActivity.this, UpdateProfileActivity.class);
         } else if (id == R.id.nav_signout) {
             mAuth.signOut();
             intent = new Intent(WelcomeDashboardActivity.this, LoginActivity.class);
@@ -228,9 +224,14 @@ public class WelcomeDashboardActivity extends AppCompatActivity
             WelcomeDashboardActivity.this.startActivity(intent);
             finish();
         } else if (intent != null) {
-            //DashboardActivity.this.startActivity(intent);
+            WelcomeDashboardActivity.this.startActivity(intent);
             Toast.makeText(WelcomeDashboardActivity.this, "Module Not Implemented!!", Toast.LENGTH_SHORT).show();
         }
+
+        // Insert the fragment by replacing any existing fragment
+        /*FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();*/
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -268,6 +269,11 @@ public class WelcomeDashboardActivity extends AppCompatActivity
                 }
             }
         });
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {

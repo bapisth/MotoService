@@ -4,24 +4,43 @@ package com.urja.motoservice.model;
  * Created by hemendra on 26-07-2016.
  */
 public class CustomerAddress {
-    private String city;
-    private String state;
-    private String country;
+    private String address;
+    private String street;
+    private String pincode;
+    private String country="India";
 
-    public String getCity() {
-        return city;
+    public CustomerAddress() {
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public CustomerAddress(String address, String street, String pincode, String country) {
+        this.address = address;
+        this.street = street;
+        this.pincode = pincode;
+        this.country = country;
     }
 
-    public String getState() {
-        return state;
+    public String getAddress() {
+        return address;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
     }
 
     public String getCountry() {

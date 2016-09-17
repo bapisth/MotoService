@@ -35,7 +35,7 @@ public class WashDetailingFragment extends Fragment {
     static final boolean GRID_LAYOUT = false;
     private static final int ITEM_COUNT = 100;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    public RecyclerView.Adapter mAdapter;
     private List<Object> mContentItems = new ArrayList<>();
     private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mCarServiceWashTypesRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CAR_SERVICE + "/" + DatabaseConstants.TABLE_WASH_DETAILING);

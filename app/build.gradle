@@ -22,47 +22,27 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    compile('com.github.florent37:materialviewpager:1.2.0@aar') {
+        transitive = true
+    }
+
+
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:design:24.1.1'
     compile 'com.android.support:support-v4:24.1.1'
     compile 'com.android.support:palette-v7:24.1.1'
-
-    //TextView Style
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-
-    // FirebaseUI Dependencies
     compile 'com.google.firebase:firebase-core:9.4.0'
     compile 'com.google.firebase:firebase-auth:9.4.0'
     compile 'com.google.firebase:firebase-messaging:9.4.0'
     compile 'com.google.firebase:firebase-database:9.4.0'
-
-    //RecyclerView Dependencies
-    /*compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.9.7'*/
-
-    // Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
-
-    //Recyclerview Adapter
     compile 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.0.4'
-
-    //Material Viewpager
-    compile ('com.github.florent37:materialviewpager:1.2.0@aar'){
-        transitive = true
-    }
-
-    //GreenDao
     compile 'de.greenrobot:greendao:2.1.0'
-
-    //EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
-
-    //Floating Action Button
     compile 'com.github.clans:fab:1.6.4'
-
-    //Caligraphy custom font
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
-
-
+    compile 'com.android.support:recyclerview-v7:24.1.1'
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'org.greenrobot.greendao'

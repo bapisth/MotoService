@@ -284,6 +284,7 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity {
 
         List<ServiceRequest> countList = queryBuilder2.where(new WhereCondition.StringCondition(String.valueOf("carnumber='" + vehicleNumber + "'"))).list();
         Log.e(TAG, "deleteRecordFromDatabase: "+serviceRequestList.size() );
+
         serviceRequestDao.delete(serviceRequestList.get(0));//Assuming only one record will be fetced
         if (countList.size() == 1) {
             // i.e for that particular vehicle number there is only one vehicle
@@ -302,6 +303,7 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity {
 
         //serviceRequestDao.deleteInTx(serviceRequestList);
     }
+
 
     abstract class ExpandableVehicleSection extends StatelessSection {
         String title;

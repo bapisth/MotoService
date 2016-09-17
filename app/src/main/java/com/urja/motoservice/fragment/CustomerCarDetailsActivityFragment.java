@@ -28,11 +28,13 @@ import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
 import com.urja.motoservice.model.CustomerTransactionAddress;
+import com.urja.motoservice.model.OrderForServicesTransaction;
 import com.urja.motoservice.model.TransactionComplete;
 import com.urja.motoservice.utils.DatabaseConstants;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -226,7 +228,9 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         if (mCurrentUserId == null)
             mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final DatabaseReference transactionDataRef = mTransactionRef.child(mCurrentUserId).push();
-        transactionDataRef.setValue(readServiceRequestData())
+        List<ServiceRequest> readServiceRequestData = readServiceRequestData();
+        OrderForServicesTransaction orderForServicesTransaction = new OrderForServicesTransaction(readServiceRequestData, false, new Date());
+        transactionDataRef.setValue(orderForServicesTransaction)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

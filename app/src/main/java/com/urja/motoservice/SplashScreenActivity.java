@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.model.Customer;
 import com.urja.motoservice.utils.AlertDialog;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
@@ -68,18 +70,17 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                         CurrentLoggedInUser.setCurrentFirebaseUser(currentUser);
 
-                        mCustomerRef.orderByKey().equalTo(currentUser.getUid()).addChildEventListener(new ChildEventListener() {
+                        mCustomerRef.child(currentUser.getUid()).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildKey) {
-                                Log.d(TAG, "onChildAdded: " + dataSnapshot.getKey());
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "KAN KALA SE: " + dataSnapshot.getKey());
                                 mCustomer = dataSnapshot.getValue(Customer.class);
+                                Log.e(TAG, "onDataChange: mCustomer:"+mCustomer );
                                 mCurrrentKey = dataSnapshot.getKey();
-                                if (mCurrrentKey != null && currentUser != null && mCurrrentKey.equalsIgnoreCase(currentUser.getUid()))
+                                if (mCurrrentKey != null && currentUser != null && mCurrrentKey.equalsIgnoreCase(currentUser.getUid())){
                                     if (mCustomer != null) {
-
                                         Log.d(TAG, "onChildAdded: Name=" + mCustomer.getName());
                                         Log.d(TAG, "onChildAdded: currentKey=" + mCurrrentKey);
-                                        Log.d(TAG, "onChildAdded: previousChildKey=" + previousChildKey);
 
                                         CurrentLoggedInUser.setCurrentFirebaseUser(currentUser);
                                         CurrentLoggedInUser.setName(mCustomer.getName());
@@ -89,20 +90,11 @@ public class SplashScreenActivity extends AppCompatActivity {
                                         finish();
 
                                     }
-                            }
+                                }else {
+                                    Toast.makeText(SplashScreenActivity.this, "Having Some trouble!!Please try again later.", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
 
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                            }
-
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                            }
-
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
                             }
 
@@ -110,7 +102,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                             public void onCancelled(DatabaseError databaseError) {
 
                             }
-
                         });
 
                     } else {

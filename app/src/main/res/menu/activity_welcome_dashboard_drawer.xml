@@ -8,9 +8,9 @@
             android:title="Transactions" />
 
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_manage_profile"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="Profile" />
         <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_menu_gallery"

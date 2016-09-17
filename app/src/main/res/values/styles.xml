@@ -101,7 +101,6 @@
     </style>-->
 
 
-
     <!--Material ViewPager theme-->
     <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light"></style>
 

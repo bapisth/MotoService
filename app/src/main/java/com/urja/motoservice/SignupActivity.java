@@ -162,12 +162,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         mCustomer = new Customer();
         mCustomer.setName(fullName);
-        //mCustomer.setMobile(mobile);
+        mCustomer.setMobile("");
 
         mCustomerAddress = new CustomerAddress();
-        mCustomerAddress.setCity("Bhubaneswar");
-        mCustomerAddress.setCountry("INDIA");
-        mCustomerAddress.setState("ODISHA");
+        mCustomerAddress.setAddress("");
+        mCustomerAddress.setCountry("India");
+        mCustomerAddress.setPincode("");
 
         /*mCustomerRef.child(mCurrentUserId).push().setValue(mCustomer);
         mCustomerAddressRef.child(mCurrentUserId).setValue(mCustomerAddress);*/

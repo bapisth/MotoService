@@ -3,6 +3,7 @@ package com.urja.motoservice;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -68,6 +69,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
     private List<FloatingActionMenu> menus = new ArrayList<>();
     private long mVehicleGroupId;
     private String mCarNumber = null;
+    private boolean backFromModifyService = false;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -82,9 +84,11 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
-        Ask4CarNumberDialogFragment ask4CarNumberDialogFragment = new Ask4CarNumberDialogFragment();
-        ask4CarNumberDialogFragment.show(getSupportFragmentManager(), TAG);
-        ask4CarNumberDialogFragment.setCancelable(false);
+        if (!backFromModifyService){
+            Ask4CarNumberDialogFragment ask4CarNumberDialogFragment = new Ask4CarNumberDialogFragment();
+            ask4CarNumberDialogFragment.show(getSupportFragmentManager(), TAG);
+            ask4CarNumberDialogFragment.setCancelable(false);
+        }
 
         menuLabelsRight = (FloatingActionMenu) findViewById(R.id.menu_labels_right);
         mAddMore = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.add_more);
@@ -210,6 +214,21 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
             return;
         }
 
+        ServiceRequestDao serviceRequestDao = removeDuplicateService();
+
+        //Insert into service request table
+        serviceRequestDao.insertOrReplaceInTx(mServiceRequestList);
+
+        mServiceRequestList = new ArrayList<>();
+        //Intent intent  = new Intent(ChooseServiceActivity.this, ConfirmRequestActivity.class );
+        Intent intent = new Intent(ChooseServiceActivity.this, ModifyChoosenServiceRquestActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivityForResult(intent, AppConstants.BACK_FROM_CHILD_MODIFY_CHOOSEN_SERVICE_ACTIVITY);
+
+    }
+
+    @NonNull
+    private ServiceRequestDao removeDuplicateService() {
         ServiceRequestDao serviceRequestDao = addToServiceRequestList();
 
         //Check if the same service is available for the same Vehicle Number
@@ -232,16 +251,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
                 mServiceRequestList.remove(mServiceRequestList.lastIndexOf(s));
             }
         }
-
-        //Insert into service request table
-        serviceRequestDao.insertOrReplaceInTx(mServiceRequestList);
-
-        mServiceRequestList = new ArrayList<>();
-        //Intent intent  = new Intent(ChooseServiceActivity.this, ConfirmRequestActivity.class );
-        Intent intent = new Intent(ChooseServiceActivity.this, ModifyChoosenServiceRquestActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivityForResult(intent, AppConstants.BACK_FROM_CHILD_MODIFY_CHOOSEN_SERVICE_ACTIVITY);
-
+        return serviceRequestDao;
     }
 
     private ServiceRequestDao addToServiceRequestList() {
@@ -372,7 +382,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
             switch (v.getId()) {
                 case R.id.add_more:
                     //Save the Older data if has some before goinh back
-                    ServiceRequestDao serviceRequestDao = addToServiceRequestList();
+                    ServiceRequestDao serviceRequestDao = removeDuplicateService();
                     serviceRequestDao.insertOrReplaceInTx(mServiceRequestList);
                     Intent intent = new Intent(ChooseServiceActivity.this, WelcomeDashboardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -393,7 +403,10 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(ChooseServiceActivity.this, "Coming back from the list Modify Service Page!!", Toast.LENGTH_SHORT).show();
+        backFromModifyService = true;
+
+
     }
 
     @Override
