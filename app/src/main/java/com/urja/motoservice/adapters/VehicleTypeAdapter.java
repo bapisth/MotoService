@@ -56,7 +56,7 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.price);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            overflow = (ImageView) view.findViewById(R.id.overflow);
+            //overflow = (ImageView) view.findViewById(R.id.overflow);
         }
     }
 
@@ -83,13 +83,22 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
         // loading album cover using Glide library
         Glide.with(mContext).load(vehicle.getDownloadPath()).into(holder.thumbnail);
 
-        holder.overflow.setOnClickListener(new View.OnClickListener() {
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, ChooseServiceActivity.class);
+                intent.putExtra(AppConstants.CAR_ID, mServiceID);
+                mContext.startActivity(intent);
+            }
+        });
+
+        /*holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopupMenu(holder.overflow, position);
                 //showPopupWindow(holder.overflow);
             }
-        });
+        });*/
     }
 
     private PopupWindow showPopupWindow(View view) {

@@ -1,5 +1,6 @@
 package com.urja.motoservice;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -87,7 +88,9 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mCustomer = dataSnapshot.getValue(Customer.class);
                 String name = mCustomer.getName();
+                String mobile = mCustomer.getMobile();
                 mName.setText(name);
+                mMobile.setText(mobile);
             }
 
             @Override
@@ -132,6 +135,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         switch (view.getId()){
             case R.id.updateProfile:
                 updateProfile();
+                startActivity(new Intent(this, WelcomeDashboardActivity.class));
                 finish();
                 break;
             case R.id.editName:

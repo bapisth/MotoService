@@ -21,9 +21,10 @@
                 android:id="@+id/thumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/album_cover_height"
-                android:background="?attr/selectableItemBackgroundBorderless"
+
+                card_view:cardBackgroundColor="@android:color/transparent"
                 android:clickable="true"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY" /><!--android:background="?attr/selectableItemBackgroundBorderless"-->
 
             <TextView
                 android:id="@+id/title"
@@ -46,7 +47,7 @@
                 android:paddingRight="@dimen/album_title_padding"
                 android:textSize="@dimen/songs_count" />
 
-            <ImageView
+            <!--<ImageView
                 android:id="@+id/overflow"
                 android:layout_width="@dimen/ic_album_overflow_width"
                 android:layout_height="@dimen/ic_album_overflow_height"
@@ -54,7 +55,7 @@
                 android:layout_below="@id/thumbnail"
                 android:layout_marginTop="@dimen/ic_album_overflow_margin_top"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_dots" />
+                android:src="@drawable/ic_dots" />-->
 
         </RelativeLayout>
 
