@@ -19,6 +19,8 @@
     <string name="pincode">Pincode</string>
     <string name="street">Street</string>
     <string name="address">Address</string>
+    <string name="no_data">No Data Available</string>
+
 
     <!--Drawer Labels-->
     <string name="drawer_item_home">Home</string>
@@ -164,10 +166,13 @@
 
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
-    <string name="title_activity_welcome_dashboard">WelcomeDashboardActivity</string>
+    <string name="title_activity_welcome_dashboard">Welcome</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="title_activity_transaction_detail">TransactionDetailActivity</string>
-    <string name="title_activity_update_profile">UpdateProfileActivity</string>
+    <string name="title_activity_transaction_detail">Transaction Detail</string>
+    <string name="title_activity_update_profile">Update Profile</string>
+
+    <string name="keyboard_signin">Sign In</string>
+    <string name="keyboard_signup">Sign Up</string>
 </resources>

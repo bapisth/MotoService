@@ -2,12 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorAccent"
-        android:text="Car Number"/>
+    android:orientation="vertical"
+    android:background="@drawable/button_background">
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dip"
@@ -48,6 +44,7 @@
             android:layout_width="0dp"
             android:layout_weight="5"
             android:text="Cancel"
+            android:background="@drawable/button_background"
             />
         <Button
             android:id="@+id/ok_button"
@@ -56,6 +53,7 @@
             android:layout_width="0dp"
             android:layout_weight="5"
             android:text="Ok"
+            android:background="@drawable/button_background"
             />
 
     </LinearLayout>

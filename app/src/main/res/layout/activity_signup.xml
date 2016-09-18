@@ -88,7 +88,10 @@
                 android:textColor="@color/textColorPrimary"
                 android:background="@color/white"
                 android:layout_marginBottom="8dp"
-                android:hint="@string/hint_password"/>
+                android:hint="@string/hint_password"
+                android:imeActionId="@+id/keyRegister"
+                android:imeActionLabel="@string/keyboard_signup"
+                android:imeOptions="actionUnspecified"/>
         <!--</android.support.design.widget.TextInputLayout>-->
 
         <!--  Mobile Label -->

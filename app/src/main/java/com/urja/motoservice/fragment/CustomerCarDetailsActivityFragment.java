@@ -1,6 +1,7 @@
 package com.urja.motoservice.fragment;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +22,13 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.urja.motoservice.CustomerCarDetailsActivity;
 import com.urja.motoservice.R;
 import com.urja.motoservice.WelcomeDashboardActivity;
 import com.urja.motoservice.database.DbHelper;
@@ -30,10 +37,13 @@ import com.urja.motoservice.database.dao.ServiceRequestDao;
 import com.urja.motoservice.model.CustomerTransactionAddress;
 import com.urja.motoservice.model.OrderForServicesTransaction;
 import com.urja.motoservice.model.TransactionComplete;
+import com.urja.motoservice.utils.AlertDialog;
 import com.urja.motoservice.utils.DatabaseConstants;
+import com.urja.motoservice.utils.FirebaseRootReference;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +52,7 @@ import java.util.List;
  */
 public class CustomerCarDetailsActivityFragment extends Fragment {
 
+    private static final String TAG = CustomerCarDetailsActivityFragment.class.getSimpleName();
     private Button mConfirm;
     private EditText mCustomerAddressline1;
     private EditText mCustomerAaddressline2;
@@ -60,8 +71,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
 
     private static final String IMMEDIATE = "immediate";
     private static final String CASH_ON_DELIVERY = "cashOnDelivery";
-    private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mTransactionRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_TRANSACTION);
+    private DatabaseReference mTransactionRef = FirebaseRootReference.get_instance().getmTransactionDatabaseRef();
 
 
     public CustomerCarDetailsActivityFragment() {
@@ -128,6 +138,22 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
             }
         });
 
+    }
+
+    private void listenCustomerTransactionEvent(String mCurrentUserId) {
+        mTransactionRef = FirebaseRootReference.get_instance().getmTransactionDatabaseRef();
+        mTransactionRef.child(mCurrentUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Toast.makeText(getActivity().getApplicationContext(), "Transaction Id: "+ dataSnapshot.getKey(), Toast.LENGTH_LONG).show();
+                //AlertDialog.Alert(getActivity().getApplicationContext(), "We Received your Request!", "Transaction Id :"+ dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private boolean isFormValid() {
@@ -229,18 +255,18 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
             mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final DatabaseReference transactionDataRef = mTransactionRef.child(mCurrentUserId).push();
         List<ServiceRequest> readServiceRequestData = readServiceRequestData();
-        OrderForServicesTransaction orderForServicesTransaction = new OrderForServicesTransaction(readServiceRequestData, false, new Date());
-        transactionDataRef.setValue(orderForServicesTransaction)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+        OrderForServicesTransaction orderForServicesTransaction = new OrderForServicesTransaction(readServiceRequestData, true, new Date());
+        Task<Void> value = transactionDataRef.setValue(orderForServicesTransaction);
+        value.addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         //Toast.makeText(getActivity(), "Request Added to the server!!", Toast.LENGTH_SHORT).show();
                         mServiceRequestDao.deleteAll();
-                        transactionDataRef.child("CarPickAddress").push().setValue(mCustomerTransactionAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        transactionDataRef.child("CarPickAddress").setValue(mCustomerTransactionAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 progressDialog.dismiss();
-                                EventBus.getDefault().post(new TransactionComplete(true));
+                                EventBus.getDefault().post(new TransactionComplete(true, ""));
                                 ActivityCompat.finishAffinity(getActivity());
                                 Intent intent = new Intent(getActivity(), WelcomeDashboardActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

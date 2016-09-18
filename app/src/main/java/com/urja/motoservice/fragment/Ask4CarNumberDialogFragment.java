@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -36,6 +37,8 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.car_number_fragment_layout, null);
         this.getDialog().setTitle("Car Number");
+        Window window = this.getDialog().getWindow();
+        window.setTitleColor(getResources().getColor(R.color.colorAccent));
 
         mCarNumber = (EditText) view.findViewById(R.id.car_number);
         mOkButton = (Button) view.findViewById(R.id.ok_button);

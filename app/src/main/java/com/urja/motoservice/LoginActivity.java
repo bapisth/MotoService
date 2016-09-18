@@ -9,10 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -72,6 +75,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //UI Initialization
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
+        inputPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.keyLogin || id == EditorInfo.IME_NULL) {
+                    attemptLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
         //progressBar = (ProgressBar) findViewById(R.id.progressBar);
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle(R.string.title_progress_dialog);
@@ -96,35 +109,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(LoginActivity.this, SignupActivity.class));
                 break;
             case R.id.btn_login: {
-                String email = inputEmail.getText().toString();
-                final String password = inputPassword.getText().toString();
-
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), R.string.warning_email, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), R.string.warning_password, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                //progressBar.setVisibility(View.VISIBLE);
-                mProgressDialog.show();
-
-                //authenticate user
-                if (NetworkService.Network) {
-                    OnCompleteListener<AuthResult> onCompleteListener = getOnCompleteListener(password);
-                    auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, onCompleteListener);
-                } else {
-                    AlertDialog.Alert(this, "", getString(R.string.message_network_not_available));
-                }
-
+                attemptLogin();
             }
             break;
             case R.id.btn_reset_password:
                 startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
                 break;
+        }
+    }
+
+    private void attemptLogin() {
+        String email = inputEmail.getText().toString();
+        final String password = inputPassword.getText().toString();
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getApplicationContext(), R.string.warning_email, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(getApplicationContext(), R.string.warning_password, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //progressBar.setVisibility(View.VISIBLE);
+        mProgressDialog.show();
+
+        //authenticate user
+        if (NetworkService.Network) {
+            OnCompleteListener<AuthResult> onCompleteListener = getOnCompleteListener(password);
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, onCompleteListener);
+        } else {
+            AlertDialog.Alert(this, "", getString(R.string.message_network_not_available));
         }
     }
 

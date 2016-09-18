@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,9 +38,19 @@ import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.adapters.VehicleTypeAdapter;
 import com.urja.motoservice.fragment.TransactionDetailActivityFragment;
 import com.urja.motoservice.fragment.dummy.DummyContent;
+import com.urja.motoservice.model.Customer;
+import com.urja.motoservice.model.ProfileUpdatedEvent;
+import com.urja.motoservice.model.TransactionComplete;
 import com.urja.motoservice.model.Vehicle;
+import com.urja.motoservice.utils.AlertDialog;
+import com.urja.motoservice.utils.AppConstants;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
 import com.urja.motoservice.utils.DatabaseConstants;
+import com.urja.motoservice.utils.FirebaseRootReference;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,8 +68,9 @@ public class WelcomeDashboardActivity extends AppCompatActivity
     private Toolbar mToolbar;
     private final int IDENTIFIER_SIGNOUT = 101;
     private ProgressBar mProgressBar;
-    private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mVehicleTypesRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_VEHICLE + "/" + DatabaseConstants.TABLE_VEHICLE_TYPE);// Add Name and Phone number to 'Customer' object
+    private DatabaseReference mVehicleTypesRef;
+    private DatabaseReference mCustomerDatabaseRef;
+    private DatabaseReference transactionDataRef;
 
     private static String mName = "";
     private static String mMobile;
@@ -76,6 +88,15 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_welcome_dashboard);
+
+        Intent intent = getIntent();
+        if (intent != null){//Assuming this intent comes from CustomerDetailActivityFragment
+            String transactionId = intent.getStringExtra(AppConstants.TRANSACTIOIN_ID);
+            if (transactionId != null && transactionId == "")
+                AlertDialog.Alert(WelcomeDashboardActivity.this, "We Received your Request!!", "Your Transaction Id : "+ transactionId);
+        }
+
+        mVehicleTypesRef = FirebaseRootReference.getInstance().getmVehicleTypesRef();
 
         //Get the Currentlogged in UserId
         if (CurrentLoggedInUser.getCurrentFirebaseUser() == null)
@@ -110,7 +131,34 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         //add vehicle list to adapter
         fetchAndShowVehicles();
 
+        //Listen Value Event Listener for Customer
+        listenCustomerChangeEvent(mCurrentUserId);
 
+
+
+
+    }
+
+
+
+    private void listenCustomerChangeEvent(String mCurrentUserId) {
+        mCustomerDatabaseRef = FirebaseRootReference.get_instance().getmCustomerDatabaseRef();
+        mCustomerDatabaseRef.child(mCurrentUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Customer customer = dataSnapshot.getValue(Customer.class);
+                String newName = customer.getName();
+                TextDrawable textDrawable = TextDrawable.builder().buildRound(newName.substring(0, 1).toUpperCase(), ColorGenerator.MATERIAL.getRandomColor());
+                mPersonImage.setBackground(textDrawable);
+                mPersonImage.setImageDrawable(textDrawable);
+                mPersonName.setText(newName);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void fetchAndShowVehicles() {
@@ -178,7 +226,13 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         }
     }
 
-    @Override
+    /**
+     * No Menu Needed
+     * @param item
+     * @return
+     */
+
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.welcome_dashboard, menu);
@@ -198,7 +252,9 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
+
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -208,9 +264,7 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         Intent intent = null;
         Fragment fragment = null;
 
-        if (id == R.id.nav_help) {
-            // Handle the camera action
-        } else if (id == R.id.nav_transaction) {
+        if (id == R.id.nav_transaction) {
                 intent = new Intent(WelcomeDashboardActivity.this, TransactionDetailActivity.class);
         } else if (id == R.id.nav_manage_profile) {
             intent = new Intent(WelcomeDashboardActivity.this, UpdateProfileActivity.class);
@@ -225,7 +279,6 @@ public class WelcomeDashboardActivity extends AppCompatActivity
             finish();
         } else if (intent != null) {
             WelcomeDashboardActivity.this.startActivity(intent);
-            Toast.makeText(WelcomeDashboardActivity.this, "Module Not Implemented!!", Toast.LENGTH_SHORT).show();
         }
 
         // Insert the fragment by replacing any existing fragment

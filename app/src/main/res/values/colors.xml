@@ -113,5 +113,6 @@
 
     <color name="item_selected_background_color">#C7C7CC</color>
     <color name="image_placeholder_background_color">#C7C7CC</color>
+    <color name="dark_grey">#484547</color>
 
 </resources>

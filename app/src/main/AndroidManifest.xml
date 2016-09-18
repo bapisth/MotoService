@@ -83,11 +83,13 @@
         <activity
             android:name=".TransactionDetailActivity"
             android:label="@string/title_activity_transaction_detail"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".WelcomeDashboardActivity"/>
         <activity
             android:name=".UpdateProfileActivity"
             android:label="@string/title_activity_update_profile"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".WelcomeDashboardActivity"></activity>
     </application>
 
 </manifest>

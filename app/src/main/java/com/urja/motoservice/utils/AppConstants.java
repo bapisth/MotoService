@@ -21,4 +21,6 @@ public interface AppConstants {
             String MOBILE = "mobile";
         }
     }
+
+    String TRANSACTIOIN_ID = "transaction_id";
 }

@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.urja.motoservice.model.Customer;
 import com.urja.motoservice.model.CustomerAddress;
+import com.urja.motoservice.utils.AlertDialog;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
 import com.urja.motoservice.utils.DatabaseConstants;
 
@@ -62,6 +66,17 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         btnSignUp = (Button) findViewById(R.id.sign_up_button);
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
+        inputPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.keyRegister || id == EditorInfo.IME_NULL) {
+                    attemptRegister();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         //progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
         fullName = (EditText) findViewById(R.id.fullName);
@@ -83,60 +98,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.sign_up_button:
-                mProgressDialog = new ProgressDialog(this);
-                //mProgressDialog.setTitle(R.string.title_progress_dialog);
-                mProgressDialog.setMessage("Creating Account...");
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.show();
-
-
-                String email = inputEmail.getText().toString().trim();
-                String password = inputPassword.getText().toString().trim();
-
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), R.string.warning_email, Toast.LENGTH_SHORT).show();
-                    mProgressDialog.dismiss();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), R.string.warning_password, Toast.LENGTH_SHORT).show();
-                    mProgressDialog.dismiss();
-                    return;
-                }
-
-                if (password.length() < 6) {
-                    Toast.makeText(getApplicationContext(), R.string.minimum_password, Toast.LENGTH_SHORT).show();
-                    mProgressDialog.dismiss();
-                    return;
-                }
-
-                //progressBar.setVisibility(View.VISIBLE);
-                //create user
-                auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Toast.makeText(SignupActivity.this, R.string.info_signup_successful + "" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
-                                //progressBar.setVisibility(View.GONE);
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
-                                if (!task.isSuccessful()) {
-                                    mProgressDialog.dismiss();
-                                    Toast.makeText(SignupActivity.this, R.string.info_signup_failed + ":" + task.getException(),
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    //Update phone Number for that User
-                                    updateUserData();
-                                    mProgressDialog.dismiss();
-
-                                    //startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                                    startActivity(new Intent(SignupActivity.this, WelcomeDashboardActivity.class));
-                                    finish();
-                                }
-                            }
-                        });
+                attemptRegister();
                 break;
             /*case R.id.sign_in_button:
                 finish();
@@ -148,6 +110,60 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         }
 
+    }
+
+    private void attemptRegister() {
+        mProgressDialog = new ProgressDialog(this);
+        //mProgressDialog.setTitle(R.string.title_progress_dialog);
+        mProgressDialog.setMessage("Creating Account...");
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+
+
+        String email = inputEmail.getText().toString().trim();
+        String password = inputPassword.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getApplicationContext(), R.string.warning_email, Toast.LENGTH_SHORT).show();
+            mProgressDialog.dismiss();
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(getApplicationContext(), R.string.warning_password, Toast.LENGTH_SHORT).show();
+            mProgressDialog.dismiss();
+            return;
+        }
+
+        if (password.length() < 6) {
+            Toast.makeText(getApplicationContext(), R.string.minimum_password, Toast.LENGTH_SHORT).show();
+            mProgressDialog.dismiss();
+            return;
+        }
+
+        //progressBar.setVisibility(View.VISIBLE);
+        //create user
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        //progressBar.setVisibility(View.GONE);
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            mProgressDialog.dismiss();
+                            AlertDialog.Alert(SignupActivity.this, getString( R.string.info_signup_failed), task.getException().getMessage().toString());
+                        } else {
+                            //Update phone Number for that User
+                            updateUserData();
+                            mProgressDialog.dismiss();
+                            //startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                            startActivity(new Intent(SignupActivity.this, WelcomeDashboardActivity.class));
+                            finish();
+                        }
+                    }
+                });
     }
 
     private void updateUserData() {

@@ -23,8 +23,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.model.Customer;
 import com.urja.motoservice.model.CustomerAddress;
+import com.urja.motoservice.model.ProfileUpdatedEvent;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
 import com.urja.motoservice.utils.DatabaseConstants;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +40,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
     private DatabaseReference mCustomerAddressRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CUSTOMER_ADDRESS);
 
     private EditText mName, mMobile, mAddress, mStreet, mPinCode;
-    private ImageView mEditName, mEditMobile, mEditAddress, mEditStreet, mEditPinCode;
+    //private ImageView mEditName, mEditMobile, mEditAddress, mEditStreet, mEditPinCode;
     private Button mButton;
     private Customer mCustomer;
     private CustomerAddress mCustomerAddress;
@@ -63,21 +66,26 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         mStreet = (EditText) findViewById(R.id.street);
         mPinCode = (EditText) findViewById(R.id.pincode);
 
-        mEditName = (ImageView) findViewById(R.id.editName);
+        /*mEditName = (ImageView) findViewById(R.id.editName);
         mEditMobile = (ImageView) findViewById(R.id.editMobile);
         mEditAddress = (ImageView) findViewById(R.id.editAddress);
         mEditStreet = (ImageView) findViewById(R.id.editStreet);
-        mEditPinCode = (ImageView) findViewById(R.id.editPincode);
+        mEditPinCode = (ImageView) findViewById(R.id.editPincode);*/
 
         mButton = (Button) findViewById(R.id.updateProfile);
 
 
-        //Make the EditText readonly untill user taps on Edit Image
+        /*//Make the EditText readonly untill user taps on Edit Image
         mName.setEnabled(false);
+        mName.setFocusable(true);
         mMobile.setEnabled(false);
+        mMobile.setFocusable(true);
         mAddress.setEnabled(false);
+        mAddress.setFocusable(true);
         mStreet.setEnabled(false);
+        mStreet.setFocusable(true);
         mPinCode.setEnabled(false);
+        mPinCode.setFocusable(false);*/
 
         //Populate the data from the database
         currentUserId = CurrentLoggedInUser.getCurrentFirebaseUser().getUid();
@@ -121,11 +129,11 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         });
 
         mButton.setOnClickListener(this);
-        mEditAddress.setOnClickListener(this);
+        /*mEditAddress.setOnClickListener(this);
         mEditName.setOnClickListener(this);
         mEditStreet.setOnClickListener(this);
         mEditPinCode.setOnClickListener(this);
-        mEditMobile.setOnClickListener(this);
+        mEditMobile.setOnClickListener(this);*/
 
 
     }
@@ -138,7 +146,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
                 startActivity(new Intent(this, WelcomeDashboardActivity.class));
                 finish();
                 break;
-            case R.id.editName:
+            /*case R.id.editName:
                     mName.setEnabled(true);
                     mName.requestFocus();
 
@@ -179,7 +187,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
                 mStreet.setEnabled(false);
                 mPinCode.setEnabled(true);
                 mPinCode.requestFocus();
-                break;
+                break;*/
         }
     }
 

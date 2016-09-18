@@ -44,7 +44,6 @@ public class CustomerCarDetailsActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(TransactionComplete transactionComplete) {
-        Toast.makeText(CustomerCarDetailsActivity.this, "Transaction Complete Event CustomerCarDetailsActivity" + transactionComplete.isTransactionComplete(), Toast.LENGTH_SHORT).show();
         if (transactionComplete.isTransactionComplete()) //If the transaction is completed, then stop the Activity
             finish();
     }

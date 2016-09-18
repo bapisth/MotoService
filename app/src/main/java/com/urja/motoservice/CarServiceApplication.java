@@ -2,6 +2,8 @@ package com.urja.motoservice;
 
 import android.app.Application;
 
+import com.urja.motoservice.utils.FirebaseRootReference;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -16,5 +18,7 @@ public class CarServiceApplication extends Application {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
+        FirebaseRootReference firebaseRootReference = FirebaseRootReference.getInstance();
     }
 }

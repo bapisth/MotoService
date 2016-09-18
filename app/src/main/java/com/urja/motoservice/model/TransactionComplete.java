@@ -5,9 +5,14 @@ package com.urja.motoservice.model;
  */
 public class TransactionComplete {
     private boolean transactionComplete = false;
+    private String transactionId;
 
-    public TransactionComplete(boolean transactionComplete) {
+    public TransactionComplete() {
+    }
+
+    public TransactionComplete(boolean transactionComplete, String transactionId) {
         this.transactionComplete = transactionComplete;
+        this.transactionId = transactionId;
     }
 
     public boolean isTransactionComplete() {
@@ -16,5 +21,13 @@ public class TransactionComplete {
 
     public void setTransactionComplete(boolean transactionComplete) {
         this.transactionComplete = transactionComplete;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
 }

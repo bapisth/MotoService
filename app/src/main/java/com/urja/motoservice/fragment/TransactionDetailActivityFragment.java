@@ -6,24 +6,46 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.R;
 import com.urja.motoservice.adapters.MyOrderForServicesTransactionRecyclerViewAdapter;
+import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.fragment.dummy.DummyContent;
+import com.urja.motoservice.model.CarPickAddress;
+import com.urja.motoservice.model.Transaction;
+import com.urja.motoservice.model.Vehicle;
+import com.urja.motoservice.utils.AppConstants;
+import com.urja.motoservice.utils.CurrentLoggedInUser;
+import com.urja.motoservice.utils.FirebaseRootReference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class TransactionDetailActivityFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 2;
+    private static final String TAG = TransactionDetailActivityFragment.class.getSimpleName();
+
+    private int mColumnCount = 0;
     private OnListFragmentInteractionListener mListener;
+    FirebaseRootReference firebaseRootReference = FirebaseRootReference.get_instance();
+    private String currentLoggedInUser;
+    private List<Transaction> mTransactionList = new ArrayList<>();
+    private MyOrderForServicesTransactionRecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
+    private TextView emptyView;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -45,30 +67,65 @@ public class TransactionDetailActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentLoggedInUser = CurrentLoggedInUser.getCurrentFirebaseUser().getUid();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+
+        firebaseRootReference.getmTransactionDatabaseRef().child(currentLoggedInUser).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot snapshot : children) {
+                    Transaction transaction = snapshot.getValue(Transaction.class);
+                    mTransactionList.add(transaction);
+                }
+                if (mTransactionList.isEmpty()) {
+                    recyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_orderforservicestransaction_list, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        emptyView = (TextView) view.findViewById(R.id.empty_view);
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+        if (recyclerView instanceof RecyclerView) {
+            Context context = recyclerView.getContext();/*
+            RecyclerView recyclerView = (RecyclerView) view;*/
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyOrderForServicesTransactionRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            Log.e(TAG, "onCreateView: mTransactionList.size() :"+mTransactionList.size() );
+            adapter = new MyOrderForServicesTransactionRecyclerViewAdapter(mTransactionList, mListener);
+            recyclerView.setAdapter(adapter);
         }
+
+
         return view;
     }
+
+
 
 
     @Override

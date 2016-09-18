@@ -84,7 +84,11 @@
                             android:background="@color/white"
                             android:drawableLeft="@mipmap/ic_lock_outline_black_24dp"
                             android:drawableTint="@color/colorAccent"
-                            android:typeface="normal"/>
+                            android:typeface="normal"
+                            android:imeActionId="@+id/keyLogin"
+                            android:imeActionLabel="@string/keyboard_signin"
+                            android:imeOptions="actionUnspecified"
+                            />
                     <!--</android.support.design.widget.TextInputLayout>-->
 
 
