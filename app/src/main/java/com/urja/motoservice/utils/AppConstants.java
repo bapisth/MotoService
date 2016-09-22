@@ -14,6 +14,7 @@ public interface AppConstants {
     String ACCESSORIES = "Accessories";
     String DENT_PAINT = "DentPaint";
     int BACK_FROM_CHILD_MODIFY_CHOOSEN_SERVICE_ACTIVITY = 7377;
+    String CHAR_SPLITER = "#||@@@||#";
 
     public interface TableColumns{
         public interface CustomerTable{//Make sure all the name is same as of the Models name
@@ -23,4 +24,16 @@ public interface AppConstants {
     }
 
     String TRANSACTIOIN_ID = "transaction_id";
+    interface Transaction{
+        String COLUMN_CARPICKADDRESS = "CarPickAddress";
+        String COLUMN_CARNUMBER = "CarNumber";
+        String COLUMN_SERVICE_REQUESTLIST = "serviceRequestList";
+        String COLUMN_SERVICE_REQUEST_DATE= "serviceRequestDate";
+        String COLUMN_REQUEST_STATUS= "requestStatus";
+
+    }
+
+    String STATUS_OPEN = "open";
+    String STATUS_PROGRESS = "progress";
+    String STATUS_CLOSED = "progress";
 }

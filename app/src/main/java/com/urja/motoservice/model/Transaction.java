@@ -9,18 +9,20 @@ import java.util.List;
  */
 public class Transaction {
     private CarPickAddress CarPickAddress;
-    private boolean requestOpen;
-    private ServiceRequestDate serviceRequestDate;
+    private String requestStatus;
+    private String serviceRequestDate;
     private List<ServiceRequest> serviceRequestList;
+    private String transactionId;
 
     public Transaction() {
     }
 
-    public Transaction(com.urja.motoservice.model.CarPickAddress carPickAddress, boolean requestOpen, ServiceRequestDate serviceRequestDate, List<ServiceRequest> serviceRequestList) {
+    public Transaction(com.urja.motoservice.model.CarPickAddress carPickAddress, String requestStatus, String serviceRequestDate, List<ServiceRequest> serviceRequestList, String transactionId) {
         CarPickAddress = carPickAddress;
-        this.requestOpen = requestOpen;
+        this.requestStatus = requestStatus;
         this.serviceRequestDate = serviceRequestDate;
         this.serviceRequestList = serviceRequestList;
+        this.transactionId = transactionId;
     }
 
     public com.urja.motoservice.model.CarPickAddress getCarPickAddress() {
@@ -31,19 +33,19 @@ public class Transaction {
         CarPickAddress = carPickAddress;
     }
 
-    public boolean isRequestOpen() {
-        return requestOpen;
+    public String getRequestStatus() {
+        return requestStatus;
     }
 
-    public void setRequestOpen(boolean requestOpen) {
-        this.requestOpen = requestOpen;
+    public void setRequestStatus(String requestStatus) {
+        this.requestStatus = requestStatus;
     }
 
-    public ServiceRequestDate getServiceRequestDate() {
+    public String getServiceRequestDate() {
         return serviceRequestDate;
     }
 
-    public void setServiceRequestDate(ServiceRequestDate serviceRequestDate) {
+    public void setServiceRequestDate(String serviceRequestDate) {
         this.serviceRequestDate = serviceRequestDate;
     }
 
@@ -53,5 +55,13 @@ public class Transaction {
 
     public void setServiceRequestList(List<ServiceRequest> serviceRequestList) {
         this.serviceRequestList = serviceRequestList;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
 }

@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.CustomerCarDetailsActivity;
 import com.urja.motoservice.R;
+import com.urja.motoservice.TransactionDetailActivity;
 import com.urja.motoservice.WelcomeDashboardActivity;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
@@ -38,14 +39,21 @@ import com.urja.motoservice.model.CustomerTransactionAddress;
 import com.urja.motoservice.model.OrderForServicesTransaction;
 import com.urja.motoservice.model.TransactionComplete;
 import com.urja.motoservice.utils.AlertDialog;
+import com.urja.motoservice.utils.AppConstants;
 import com.urja.motoservice.utils.DatabaseConstants;
 import com.urja.motoservice.utils.FirebaseRootReference;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.security.Key;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -68,10 +76,19 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     private List<ServiceRequest> mServiceRequestList = null;
     private ServiceRequestDao mServiceRequestDao = null;
     private CustomerTransactionAddress mCustomerTransactionAddress = null;
+    private boolean addedToServer = false;
+    private int countNumberOfCar = 0;
+    private int carAddedToServerCounter = 0;
+    private String carNumber;
+    private ServiceRequest carServiceRequest;
 
     private static final String IMMEDIATE = "immediate";
     private static final String CASH_ON_DELIVERY = "cashOnDelivery";
     private DatabaseReference mTransactionRef = FirebaseRootReference.get_instance().getmTransactionDatabaseRef();
+
+    DateFormat df = null ;
+    Date today = null;
+    String transactionDate = "";
 
 
     public CustomerCarDetailsActivityFragment() {
@@ -80,6 +97,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_customer_car_details, container, false);
         return view;
     }
@@ -101,7 +119,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         mPaymentTypeGroup = (RadioGroup) view.findViewById(R.id.payment_type_group);
 
         //Add Listener to the RadioGroup
-        mPaymentTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        /*mPaymentTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (radioGroup.getCheckedRadioButtonId()) {
@@ -116,7 +134,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
                         break;
                 }
             }
-        });
+        });*/
 
         //Listner for the Confirm Button
         mConfirm.setOnClickListener(new View.OnClickListener() {
@@ -182,11 +200,12 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         boolean mobileNumber = checkMobileNumber();
 
         //check radio group is checked
-        boolean isPaymentChoosen = checkPaymentType();
+        //boolean isPaymentChoosen = checkPaymentType();
 
         //return (addressLine1 && addressLine2 && landmark && city && state && pin && carNumber && mobileNumber && isPaymentChoosen);
         //return (addressLine1 && addressLine2 && landmark && city && state && pin && mobileNumber && isPaymentChoosen);
-        return (addressLine1 && landmark && city && state && pin && mobileNumber && isPaymentChoosen);
+        //return (addressLine1 && landmark && city && state && pin && mobileNumber && isPaymentChoosen);
+        return (addressLine1 && landmark && city && state && pin && mobileNumber);
 
 
     }
@@ -243,7 +262,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
 
     private List<ServiceRequest> readServiceRequestData() {
         mServiceRequestDao = DbHelper.getInstance(getActivity()).getServiceRequestDao();
-        mServiceRequestList = mServiceRequestDao.loadAll();
+        mServiceRequestList = mServiceRequestDao.queryBuilder().orderDesc(ServiceRequestDao.Properties.Carnumber).list();
         return mServiceRequestList;
     }
 
@@ -253,29 +272,66 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         progressDialog.show();
         if (mCurrentUserId == null)
             mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final DatabaseReference transactionDataRef = mTransactionRef.child(mCurrentUserId).push();
+        final DatabaseReference transactionDataRef = mTransactionRef.child(mCurrentUserId);
         List<ServiceRequest> readServiceRequestData = readServiceRequestData();
         OrderForServicesTransaction orderForServicesTransaction = new OrderForServicesTransaction(readServiceRequestData, true, new Date());
-        Task<Void> value = transactionDataRef.setValue(orderForServicesTransaction);
-        value.addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        //Toast.makeText(getActivity(), "Request Added to the server!!", Toast.LENGTH_SHORT).show();
-                        mServiceRequestDao.deleteAll();
-                        transactionDataRef.child("CarPickAddress").setValue(mCustomerTransactionAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
+
+
+        String carNum = "";
+        Map<String, List<ServiceRequest>> carWithServiceMap = new HashMap<>();//Map<CarNumber, ServiceList>
+        StringBuilder carServiceList = null;
+        for (ServiceRequest serviceRequest : readServiceRequestData){//Extract the Car Number as per the CarNumber
+            if (!(carNum.equalsIgnoreCase(serviceRequest.getCarnumber()))){
+                carNum = serviceRequest.getCarnumber();
+                mServiceRequestDao = DbHelper.getInstance(getActivity()).getServiceRequestDao();
+                mServiceRequestList = mServiceRequestDao.queryBuilder().where(ServiceRequestDao.Properties.Carnumber.eq(carNum)).list();
+                carWithServiceMap.put(carNum, mServiceRequestList);
+
+            }
+        }
+
+        countNumberOfCar = carWithServiceMap.size();
+
+        df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        today = Calendar.getInstance().getTime();
+        transactionDate = df.format(today);
+
+        for (Map.Entry<String, List<ServiceRequest>> entry : carWithServiceMap.entrySet()) {
+            carNumber = entry.getKey();
+            List<ServiceRequest> entryValue = entry.getValue();
+            System.out.println(carNumber + "/" + entryValue);
+
+            final DatabaseReference carNumberPush = transactionDataRef.child(carNumber).push();
+            final Task<Void> transactionDateTask = carNumberPush.child(AppConstants.Transaction.COLUMN_SERVICE_REQUEST_DATE).setValue(transactionDate);
+            final Task<Void> transactionStatusTask = carNumberPush.child(AppConstants.Transaction.COLUMN_REQUEST_STATUS).setValue(AppConstants.STATUS_OPEN);
+            final Task<Void> value = carNumberPush.child(AppConstants.Transaction.COLUMN_SERVICE_REQUESTLIST).setValue(entryValue);
+
+            value.addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    //Toast.makeText(getActivity(), "Request Added to the server!!", Toast.LENGTH_SHORT).show();
+                    carNumberPush.child(AppConstants.Transaction.COLUMN_CARPICKADDRESS).setValue(mCustomerTransactionAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            carAddedToServerCounter +=1;
+                            if (carAddedToServerCounter==countNumberOfCar){
+                                mServiceRequestDao.deleteAll();
+
                                 progressDialog.dismiss();
                                 EventBus.getDefault().post(new TransactionComplete(true, ""));
                                 ActivityCompat.finishAffinity(getActivity());
-                                Intent intent = new Intent(getActivity(), WelcomeDashboardActivity.class);
+                                //Intent intent = new Intent(getActivity(), WelcomeDashboardActivity.class);
+                                Intent intent = new Intent(getActivity(), TransactionDetailActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
                                 getActivity().finish();
                             }
-                        });
-                    }
-                });
+                        }
+                    });
+                }
+            });
+        }
+
     }
 
 

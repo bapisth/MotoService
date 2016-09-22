@@ -119,7 +119,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
             public Fragment getItem(int position) {
                 Fragment fragment = null;
                 Log.e(TAG, "getItem: position=" + position);
-                switch (position % 5) {
+                switch (position % 1) {
                     case 0:
                         fragment = WashDetailingFragment.newInstance();
                         break;
@@ -141,12 +141,12 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
 
             @Override
             public int getCount() {
-                return 5;
+                return 1;
             }
 
             @Override
             public CharSequence getPageTitle(int position) {
-                switch (position % 5) {
+                switch (position % 1) {
                     case 0:
                         return getString(R.string.tab_wash_detailing);
                     case 1:

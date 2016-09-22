@@ -79,8 +79,12 @@ public class TransactionDetailActivityFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot snapshot : children) {
-                    Transaction transaction = snapshot.getValue(Transaction.class);
-                    mTransactionList.add(transaction);
+                    for (DataSnapshot dss:snapshot.getChildren()){
+                        Transaction transaction = dss.getValue(Transaction.class);
+                        transaction.setTransactionId(dss.getKey());
+                        mTransactionList.add(transaction);
+                    }
+
                 }
                 if (mTransactionList.isEmpty()) {
                     recyclerView.setVisibility(View.GONE);
