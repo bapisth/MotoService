@@ -174,7 +174,6 @@
                         android:id="@+id/customer_car_number"
                         android:layout_below="@id/label_car_number"
                         android:hint="OD XXX XXXX"
-                        android:nextFocusForward="@+id/payment_type_group"
                         android:imeOptions="actionDone"
                         android:singleLine="true"
                         android:ems="10"

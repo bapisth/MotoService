@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.R;
 import com.urja.motoservice.adapters.CarServiceRecyclerViewAdapter;
+import com.urja.motoservice.model.CarCareDetailing;
 import com.urja.motoservice.model.WashDetailing;
 import com.urja.motoservice.utils.DatabaseConstants;
 
@@ -29,20 +30,20 @@ import java.util.List;
 /**
  * Created by florentchampigny on 24/04/15.
  */
-public class WashDetailingFragment extends Fragment {
+public class CarCareDetailingFragment extends Fragment {
 
-    private static final String TAG = WashDetailingFragment.class.getSimpleName();
+    private static final String TAG = CarCareDetailingFragment.class.getSimpleName();
     static final boolean GRID_LAYOUT = false;
     private static final int ITEM_COUNT = 100;
     private RecyclerView mRecyclerView;
     public RecyclerView.Adapter mAdapter;
     private List<Object> mContentItems = new ArrayList<>();
     private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mCarServiceWashTypesRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CAR_SERVICE + "/" + DatabaseConstants.TABLE_WASH_DETAILING);
+    private DatabaseReference mCarServiceWashTypesRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CAR_SERVICE + "/" + DatabaseConstants.CAR_CARE_DETAILING);
     private FirebaseAuth firebaseAuth;
 
-    public static WashDetailingFragment newInstance() {
-        return new WashDetailingFragment();
+    public static CarCareDetailingFragment newInstance() {
+        return new CarCareDetailingFragment();
     }
 
 
@@ -79,7 +80,7 @@ public class WashDetailingFragment extends Fragment {
 
     }
 
-    private void fetchServiceData(WashDetailingFragment washDetailingFragment) {
+    private void fetchServiceData(CarCareDetailingFragment carCareDetailingFragment) {
 
         mCarServiceWashTypesRef.orderByKey().addValueEventListener(new ValueEventListener() {
             WashDetailing mWashDetailing = null;
@@ -89,7 +90,9 @@ public class WashDetailingFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "onDataChange: Key=" + snapshot.getKey());
                     Log.d(TAG, "onDataChange: value=" + snapshot.getValue());
-                    mContentItems.add(new WashDetailing(snapshot.getKey(), snapshot.getValue().toString()));
+                    CarCareDetailing carCareDetailing = snapshot.getValue(CarCareDetailing.class);
+                    carCareDetailing.setCode(snapshot.getKey());
+                    mContentItems.add(carCareDetailing);
                 }
                 mAdapter.notifyDataSetChanged();
             }

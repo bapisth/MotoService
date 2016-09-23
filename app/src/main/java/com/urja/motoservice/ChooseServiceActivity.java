@@ -27,8 +27,9 @@ import com.urja.motoservice.fragment.Ask4CarNumberDialogFragment;
 import com.urja.motoservice.fragment.DentPaintFragment;
 import com.urja.motoservice.fragment.ServiceRepairFragment;
 import com.urja.motoservice.fragment.TyreWheelFragment;
-import com.urja.motoservice.fragment.WashDetailingFragment;
+import com.urja.motoservice.fragment.CarCareDetailingFragment;
 import com.urja.motoservice.model.Accessories;
+import com.urja.motoservice.model.CarCareDetailing;
 import com.urja.motoservice.model.DentPaint;
 import com.urja.motoservice.model.ServiceEventModel;
 import com.urja.motoservice.model.ServiceRepair;
@@ -54,7 +55,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
     private MaterialViewPager mViewPager;
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private Set<WashDetailing> mWashDetailingList = new HashSet<>();
+    private Set<CarCareDetailing> carCareDetailings = new HashSet<>();
     private Set<TyreWheel> mTyreWheelList = new HashSet<>();
     private Set<ServiceRepair> mServiceRepairList = new HashSet<>();
     private Set<DentPaint> mDentPaintList = new HashSet<>();
@@ -69,6 +70,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
     private List<FloatingActionMenu> menus = new ArrayList<>();
     private long mVehicleGroupId;
     private String mCarNumber = null;
+    private String mCarType = null;
     private boolean backFromModifyService = false;
 
     @Override
@@ -121,7 +123,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
                 Log.e(TAG, "getItem: position=" + position);
                 switch (position % 1) {
                     case 0:
-                        fragment = WashDetailingFragment.newInstance();
+                        fragment = CarCareDetailingFragment.newInstance();
                         break;
                     case 1:
                         fragment = ServiceRepairFragment.newInstance();
@@ -209,7 +211,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
     }
 
     private void goToServiceCheckList() {
-        if (mWashDetailingList.size() == 0 && mTyreWheelList.size() == 0 && mServiceRepairList.size() == 0 && mDentPaintList.size() == 0 && mAccessoriesList.size() == 0) {
+        if (carCareDetailings.size() == 0 && mTyreWheelList.size() == 0 && mServiceRepairList.size() == 0 && mDentPaintList.size() == 0 && mAccessoriesList.size() == 0) {
             Toast.makeText(ChooseServiceActivity.this, "Choose Any of the Service!!!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -256,18 +258,18 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
 
     private ServiceRequestDao addToServiceRequestList() {
         ServiceRequestDao serviceRequestDao = DbHelper.getInstance(this).getServiceRequestDao();
-        for (WashDetailing washDetailing : mWashDetailingList) {
+        for (CarCareDetailing carCareDetailing : carCareDetailings) {
             mServiceRequest = new ServiceRequest();
-            mServiceRequest.setCode(washDetailing.getCode());
-            mServiceRequest.setDesc(washDetailing.getDesc());
-            mServiceRequest.setGroupname(AppConstants.WASH_DETAILING);
+            mServiceRequest.setCode(carCareDetailing.getCode());
+            mServiceRequest.setDesc(carCareDetailing.getDesc());
+            mServiceRequest.setGroupname(String.valueOf(mCarType)); //Adding CarType in GroupName
             mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
             mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
 
             mServiceRequestList.add(mServiceRequest);
         }
 
-        for (TyreWheel tyreWheel : mTyreWheelList) {
+        /*for (TyreWheel tyreWheel : mTyreWheelList) {
             mServiceRequest = new ServiceRequest();
             mServiceRequest.setCode(tyreWheel.getCode());
             mServiceRequest.setDesc(tyreWheel.getDesc());
@@ -287,9 +289,9 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
             mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
 
             mServiceRequestList.add(mServiceRequest);
-        }
+        }*/
 
-        for (DentPaint dentPaint : mDentPaintList) {
+        /*for (DentPaint dentPaint : mDentPaintList) {
             mServiceRequest = new ServiceRequest();
             mServiceRequest.setCode(dentPaint.getCode());
             mServiceRequest.setDesc(dentPaint.getDesc());
@@ -310,7 +312,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
 
 
             mServiceRequestList.add(mServiceRequest);
-        }
+        }*/
         return serviceRequestDao;
     }
 
@@ -330,12 +332,12 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
     public void onMessageEvent(ServiceEventModel serviceEventModel) {
         Object event = serviceEventModel.getObject();
         boolean add = serviceEventModel.isAdd();
-        if (event instanceof WashDetailing) {
-            WashDetailing washDetailing = (WashDetailing) event;
+        if (event instanceof CarCareDetailing) {
+            CarCareDetailing carCareDetailing = (CarCareDetailing) event;
             if (add)
-                mWashDetailingList.add(washDetailing);
+                carCareDetailings.add(carCareDetailing);
             else
-                mWashDetailingList.remove(washDetailing);
+                carCareDetailings.remove(carCareDetailing);
         } else if (event instanceof TyreWheel) {
             TyreWheel tyreWheel = (TyreWheel) event;
 
@@ -397,8 +399,9 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
     };
 
     @Override
-    public void onSubmit(String carNumber) {
+    public void onSubmit(String carNumber, String carType) {
         this.mCarNumber = carNumber;
+        this.mCarType = carType;
     }
 
     @Override

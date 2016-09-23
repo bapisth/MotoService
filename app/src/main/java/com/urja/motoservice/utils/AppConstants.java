@@ -15,6 +15,7 @@ public interface AppConstants {
     String DENT_PAINT = "DentPaint";
     int BACK_FROM_CHILD_MODIFY_CHOOSEN_SERVICE_ACTIVITY = 7377;
     String CHAR_SPLITER = "#||@@@||#";
+    String CAR_CARE_DETAILING = "CarCareDetailing";
 
     public interface TableColumns{
         public interface CustomerTable{//Make sure all the name is same as of the Models name
@@ -36,4 +37,9 @@ public interface AppConstants {
     String STATUS_OPEN = "open";
     String STATUS_PROGRESS = "progress";
     String STATUS_CLOSED = "progress";
+
+    String CAR_SMALL = "s";
+    String CAR_MEDIUM = "m";
+    String CAR_LARGE = "l";
+
 }

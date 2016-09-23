@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.urja.motoservice.R;
 import com.urja.motoservice.model.Accessories;
+import com.urja.motoservice.model.CarCareDetailing;
 import com.urja.motoservice.model.DentPaint;
 import com.urja.motoservice.model.ServiceEventModel;
 import com.urja.motoservice.model.ServiceRepair;
@@ -93,11 +94,11 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 break;
             case TYPE_CELL:
                 final Object object = contents.get(position);
-                if (contents != null && object instanceof WashDetailing) {
-                    WashDetailing washDetailing = (WashDetailing) object;
-                    mCode.setText(washDetailing.getCode());
-                    mCheckBox.setText(washDetailing.getDesc());
-                } else if (contents != null && object instanceof ServiceRepair) {
+                if (contents != null && object instanceof CarCareDetailing) {
+                    CarCareDetailing carCareDetailing = (CarCareDetailing) object;
+                    mCode.setText(carCareDetailing.getCode());
+                    mCheckBox.setText(carCareDetailing.getDesc());
+                } /*else if (contents != null && object instanceof ServiceRepair) {
                     ServiceRepair serviceRepair = (ServiceRepair) object;
                     mCode.setText(serviceRepair.getCode());
                     mCheckBox.setText(serviceRepair.getDesc());
@@ -113,7 +114,7 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     Accessories accessories = (Accessories) object;
                     mCode.setText(accessories.getCode());
                     mCheckBox.setText(accessories.getDesc());
-                }
+                }*/
 
                 mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override

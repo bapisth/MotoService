@@ -94,6 +94,11 @@
     <color name="list_background_pressed">#992416</color>
     <color name="counter_text_bg">#626262</color>
 
+    <color name="dark_blue">#180065</color>
+    <color name="light_blue">#334ee9ff</color>
+    <color name="medium_green">#3d853e</color>
+    <color name="light_green">#3c2ae668</color>
+
     <integer-array name="androidcolors">
 
         <item>@color/white</item>

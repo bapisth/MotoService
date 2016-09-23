@@ -116,7 +116,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         mCustomerPin = (EditText) view.findViewById(R.id.customer_pin);
         mCustomerCarNumber = (EditText) view.findViewById(R.id.customer_car_number);
         mCustomerMobileNumber = (EditText) view.findViewById(R.id.customer_mobile_number);
-        mPaymentTypeGroup = (RadioGroup) view.findViewById(R.id.payment_type_group);
+        //mPaymentTypeGroup = (RadioGroup) view.findViewById(R.id.payment_type_group);
 
         //Add Listener to the RadioGroup
         /*mPaymentTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

@@ -12,17 +12,19 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.urja.motoservice.R;
 import com.urja.motoservice.WelcomeDashboardActivity;
+import com.urja.motoservice.utils.AppConstants;
 
 public class Ask4CarNumberDialogFragment extends DialogFragment implements View.OnClickListener {
     private static final String TAG = Ask4CarNumberDialogFragment.class.getSimpleName();
 
 
     public interface Ask4CarNumberDialogListener {
-        void onSubmit(String carNumber);
+        void onSubmit(String carNumber, String carType);
     }
 
     private Ask4CarNumberDialogListener mListener;
@@ -32,6 +34,8 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
     private Button mReset;
     private Button mOkButton;
     private Button mCancelButton;
+    private RadioGroup mCarTypeGroup;
+    private String mCarType = null;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,6 +50,29 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
 
         mOkButton.setOnClickListener(this);
         mCancelButton.setOnClickListener(this);
+
+        mCarTypeGroup = (RadioGroup) view.findViewById(R.id.car_type_group);
+
+        //Add Listener to the RadioGroup
+        mCarTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (radioGroup.getCheckedRadioButtonId()) {
+                    case R.id.cartype_small:
+                        mCarType = AppConstants.CAR_SMALL;
+                        break;
+                    case R.id.cartype_medium:
+                        mCarType = AppConstants.CAR_MEDIUM;
+                        break;
+                    case R.id.cartype_large:
+                        mCarType = AppConstants.CAR_LARGE;
+                        break;
+                    default:
+                        mCarType = null;
+                        break;
+                }
+            }
+        });
 
         return view;
     }
@@ -90,11 +117,12 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ok_button:
-                if (mCarNumber.getText().toString().length() < 1 || mCarNumber.getText().toString().equals("")) {
-                    mCarNumber.setError("Required!!");
+                if ((mCarNumber.getText().toString().length() < 1 || mCarNumber.getText().toString().equals("")) || (mCarType == null)) {
+                    //mCarNumber.setError("Required!!");
+                    Toast.makeText(getActivity(), "Fileds are Mandatory!!", Toast.LENGTH_SHORT).show();
                     return;
-                } else {
-                    mListener.onSubmit(mCarNumber.getText().toString());
+                }else {
+                    mListener.onSubmit(mCarNumber.getText().toString(), mCarType);
                     this.dismiss();
                 }
                 break;
