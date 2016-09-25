@@ -25,6 +25,7 @@ public interface AppConstants {
     }
 
     String TRANSACTIOIN_ID = "transaction_id";
+
     interface Transaction{
         String COLUMN_CARPICKADDRESS = "CarPickAddress";
         String COLUMN_CARNUMBER = "CarNumber";
@@ -32,6 +33,13 @@ public interface AppConstants {
         String COLUMN_SERVICE_REQUEST_DATE= "serviceRequestDate";
         String COLUMN_REQUEST_STATUS= "requestStatus";
 
+    }
+
+    interface AdminNotification{
+        String isUnread = "isUnread";
+        String customerName = "customerName";
+        String customerTransactionId = "customerTransactionId";
+        String customerId = "customerId";
     }
 
     String STATUS_OPEN = "open";

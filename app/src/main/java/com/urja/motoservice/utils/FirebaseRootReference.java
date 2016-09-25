@@ -13,6 +13,10 @@ public class FirebaseRootReference {
     private DatabaseReference mTransactionDatabaseRef;
     private DatabaseReference mCustomerAddressDatabaseRef;
     private DatabaseReference mVehicleTypesRef;
+    private DatabaseReference mAdminNotificationRef;
+
+
+
     private FirebaseRootReference() {
         //Preventing Singletone Object instantiation from Outside
     }
@@ -28,6 +32,7 @@ public class FirebaseRootReference {
                     _instance.setmCustomerAddressDatabaseRef(rootRef.child(DatabaseConstants.TABLE_CUSTOMER_ADDRESS));
                     _instance.setmTransactionDatabaseRef(rootRef.child(DatabaseConstants.TABLE_TRANSACTION));
                     _instance.setmVehicleTypesRef(rootRef.child(DatabaseConstants.TABLE_VEHICLE + "/" + DatabaseConstants.TABLE_VEHICLE_TYPE));
+                    _instance.setmAdminNotificationRef(rootRef.child(DatabaseConstants.TABLE_ADMIN_NOTIFICATION));
                 }
             }
         }
@@ -80,5 +85,13 @@ public class FirebaseRootReference {
 
     public void setmVehicleTypesRef(DatabaseReference mVehicleTypesRef) {
         this.mVehicleTypesRef = mVehicleTypesRef;
+    }
+
+    public DatabaseReference getmAdminNotificationRef() {
+        return mAdminNotificationRef;
+    }
+
+    public void setmAdminNotificationRef(DatabaseReference mAdminNotificationRef) {
+        this.mAdminNotificationRef = mAdminNotificationRef;
     }
 }

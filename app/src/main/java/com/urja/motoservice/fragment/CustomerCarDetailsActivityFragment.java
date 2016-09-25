@@ -1,7 +1,6 @@
 package com.urja.motoservice.fragment;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,29 +25,23 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.urja.motoservice.CustomerCarDetailsActivity;
 import com.urja.motoservice.R;
 import com.urja.motoservice.TransactionDetailActivity;
-import com.urja.motoservice.WelcomeDashboardActivity;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
+import com.urja.motoservice.model.AdminNotification;
 import com.urja.motoservice.model.CustomerTransactionAddress;
 import com.urja.motoservice.model.OrderForServicesTransaction;
 import com.urja.motoservice.model.TransactionComplete;
-import com.urja.motoservice.utils.AlertDialog;
 import com.urja.motoservice.utils.AppConstants;
-import com.urja.motoservice.utils.DatabaseConstants;
 import com.urja.motoservice.utils.FirebaseRootReference;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.security.Key;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -81,12 +74,16 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     private int carAddedToServerCounter = 0;
     private String carNumber;
     private ServiceRequest carServiceRequest;
+    private String customerName = "";
 
     private static final String IMMEDIATE = "immediate";
     private static final String CASH_ON_DELIVERY = "cashOnDelivery";
     private DatabaseReference mTransactionRef = FirebaseRootReference.get_instance().getmTransactionDatabaseRef();
+    private DatabaseReference mAdminNotificationRef = null;
+    private DatabaseReference mCustomerRef = null;
+    private static String PREVIOUS_KEY = "";
 
-    DateFormat df = null ;
+    DateFormat df = null;
     Date today = null;
     String transactionDate = "";
 
@@ -118,24 +115,6 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         mCustomerMobileNumber = (EditText) view.findViewById(R.id.customer_mobile_number);
         //mPaymentTypeGroup = (RadioGroup) view.findViewById(R.id.payment_type_group);
 
-        //Add Listener to the RadioGroup
-        /*mPaymentTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (radioGroup.getCheckedRadioButtonId()) {
-                    case R.id.immediate_service:
-                        mPaymentOptionChecked = IMMEDIATE;
-                        break;
-                    case R.id.cash_delivery:
-                        mPaymentOptionChecked = CASH_ON_DELIVERY;
-                        break;
-                    default:
-                        mPaymentOptionChecked = null;
-                        break;
-                }
-            }
-        });*/
-
         //Listner for the Confirm Button
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,13 +137,56 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
 
     }
 
-    private void listenCustomerTransactionEvent(String mCurrentUserId) {
+    private void listenCustomerTransactionEvent(final String mCurrentUserId) {
         mTransactionRef = FirebaseRootReference.get_instance().getmTransactionDatabaseRef();
-        mTransactionRef.child(mCurrentUserId).addValueEventListener(new ValueEventListener() {
+        mTransactionRef.child(mCurrentUserId).child(carNumber).limitToLast(1).addChildEventListener(new ChildEventListener() {
+            int counter = 0;
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Toast.makeText(getActivity().getApplicationContext(), "Transaction Id: "+ dataSnapshot.getKey(), Toast.LENGTH_LONG).show();
-                //AlertDialog.Alert(getActivity().getApplicationContext(), "We Received your Request!", "Transaction Id :"+ dataSnapshot.getKey());
+            public void onChildAdded(DataSnapshot transactionDataSnapshot, String s) {
+                counter++;
+                Log.e(TAG, "onChildAdded: previous key = "+ s );
+                Log.e(TAG, "onChildAdded: Current Key = "+ transactionDataSnapshot.getKey() );
+
+                final String transactionId = transactionDataSnapshot.getKey();
+                mCustomerRef = FirebaseRootReference.get_instance().getmCustomerDatabaseRef();
+                mCustomerRef.child(mCurrentUserId).child(AppConstants.TableColumns.CustomerTable.NAME).limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot customerDataSnapshot) {
+                        if (!(PREVIOUS_KEY.equalsIgnoreCase(transactionId))){
+                            PREVIOUS_KEY = transactionId;
+                            mAdminNotificationRef = FirebaseRootReference.get_instance().getmAdminNotificationRef();
+                            customerName = customerDataSnapshot.getValue(String.class);
+                            AdminNotification adminNotification = new AdminNotification();
+                            adminNotification.setUnread(true);
+                            adminNotification.setTransactionId(transactionId);
+                            adminNotification.setCustomerId(mCurrentUserId);
+                            adminNotification.setCustomerName(customerName);
+                            mAdminNotificationRef.push().setValue(adminNotification);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    //Do Nothing
+                Log.e(TAG, "onChildChanged: Key = "+s );
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -280,8 +302,8 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         String carNum = "";
         Map<String, List<ServiceRequest>> carWithServiceMap = new HashMap<>();//Map<CarNumber, ServiceList>
         StringBuilder carServiceList = null;
-        for (ServiceRequest serviceRequest : readServiceRequestData){//Extract the Car Number as per the CarNumber
-            if (!(carNum.equalsIgnoreCase(serviceRequest.getCarnumber()))){
+        for (ServiceRequest serviceRequest : readServiceRequestData) {//Extract the Car Number as per the CarNumber
+            if (!(carNum.equalsIgnoreCase(serviceRequest.getCarnumber()))) {
                 carNum = serviceRequest.getCarnumber();
                 mServiceRequestDao = DbHelper.getInstance(getActivity()).getServiceRequestDao();
                 mServiceRequestList = mServiceRequestDao.queryBuilder().where(ServiceRequestDao.Properties.Carnumber.eq(carNum)).list();
@@ -313,10 +335,10 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
                     carNumberPush.child(AppConstants.Transaction.COLUMN_CARPICKADDRESS).setValue(mCustomerTransactionAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            carAddedToServerCounter +=1;
-                            if (carAddedToServerCounter==countNumberOfCar){
+                            carAddedToServerCounter += 1;
+                            if (carAddedToServerCounter == countNumberOfCar) {
                                 mServiceRequestDao.deleteAll();
-
+                                listenCustomerTransactionEvent(mCurrentUserId); // Add data to Notification Object
                                 progressDialog.dismiss();
                                 EventBus.getDefault().post(new TransactionComplete(true, ""));
                                 ActivityCompat.finishAffinity(getActivity());

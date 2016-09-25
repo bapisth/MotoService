@@ -19,4 +19,5 @@ public interface DatabaseConstants {
     String TABLE_TYRE_WHEELS = "TyresWheels";
     String TABLE_TRANSACTION = "Transaction";
     String CAR_CARE_DETAILING = "CarCareDetailing";
+    String TABLE_ADMIN_NOTIFICATION = "AdminNotification";
 }
