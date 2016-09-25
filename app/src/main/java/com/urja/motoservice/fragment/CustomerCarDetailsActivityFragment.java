@@ -149,7 +149,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
 
                 final String transactionId = transactionDataSnapshot.getKey();
                 mCustomerRef = FirebaseRootReference.get_instance().getmCustomerDatabaseRef();
-                mCustomerRef.child(mCurrentUserId).child(AppConstants.TableColumns.CustomerTable.NAME).limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                mCustomerRef.child(mCurrentUserId).child(AppConstants.TableColumns.CustomerTable.NAME).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot customerDataSnapshot) {
                         if (!(PREVIOUS_KEY.equalsIgnoreCase(transactionId))){
