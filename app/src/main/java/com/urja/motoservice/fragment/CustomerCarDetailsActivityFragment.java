@@ -137,8 +137,9 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
 
     }
 
-    private void listenCustomerTransactionEvent(final String mCurrentUserId) {
+    private void listenCustomerTransactionEvent(final String mCurrentUserId, final String carNumber) {
         mTransactionRef = FirebaseRootReference.get_instance().getmTransactionDatabaseRef();
+        //limitToLast(countNumberOfCar) : That is fetch last number of car added records
         mTransactionRef.child(mCurrentUserId).child(carNumber).limitToLast(1).addChildEventListener(new ChildEventListener() {
             int counter = 0;
             @Override
@@ -148,7 +149,11 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
                 Log.e(TAG, "onChildAdded: Current Key = "+ transactionDataSnapshot.getKey() );
 
                 final String transactionId = transactionDataSnapshot.getKey();
+                final String rootRefpath = transactionDataSnapshot.getRef().getRoot().toString();
+                final String transactionRefpath = transactionDataSnapshot.getRef().toString();
                 mCustomerRef = FirebaseRootReference.get_instance().getmCustomerDatabaseRef();
+
+
                 mCustomerRef.child(mCurrentUserId).child(AppConstants.TableColumns.CustomerTable.NAME).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot customerDataSnapshot) {
@@ -161,6 +166,9 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
                             adminNotification.setTransactionId(transactionId);
                             adminNotification.setCustomerId(mCurrentUserId);
                             adminNotification.setCustomerName(customerName);
+                            adminNotification.setCustomerVehicleNumber(carNumber);
+                            adminNotification.setRootRef(rootRefpath);
+                            adminNotification.setTransactionRef(transactionRefpath);
                             mAdminNotificationRef.push().setValue(adminNotification);
                         }
 
@@ -336,9 +344,9 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             carAddedToServerCounter += 1;
+                            listenCustomerTransactionEvent(mCurrentUserId, carNumber); // Add data to Notification Object
                             if (carAddedToServerCounter == countNumberOfCar) {
                                 mServiceRequestDao.deleteAll();
-                                listenCustomerTransactionEvent(mCurrentUserId); // Add data to Notification Object
                                 progressDialog.dismiss();
                                 EventBus.getDefault().post(new TransactionComplete(true, ""));
                                 ActivityCompat.finishAffinity(getActivity());

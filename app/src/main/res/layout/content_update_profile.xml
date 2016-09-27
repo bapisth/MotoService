@@ -28,7 +28,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:background="@drawable/textview_border"
+                        android:background="@drawable/textview_border_new"
                         android:hint="@string/name"
                         android:paddingTop="6dp"
                         android:paddingBottom="8dp"
@@ -37,14 +37,15 @@
                         android:id="@+id/name"
                         android:nextFocusDown="@id/mobile"
                         android:singleLine="true"
-                        android:gravity="center_vertical"/>
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
 
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:background="@drawable/textview_border"
+                        android:background="@drawable/textview_border_new"
                         android:hint="@string/mobile"
                         android:paddingTop="6dp"
                         android:paddingBottom="8dp"
@@ -55,13 +56,14 @@
                         android:gravity="center_vertical"
                         android:nextFocusDown="@+id/address"
                         android:singleLine="true"
-                        android:inputType="phone"/>
+                        android:inputType="phone"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:background="@drawable/textview_border"
+                        android:background="@drawable/textview_border_new"
                         android:hint="@string/address"
                         android:paddingTop="6dp"
                         android:paddingBottom="8dp"
@@ -71,14 +73,15 @@
                         android:id="@+id/address"
                         android:nextFocusRight="@+id/street"
                         android:singleLine="true"
-                        android:layout_below="@id/mobile"/>
+                        android:layout_below="@id/mobile"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
 
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:background="@drawable/textview_border"
+                        android:background="@drawable/textview_border_new"
                         android:hint="@string/street"
                         android:paddingTop="6dp"
                         android:paddingBottom="8dp"
@@ -88,13 +91,14 @@
                         android:layout_below="@id/address"
                         android:nextFocusDown="@+id/pincode"
                         android:singleLine="true"
-                        android:id="@+id/street"/>
+                        android:id="@+id/street"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:background="@drawable/textview_border"
+                        android:background="@drawable/textview_border_new"
                         android:hint="@string/pincode"
                         android:paddingTop="6dp"
                         android:paddingBottom="8dp"
@@ -105,7 +109,8 @@
                         android:layout_below="@id/street"
                         android:inputType="number"
                         android:singleLine="true"
-                        android:imeOptions="actionDone"/>
+                        android:imeOptions="actionDone"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -116,7 +121,7 @@
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/button_background"
+                        android:background="@drawable/textview_border_new"
                         android:backgroundTint="@color/colorAccent"
                         android:text="Update Profile"
                         android:textAllCaps="false"

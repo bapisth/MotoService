@@ -21,13 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/login_title"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="40dp"
                 android:elevation="4dp"
                 android:orientation="vertical"
-                android:padding="20dp"
-                android:layout_marginBottom="20dp"
                 android:layout_margin="20dp"
                 android:layout_gravity="center_vertical|fill_horizontal">
 
@@ -63,6 +58,7 @@
                             android:textColor="@color/textColorPrimary"
                             android:textColorHint="@color/textColorPrimary"
                             android:background="@color/white"
+                            android:textSize="14sp"
                             android:maxLines="1"
                             android:layout_weight="0.46" />
                     <!--</android.support.design.widget.TextInputLayout>-->
@@ -81,6 +77,7 @@
                             android:textColor="@color/textColorPrimary"
                             android:textColorHint="@color/textColorPrimary"
                             android:maxLines="1"
+                            android:textSize="14sp"
                             android:background="@color/white"
                             android:drawableLeft="@mipmap/ic_lock_outline_black_24dp"
                             android:drawableTint="@color/colorAccent"
@@ -118,10 +115,9 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_background"
                         android:text="@string/btn_forgot_password"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:fontFamily="cursive"
                         android:layout_marginRight="4dp"
                         android:layout_weight="1"
                         android:layout_gravity="bottom" />
@@ -138,7 +134,6 @@
                         android:textColor="@color/white"
                         android:layout_marginLeft="4dp"
                         android:textAllCaps="false"
-                        android:fontFamily="cursive"
                         android:layout_weight="1"/>
                 </LinearLayout>
             </RelativeLayout>
