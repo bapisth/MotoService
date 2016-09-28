@@ -1,5 +1,6 @@
 package com.urja.motoservice;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,7 +13,14 @@ import android.view.View;
 import com.urja.motoservice.fragment.TransactionDetailActivityFragment;
 import com.urja.motoservice.fragment.dummy.DummyContent;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class TransactionDetailActivity extends AppCompatActivity implements TransactionDetailActivityFragment.OnListFragmentInteractionListener {
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

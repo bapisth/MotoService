@@ -14,7 +14,7 @@ public class CarServiceApplication extends Application {
     public void onCreate() {
         super.onCreate();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/angelina.ttf")
+                .setDefaultFontPath("fonts/calibril.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );

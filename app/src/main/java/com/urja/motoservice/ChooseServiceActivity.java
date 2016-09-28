@@ -68,7 +68,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
     private com.github.clans.fab.FloatingActionButton mAddMore;
     private com.github.clans.fab.FloatingActionButton mNext;
     private List<FloatingActionMenu> menus = new ArrayList<>();
-    private long mVehicleGroupId;
+    private String mVehicleGroupId;
     private String mCarNumber = null;
     private String mCarType = null;
     private boolean backFromModifyService = false;
@@ -99,8 +99,9 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
         mNext.setOnClickListener(clickListener);
 
         Intent intent = getIntent();
-        Log.d(TAG, "onCreate: " + intent.getLongExtra(AppConstants.CAR_ID, -1));
-        mVehicleGroupId = intent.getLongExtra(AppConstants.CAR_ID, -1);
+        Log.d(TAG, "onCreate: " + intent.getStringExtra(AppConstants.CAR_ID));
+        mVehicleGroupId = intent.getStringExtra(AppConstants.CAR_ID);
+        //mVehicleGroupId = intent.getLongExtra(AppConstants.CAR_ID, -1);
 
         mViewPager = (MaterialViewPager) findViewById(R.id.materialViewPager);
         toolbar = mViewPager.getToolbar();
@@ -269,50 +270,6 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
             mServiceRequestList.add(mServiceRequest);
         }
 
-        /*for (TyreWheel tyreWheel : mTyreWheelList) {
-            mServiceRequest = new ServiceRequest();
-            mServiceRequest.setCode(tyreWheel.getCode());
-            mServiceRequest.setDesc(tyreWheel.getDesc());
-            mServiceRequest.setGroupname(AppConstants.TYRE_WHEEL);
-            mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
-            mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
-
-            mServiceRequestList.add(mServiceRequest);
-        }
-
-        for (ServiceRepair serviceRepair : mServiceRepairList) {
-            mServiceRequest = new ServiceRequest();
-            mServiceRequest.setCode(serviceRepair.getCode());
-            mServiceRequest.setDesc(serviceRepair.getDesc());
-            mServiceRequest.setGroupname(AppConstants.SERVICE_REPAIR);
-            mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
-            mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
-
-            mServiceRequestList.add(mServiceRequest);
-        }*/
-
-        /*for (DentPaint dentPaint : mDentPaintList) {
-            mServiceRequest = new ServiceRequest();
-            mServiceRequest.setCode(dentPaint.getCode());
-            mServiceRequest.setDesc(dentPaint.getDesc());
-            mServiceRequest.setGroupname(AppConstants.DENT_PAINT);
-            mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
-            mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
-
-            mServiceRequestList.add(mServiceRequest);
-        }
-
-        for (Accessories accessories : mAccessoriesList) {
-            mServiceRequest = new ServiceRequest();
-            mServiceRequest.setCode(accessories.getCode());
-            mServiceRequest.setDesc(accessories.getDesc());
-            mServiceRequest.setGroupname(AppConstants.ACCESSORIES);
-            mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
-            mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
-
-
-            mServiceRequestList.add(mServiceRequest);
-        }*/
         return serviceRequestDao;
     }
 
@@ -338,7 +295,9 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
                 carCareDetailings.add(carCareDetailing);
             else
                 carCareDetailings.remove(carCareDetailing);
-        } else if (event instanceof TyreWheel) {
+        }
+
+        /*else if (event instanceof TyreWheel) {
             TyreWheel tyreWheel = (TyreWheel) event;
 
             if (add)
@@ -369,7 +328,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
                 mAccessoriesList.add(accessories);
             else
                 mAccessoriesList.remove(accessories);
-        }
+        }*/
     }
 
     @Override

@@ -2,7 +2,9 @@ package com.urja.motoservice.database.dao;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.urja.motoservice.database.CarServicePrice;
 import com.urja.motoservice.database.ServiceRequest;
+import com.urja.motoservice.database.ValidVehicle;
 
 import java.util.Map;
 
@@ -24,24 +26,59 @@ public class DaoSession extends AbstractDaoSession {
 
     private final ServiceRequestDao serviceRequestDao;
 
+    private final DaoConfig carServicePriceDaoConfig;
+
+    private final CarServicePriceDao carServicePriceDao;
+
+    private final DaoConfig validVehicleDaoConfig;
+
+    private final ValidVehicleDao validVehicleDao;
+
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
 
+        /*Customer Service Request*/
         serviceRequestDaoConfig = daoConfigMap.get(ServiceRequestDao.class).clone();
         serviceRequestDaoConfig.initIdentityScope(type);
 
         serviceRequestDao = new ServiceRequestDao(serviceRequestDaoConfig, this);
 
         registerDao(ServiceRequest.class, serviceRequestDao);
+
+        /*Car Service/price table*/
+        carServicePriceDaoConfig = daoConfigMap.get(CarServicePriceDao.class).clone();
+        carServicePriceDaoConfig.initIdentityScope(type);
+
+        carServicePriceDao = new CarServicePriceDao(carServicePriceDaoConfig, this);
+
+        registerDao(CarServicePrice.class, carServicePriceDao);
+
+        /*-------------Valid Vehicle--------*/
+        validVehicleDaoConfig = daoConfigMap.get(ValidVehicleDao.class).clone();
+        validVehicleDaoConfig.initIdentityScope(type);
+
+        validVehicleDao = new ValidVehicleDao(validVehicleDaoConfig, this);
+
+        registerDao(ValidVehicle.class, validVehicleDao);
     }
 
     public void clear() {
         serviceRequestDaoConfig.getIdentityScope().clear();
+        carServicePriceDaoConfig.getIdentityScope().clear();
+        validVehicleDaoConfig.getIdentityScope().clear();
     }
 
     public ServiceRequestDao getServiceRequestDao() {
         return serviceRequestDao;
+    }
+
+    public CarServicePriceDao getCarServicePriceDao() {
+        return carServicePriceDao;
+    }
+
+    public ValidVehicleDao getValidVehicleDao() {
+        return validVehicleDao;
     }
 
 }

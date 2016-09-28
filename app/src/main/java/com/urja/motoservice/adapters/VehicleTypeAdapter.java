@@ -46,6 +46,8 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
     private PopupWindow mPopupWindow;
     private ViewGroup mViewGroup;
     private long mServiceID = -1;
+    private String code = "";
+    String carSize = "";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, count;
@@ -76,8 +78,15 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         Vehicle vehicle = mVehicleList.get(position);
-        holder.title.setText("Not Available");
-        holder.count.setText("Rs. " + 12); //remove
+        holder.title.setText(vehicle.getCarType());
+        code = Long.toString(vehicle.getCode());
+        switch (code){
+            case "1": carSize = AppConstants.ValidVehicle.CAR_TYPE_SMALL;break;
+            case "2": carSize = AppConstants.ValidVehicle.CAR_TYPE_MEDIUM;break;
+            case "3": carSize = AppConstants.ValidVehicle.CAR_TYPE_LARGE;break;
+        }
+
+        holder.count.setText(carSize); //remove
 
         Log.e(TAG, "onBindViewHolder: " + vehicle.getDownloadPath());
         // loading album cover using Glide library
@@ -87,7 +96,8 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, ChooseServiceActivity.class);
-                intent.putExtra(AppConstants.CAR_ID, mServiceID);
+                //intent.putExtra(AppConstants.CAR_ID, mServiceID);
+                intent.putExtra(AppConstants.CAR_ID, carSize);
                 mContext.startActivity(intent);
             }
         });

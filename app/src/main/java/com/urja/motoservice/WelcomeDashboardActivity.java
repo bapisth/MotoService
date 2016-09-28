@@ -1,5 +1,6 @@
 package com.urja.motoservice;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -36,10 +37,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.adapters.VehicleTypeAdapter;
+import com.urja.motoservice.database.DbHelper;
+import com.urja.motoservice.database.dao.CarServicePriceDao;
+import com.urja.motoservice.database.dao.ValidVehicleDao;
 import com.urja.motoservice.fragment.TransactionDetailActivityFragment;
 import com.urja.motoservice.fragment.dummy.DummyContent;
+import com.urja.motoservice.model.CarCareDetailing;
+import com.urja.motoservice.model.CarCareDetailingService;
 import com.urja.motoservice.model.Customer;
 import com.urja.motoservice.model.ProfileUpdatedEvent;
+import com.urja.motoservice.model.Size;
 import com.urja.motoservice.model.TransactionComplete;
 import com.urja.motoservice.model.Vehicle;
 import com.urja.motoservice.utils.AlertDialog;
@@ -54,6 +61,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class WelcomeDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TransactionDetailActivityFragment.OnListFragmentInteractionListener {
@@ -71,6 +80,7 @@ public class WelcomeDashboardActivity extends AppCompatActivity
     private DatabaseReference mVehicleTypesRef;
     private DatabaseReference mCustomerDatabaseRef;
     private DatabaseReference transactionDataRef;
+    private DatabaseReference mCarCareDetailingDatabaseRef;
 
     private static String mName = "";
     private static String mMobile;
@@ -80,8 +90,16 @@ public class WelcomeDashboardActivity extends AppCompatActivity
     private VehicleTypeAdapter adapter;
     private List<Vehicle> mVehicleList;
     private Vehicle mVehicle;
+    private List<CarCareDetailing> carCareDetailingList;
+
+    private CarServicePriceDao carServicePriceDao ;
 
     private ImageView mPersonImage;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,11 +152,38 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         //Listen Value Event Listener for Customer
         listenCustomerChangeEvent(mCurrentUserId);
 
-
-
+        //initialize carprice table
+        carServicePriceDao = DbHelper.getInstance(WelcomeDashboardActivity.this).getCarServicePriceDao();
+        if (carServicePriceDao.loadAll().size()<1){
+            carCareDetailingList = new ArrayList<>();
+            populateCarServicePriceTable(carServicePriceDao);
+        }
 
     }
 
+    private void populateCarServicePriceTable(CarServicePriceDao carServicePriceDao) {
+        mCarCareDetailingDatabaseRef = FirebaseRootReference.get_instance().getmCarCareDetailingRef();
+        mCarCareDetailingDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                    for (DataSnapshot snapshot : childSnapshot.getChildren()){
+                        CarCareDetailing carCareDetailing = snapshot.getValue(CarCareDetailing.class);
+
+                        Log.e(TAG, "onDataChange: "+carCareDetailing );
+                    }
+
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 
     private void listenCustomerChangeEvent(String mCurrentUserId) {
@@ -167,6 +212,7 @@ public class WelcomeDashboardActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     mVehicle = snapshot.getValue(Vehicle.class);
+                    mVehicle.setCarType(snapshot.getKey());
                     mVehicleList.add(mVehicle);
                 }
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);

@@ -2,6 +2,7 @@ package com.urja.motoservice;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import com.urja.motoservice.adapters.NavDrawerListAdapter;
 import com.urja.motoservice.model.NavDrawerItem;
 
 import java.util.ArrayList;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DashboardDataActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -202,6 +205,11 @@ public class DashboardDataActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
 }

@@ -28,14 +28,9 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
     }
 
     private Ask4CarNumberDialogListener mListener;
-
     private EditText mCarNumber;
-    private EditText mPassword;
-    private Button mReset;
     private Button mOkButton;
     private Button mCancelButton;
-    private RadioGroup mCarTypeGroup;
-    private String mCarType = null;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,31 +46,9 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
         mOkButton.setOnClickListener(this);
         mCancelButton.setOnClickListener(this);
 
-        mCarTypeGroup = (RadioGroup) view.findViewById(R.id.car_type_group);
-
-        //Add Listener to the RadioGroup
-        mCarTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (radioGroup.getCheckedRadioButtonId()) {
-                    case R.id.cartype_small:
-                        mCarType = AppConstants.CAR_SMALL;
-                        break;
-                    case R.id.cartype_medium:
-                        mCarType = AppConstants.CAR_MEDIUM;
-                        break;
-                    case R.id.cartype_large:
-                        mCarType = AppConstants.CAR_LARGE;
-                        break;
-                    default:
-                        mCarType = null;
-                        break;
-                }
-            }
-        });
-
         return view;
     }
+
 
     @Override
     public void onResume() {
@@ -117,12 +90,11 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ok_button:
-                if ((mCarNumber.getText().toString().length() < 1 || mCarNumber.getText().toString().equals("")) || (mCarType == null)) {
-                    //mCarNumber.setError("Required!!");
-                    Toast.makeText(getActivity(), "Fileds are Mandatory!!", Toast.LENGTH_SHORT).show();
+                if ((mCarNumber.getText().toString().length() < 1 || mCarNumber.getText().toString().equals(""))) {
+                    mCarNumber.setError("Required!!");
                     return;
                 }else {
-                    mListener.onSubmit(mCarNumber.getText().toString(), mCarType);
+                    mListener.onSubmit(mCarNumber.getText().toString(), "");
                     this.dismiss();
                 }
                 break;

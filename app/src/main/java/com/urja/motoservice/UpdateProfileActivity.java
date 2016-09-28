@@ -1,5 +1,6 @@
 package com.urja.motoservice;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,6 +33,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class UpdateProfileActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = UpdateProfileActivity.class.getSimpleName();
 
@@ -51,6 +54,10 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
     boolean updatedCustomerToServer = false;
     boolean updatedCustomerAddressToServer = false;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

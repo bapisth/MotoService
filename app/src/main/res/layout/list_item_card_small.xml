@@ -37,18 +37,32 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/code"
                 android:visibility="gone"/>
-            <CheckBox
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/washDetailCheckBox"
-                android:theme="@style/CheckBoxStyle"
-                />
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/washDetailCheckBox"
+                    android:theme="@style/CheckBoxStyle"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/washDetailCheckBox"
+                    android:layout_toRightOf="@id/washDetailCheckBox"
+                    android:id="@+id/item_desc"/>
+            </RelativeLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/washDetailCheckBox"
-                android:layout_toRightOf="@id/washDetailCheckBox"
-                android:id="@+id/item_desc"/>
+                android:id="@+id/item_price"
+                android:layout_alignParentBottom="true"
+                />
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

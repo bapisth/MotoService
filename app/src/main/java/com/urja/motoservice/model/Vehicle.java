@@ -8,22 +8,24 @@ public class Vehicle {
     private Long code;
     private String downloadPath;
     private String path;
+    private String carType;
 
     public Vehicle() {
     }
 
-    public void setCode(Long code) {
-        this.code = code;
-    }
-
-    public Vehicle(Long code, String downloadPath, String path) {
+    public Vehicle(Long code, String downloadPath, String path, String carType) {
         this.code = code;
         this.downloadPath = downloadPath;
         this.path = path;
+        this.carType = carType;
     }
 
     public Long getCode() {
         return code;
+    }
+
+    public void setCode(Long code) {
+        this.code = code;
     }
 
     public String getDownloadPath() {
@@ -40,5 +42,13 @@ public class Vehicle {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getCarType() {
+        return carType;
+    }
+
+    public void setCarType(String carType) {
+        this.carType = carType;
     }
 }

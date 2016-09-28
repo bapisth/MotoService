@@ -35,6 +35,7 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private TextView mlargeDesc;
     private TextView mCode;
     private TextView mItemDesc;
+    private TextView mItemPrice;
     private CheckBox mCheckBox;
     private Context mContext;
 
@@ -77,6 +78,7 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         .inflate(R.layout.list_item_card_small, parent, false);
                 mCode = (TextView) view.findViewById(R.id.code);
                 mItemDesc = (TextView) view.findViewById(R.id.item_desc);
+                mItemPrice = (TextView) view.findViewById(R.id.item_price);
                 mCheckBox = (CheckBox) view.findViewById(R.id.washDetailCheckBox);
 
                 return new RecyclerView.ViewHolder(view) {
@@ -98,7 +100,18 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     CarCareDetailing carCareDetailing = (CarCareDetailing) object;
                     mCode.setText(carCareDetailing.getCode());
                     mCheckBox.setText(carCareDetailing.getDesc());
-                } /*else if (contents != null && object instanceof ServiceRepair) {
+
+                    mItemPrice.setText(carCareDetailing.getDesc());
+                }
+
+
+
+
+
+
+
+
+                /*else if (contents != null && object instanceof ServiceRepair) {
                     ServiceRepair serviceRepair = (ServiceRepair) object;
                     mCode.setText(serviceRepair.getCode());
                     mCheckBox.setText(serviceRepair.getDesc());

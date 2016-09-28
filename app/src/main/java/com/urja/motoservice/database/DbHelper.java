@@ -3,9 +3,11 @@ package com.urja.motoservice.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.urja.motoservice.database.dao.CarServicePriceDao;
 import com.urja.motoservice.database.dao.DaoMaster;
 import com.urja.motoservice.database.dao.DaoSession;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
+import com.urja.motoservice.database.dao.ValidVehicleDao;
 
 /**
  * Created by BAPI1 on 8/20/2016.
@@ -46,5 +48,13 @@ public class DbHelper {
 
     public ServiceRequestDao getServiceRequestDao() {
         return this.daoSession.getServiceRequestDao();
+    }
+
+    public CarServicePriceDao getCarServicePriceDao(){
+        return this.daoSession.getCarServicePriceDao();
+    }
+
+    public ValidVehicleDao  getValidVehicleDao(){
+        return this.daoSession.getValidVehicleDao();
     }
 }

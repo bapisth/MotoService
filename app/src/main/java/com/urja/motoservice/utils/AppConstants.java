@@ -42,6 +42,12 @@ public interface AppConstants {
         String customerId = "customerId";
     }
 
+    interface ValidVehicle{
+        String CAR_TYPE_SMALL = "small";
+        String CAR_TYPE_MEDIUM = "medium";
+        String CAR_TYPE_LARGE = "large";
+    }
+
     String STATUS_OPEN = "open";
     String STATUS_PROGRESS = "progress";
     String STATUS_CLOSED = "progress";
