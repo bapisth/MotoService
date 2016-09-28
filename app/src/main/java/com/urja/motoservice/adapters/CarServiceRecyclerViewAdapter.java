@@ -44,6 +44,7 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private CheckBox mCheckBox;
     private Context mContext;
     private final String CAR_TYPE;
+    private final String RUPEES = "Rs. ";
 
     public CarServiceRecyclerViewAdapter(List<CarServicePrice> contents, Context context, String carType) {
         Log.e(TAG, "CarServiceRecyclerViewAdapter: "+ contents.size());
@@ -108,11 +109,11 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mCode.setText(servicePrice.getServiceCode());
                     mCheckBox.setText(servicePrice.getServiceDesc());
                     if (CAR_TYPE.equalsIgnoreCase(AppConstants.ValidVehicle.CAR_TYPE_SMALL)){
-                        mItemPrice.setText(servicePrice.getPriceSmall());
+                        mItemPrice.setText(RUPEES+servicePrice.getPriceSmall());
                     }else if (CAR_TYPE.equalsIgnoreCase(AppConstants.ValidVehicle.CAR_TYPE_MEDIUM)){
-                        mItemPrice.setText(servicePrice.getPriceMedium());
+                        mItemPrice.setText(RUPEES+servicePrice.getPriceMedium());
                     }else if (CAR_TYPE.equalsIgnoreCase(AppConstants.ValidVehicle.CAR_TYPE_LARGE)){
-                        mItemPrice.setText(servicePrice.getPriceLarge());
+                        mItemPrice.setText(RUPEES+servicePrice.getPriceLarge());
                     }
 
                 }

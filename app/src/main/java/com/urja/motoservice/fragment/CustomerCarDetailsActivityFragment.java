@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -63,6 +64,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     private EditText mCustomerPin;
     private EditText mCustomerCarNumber;
     private EditText mCustomerMobileNumber;
+    private TextView mTotalAmount;
     private RadioGroup mPaymentTypeGroup;
     private String mCurrentUserId = null;
     private String mPaymentOptionChecked = null;
@@ -87,8 +89,23 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     Date today = null;
     String transactionDate = "";
 
+    private ServiceRequestDao serviceRequestDao = null;
+    private List<ServiceRequest> serviceRequestList = null;
+    private int TOTAL_AMOUNT = 0;
+
 
     public CustomerCarDetailsActivityFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        serviceRequestDao = DbHelper.getInstance(getActivity()).getServiceRequestDao();
+        serviceRequestList = serviceRequestDao.loadAll();
+        for (ServiceRequest serviceRequest : serviceRequestList){
+            int val = Integer.valueOf(serviceRequest.getVehiclegroup());
+            TOTAL_AMOUNT +=val;
+        }
     }
 
     @Override
@@ -113,6 +130,9 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         mCustomerPin = (EditText) view.findViewById(R.id.customer_pin);
         mCustomerCarNumber = (EditText) view.findViewById(R.id.customer_car_number);
         mCustomerMobileNumber = (EditText) view.findViewById(R.id.customer_mobile_number);
+        mTotalAmount = (TextView) view.findViewById(R.id.total_amount);
+
+        mTotalAmount.setText("Rs. "+TOTAL_AMOUNT);
         //mPaymentTypeGroup = (RadioGroup) view.findViewById(R.id.payment_type_group);
 
         //Listner for the Confirm Button

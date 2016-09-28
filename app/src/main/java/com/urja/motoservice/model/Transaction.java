@@ -13,16 +13,18 @@ public class Transaction {
     private String serviceRequestDate;
     private List<ServiceRequest> serviceRequestList;
     private String transactionId;
+    private String totalAmount;
 
     public Transaction() {
     }
 
-    public Transaction(com.urja.motoservice.model.CarPickAddress carPickAddress, String requestStatus, String serviceRequestDate, List<ServiceRequest> serviceRequestList, String transactionId) {
+    public Transaction(com.urja.motoservice.model.CarPickAddress carPickAddress, String requestStatus, String serviceRequestDate, List<ServiceRequest> serviceRequestList, String transactionId, String totalAmount) {
         CarPickAddress = carPickAddress;
         this.requestStatus = requestStatus;
         this.serviceRequestDate = serviceRequestDate;
         this.serviceRequestList = serviceRequestList;
         this.transactionId = transactionId;
+        this.totalAmount = totalAmount;
     }
 
     public com.urja.motoservice.model.CarPickAddress getCarPickAddress() {
@@ -63,5 +65,13 @@ public class Transaction {
 
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
+    }
+
+    public String getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(String totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }

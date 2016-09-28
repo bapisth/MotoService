@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.urja.motoservice.R;
+import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.fragment.TransactionDetailActivityFragment.OnListFragmentInteractionListener;
 import com.urja.motoservice.fragment.dummy.DummyContent.DummyItem;
 import com.urja.motoservice.model.Transaction;
@@ -26,6 +27,7 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
     private final OnListFragmentInteractionListener mListener;
     private static final int VIEW_TYPE_EMPTY_LIST_PLACEHOLDER = 0;
     private static final int VIEW_TYPE_OBJECT_VIEW = 1;
+    private static final String MSG_TOTAL_AMOUNT = "Total Amount: Rs. ";
 
     public MyOrderForServicesTransactionRecyclerViewAdapter(List<Transaction> items, OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -59,6 +61,12 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
                 TransactionViewHolder transactionViewHolder = (TransactionViewHolder) holder;
                 Transaction transaction = mValues.get(position);
                 transactionViewHolder.mItem = transaction;
+                List<ServiceRequest> requests = transaction.getServiceRequestList();
+                int totalAmount = 0;
+                for (ServiceRequest request : requests){
+                    int val = Integer.valueOf(request.getVehiclegroup());
+                    totalAmount +=val;
+                }
                 //holder.mIdView.setText(mValues.get(position).id);
                 //holder.mContentView.setText(mValues.get(position).content);
                 String carNumber = transaction.getServiceRequestList().get(0).getCarnumber();
@@ -67,6 +75,7 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
 
                 transactionViewHolder.mTransactionDate.setText(transaction.getServiceRequestDate());
                 transactionViewHolder.mTransactionStatus.setText(transaction.getRequestStatus().toUpperCase());
+                transactionViewHolder.mTotalAmount.setText(MSG_TOTAL_AMOUNT+totalAmount);
                 break;
             case VIEW_TYPE_EMPTY_LIST_PLACEHOLDER:
                 Log.e(TAG, "onBindViewHolder: EMPTY TEXT VIEW" );
@@ -108,6 +117,7 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
         public final TextView mTransactionID;
         public final TextView mTransactionDate;
         public final TextView mTransactionStatus;
+        public final TextView mTotalAmount;
         public Transaction mItem;
 
         public TransactionViewHolder(View view) {
@@ -117,6 +127,7 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
             mTransactionID = (TextView) view.findViewById(R.id.transactionID);
             mTransactionDate = (TextView) view.findViewById(R.id.transactionDate);
             mTransactionStatus = (TextView) view.findViewById(R.id.transactionStatus);
+            mTotalAmount = (TextView) view.findViewById(R.id.totalAmount);
         }
     }
 

@@ -155,7 +155,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
             public CharSequence getPageTitle(int position) {
                 switch (position % 1) {
                     case 0:
-                        return getString(R.string.tab_wash_detailing);
+                        return getString(R.string.tab_car_care_detailing);
                     case 1:
                         return getString(R.string.tab_service_repairs);
                     case 2:
@@ -175,7 +175,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
                 switch (page) {
                     case 0:
                         return HeaderDesign.fromColorResAndUrl(
-                                R.color.green,
+                                R.color.colorPrimary,
                                 "https://fs01.androidpit.info/a/63/0e/android-l-wallpapers-630ea6-h900.jpg");
                     case 1:
                         return HeaderDesign.fromColorResAndUrl(
@@ -268,7 +268,19 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
             mServiceRequest.setCode(carServicePrice.getServiceCode());
             mServiceRequest.setDesc(carServicePrice.getServiceDesc());
             mServiceRequest.setGroupname(String.valueOf(mCarType)); //Adding CarType in GroupName
-            mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
+            switch (mVehicleGroupId){
+                case AppConstants.ValidVehicle.CAR_TYPE_SMALL:
+                    mServiceRequest.setVehiclegroup(String.valueOf(carServicePrice.getPriceSmall()));
+                    break;
+                case AppConstants.ValidVehicle.CAR_TYPE_MEDIUM:
+                    mServiceRequest.setVehiclegroup(String.valueOf(carServicePrice.getPriceMedium()));
+                    break;
+                case AppConstants.ValidVehicle.CAR_TYPE_LARGE:
+                    mServiceRequest.setVehiclegroup(String.valueOf(carServicePrice.getPriceLarge()));
+                    break;
+
+            }
+            //Inplace of vehicleGroupid keep the Prices
             mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
 
             mServiceRequestList.add(mServiceRequest);
@@ -336,10 +348,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(ChooseServiceActivity.this, "Coming back from the list Modify Service Page!!", Toast.LENGTH_SHORT).show();
         backFromModifyService = true;
-
-
     }
 
     @Override
