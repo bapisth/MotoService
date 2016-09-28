@@ -46,6 +46,8 @@ public interface AppConstants {
         String CAR_TYPE_SMALL = "small";
         String CAR_TYPE_MEDIUM = "medium";
         String CAR_TYPE_LARGE = "large";
+        String VALID_VEHICLE_DESC = "desc";
+        String VALID_VEHICLE_SIZE = "size";
     }
 
     String STATUS_OPEN = "open";

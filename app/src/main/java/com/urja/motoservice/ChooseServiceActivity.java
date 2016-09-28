@@ -19,8 +19,10 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionMenu;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
+import com.urja.motoservice.database.CarServicePrice;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
+import com.urja.motoservice.database.dao.CarServicePriceDao;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
 import com.urja.motoservice.fragment.AccessoriesFragment;
 import com.urja.motoservice.fragment.Ask4CarNumberDialogFragment;
@@ -55,7 +57,9 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
     private MaterialViewPager mViewPager;
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private Set<CarCareDetailing> carCareDetailings = new HashSet<>();
+    //private Set<CarCareDetailing> carCareDetailings = new HashSet<>();
+    private Set<CarServicePrice> carServicePriceList = new HashSet<>();
+
     private Set<TyreWheel> mTyreWheelList = new HashSet<>();
     private Set<ServiceRepair> mServiceRepairList = new HashSet<>();
     private Set<DentPaint> mDentPaintList = new HashSet<>();
@@ -124,7 +128,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
                 Log.e(TAG, "getItem: position=" + position);
                 switch (position % 1) {
                     case 0:
-                        fragment = CarCareDetailingFragment.newInstance();
+                        fragment = CarCareDetailingFragment.newInstance(mVehicleGroupId);
                         break;
                     case 1:
                         fragment = ServiceRepairFragment.newInstance();
@@ -212,7 +216,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
     }
 
     private void goToServiceCheckList() {
-        if (carCareDetailings.size() == 0 && mTyreWheelList.size() == 0 && mServiceRepairList.size() == 0 && mDentPaintList.size() == 0 && mAccessoriesList.size() == 0) {
+        if (carServicePriceList.size() == 0) {
             Toast.makeText(ChooseServiceActivity.this, "Choose Any of the Service!!!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -259,10 +263,10 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
 
     private ServiceRequestDao addToServiceRequestList() {
         ServiceRequestDao serviceRequestDao = DbHelper.getInstance(this).getServiceRequestDao();
-        for (CarCareDetailing carCareDetailing : carCareDetailings) {
+        for (CarServicePrice carServicePrice : carServicePriceList) {
             mServiceRequest = new ServiceRequest();
-            mServiceRequest.setCode(carCareDetailing.getCode());
-            mServiceRequest.setDesc(carCareDetailing.getDesc());
+            mServiceRequest.setCode(carServicePrice.getServiceCode());
+            mServiceRequest.setDesc(carServicePrice.getServiceDesc());
             mServiceRequest.setGroupname(String.valueOf(mCarType)); //Adding CarType in GroupName
             mServiceRequest.setVehiclegroup(String.valueOf(mVehicleGroupId));
             mServiceRequest.setCarnumber(String.valueOf(mCarNumber));
@@ -289,46 +293,13 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
     public void onMessageEvent(ServiceEventModel serviceEventModel) {
         Object event = serviceEventModel.getObject();
         boolean add = serviceEventModel.isAdd();
-        if (event instanceof CarCareDetailing) {
-            CarCareDetailing carCareDetailing = (CarCareDetailing) event;
+        if (event instanceof CarServicePrice) {
+            CarServicePrice carServicePrice = (CarServicePrice) event;
             if (add)
-                carCareDetailings.add(carCareDetailing);
+                carServicePriceList.add(carServicePrice);
             else
-                carCareDetailings.remove(carCareDetailing);
+                carServicePriceList.remove(carServicePrice);
         }
-
-        /*else if (event instanceof TyreWheel) {
-            TyreWheel tyreWheel = (TyreWheel) event;
-
-            if (add)
-                mTyreWheelList.add(tyreWheel);
-            else
-                mTyreWheelList.remove(tyreWheel);
-
-        } else if (event instanceof ServiceRepair) {
-            ServiceRepair serviceRepair = (ServiceRepair) event;
-
-            if (add)
-                mServiceRepairList.add(serviceRepair);
-            else
-                mServiceRepairList.remove(serviceRepair);
-
-        } else if (event instanceof DentPaint) {
-            DentPaint dentPaint = (DentPaint) event;
-
-            if (add)
-                mDentPaintList.add(dentPaint);
-            else
-                mDentPaintList.remove(dentPaint);
-
-        } else if (event instanceof Accessories) {
-            Accessories accessories = (Accessories) event;
-
-            if (add)
-                mAccessoriesList.add(accessories);
-            else
-                mAccessoriesList.remove(accessories);
-        }*/
     }
 
     @Override

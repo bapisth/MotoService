@@ -65,7 +65,8 @@ public class ServiceRepairFragment extends Fragment {
         //Use this now
         mRecyclerView.addItemDecoration(new MaterialViewPagerHeaderDecorator());
 
-        mAdapter = new CarServiceRecyclerViewAdapter(mContentItems, getActivity());
+        //mAdapter = new CarServiceRecyclerViewAdapter(mContentItems, getActivity(), "");
+        mAdapter = new CarServiceRecyclerViewAdapter(null, getActivity(), "");
 
         //mAdapter = new RecyclerViewMaterialAdapter();
         mRecyclerView.setAdapter(mAdapter);

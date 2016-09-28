@@ -37,6 +37,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.adapters.VehicleTypeAdapter;
+import com.urja.motoservice.database.CarServicePrice;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.dao.CarServicePriceDao;
 import com.urja.motoservice.database.dao.ValidVehicleDao;
@@ -90,7 +91,9 @@ public class WelcomeDashboardActivity extends AppCompatActivity
     private VehicleTypeAdapter adapter;
     private List<Vehicle> mVehicleList;
     private Vehicle mVehicle;
-    private List<CarCareDetailing> carCareDetailingList;
+
+    private List<CarServicePrice> carServicePriceList;
+
 
     private CarServicePriceDao carServicePriceDao ;
 
@@ -155,27 +158,46 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         //initialize carprice table
         carServicePriceDao = DbHelper.getInstance(WelcomeDashboardActivity.this).getCarServicePriceDao();
         if (carServicePriceDao.loadAll().size()<1){
-            carCareDetailingList = new ArrayList<>();
+            carServicePriceList = new ArrayList<>();
             populateCarServicePriceTable(carServicePriceDao);
         }
 
     }
 
-    private void populateCarServicePriceTable(CarServicePriceDao carServicePriceDao) {
+    /**
+     * Inserts data into the Carservice table from the Firebase database for one time read
+     * @param carServicePriceDao
+     */
+    private void populateCarServicePriceTable(final CarServicePriceDao carServicePriceDao) {
+        Log.e(TAG, "populateCarServicePriceTable: " );
         mCarCareDetailingDatabaseRef = FirebaseRootReference.get_instance().getmCarCareDetailingRef();
         mCarCareDetailingDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            CarServicePrice carServicePrice = null;
+            CarCareDetailing carCareDetailing = null;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                    carCareDetailing = new CarCareDetailing();
+                    carCareDetailing.setCode(childSnapshot.getKey());
                     for (DataSnapshot snapshot : childSnapshot.getChildren()){
-                        CarCareDetailing carCareDetailing = snapshot.getValue(CarCareDetailing.class);
-
-                        Log.e(TAG, "onDataChange: "+carCareDetailing );
+                        String key = snapshot.getKey();
+                        if(key.equalsIgnoreCase(AppConstants.ValidVehicle.VALID_VEHICLE_DESC)){
+                            carCareDetailing.setDesc(snapshot.getValue(String.class));
+                        }else if (key.equalsIgnoreCase(AppConstants.ValidVehicle.VALID_VEHICLE_SIZE)){
+                            Size size = snapshot.getValue(Size.class);
+                            carCareDetailing.setSize(size);
+                        }
                     }
-
-
+                    //Insert into CarService table
+                    carServicePrice = new CarServicePrice();
+                    carServicePrice.setServiceCode(carCareDetailing.getCode());
+                    carServicePrice.setServiceDesc(carCareDetailing.getDesc());
+                    carServicePrice.setPriceSmall(carCareDetailing.getSize().getS().toString());
+                    carServicePrice.setPriceMedium(carCareDetailing.getSize().getM().toString());
+                    carServicePrice.setPriceLarge(carCareDetailing.getSize().getL().toString());
+                    carServicePriceList.add(carServicePrice);
                 }
-
+                carServicePriceDao.insertOrReplaceInTx(carServicePriceList);
             }
 
             @Override
@@ -183,6 +205,8 @@ public class WelcomeDashboardActivity extends AppCompatActivity
 
             }
         });
+
+
     }
 
 

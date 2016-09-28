@@ -3,6 +3,7 @@ package com.urja.motoservice.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.urja.motoservice.R;
+import com.urja.motoservice.database.CarServicePrice;
 import com.urja.motoservice.model.Accessories;
 import com.urja.motoservice.model.CarCareDetailing;
 import com.urja.motoservice.model.DentPaint;
@@ -18,6 +20,7 @@ import com.urja.motoservice.model.ServiceEventModel;
 import com.urja.motoservice.model.ServiceRepair;
 import com.urja.motoservice.model.TyreWheel;
 import com.urja.motoservice.model.WashDetailing;
+import com.urja.motoservice.utils.AppConstants;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -28,7 +31,9 @@ import java.util.List;
  */
 public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    List<Object> contents;
+    private static final String TAG = CarServiceRecyclerViewAdapter.class.getSimpleName();
+
+    List<CarServicePrice> contents;
 
     static final int TYPE_HEADER = 0;
     static final int TYPE_CELL = 1;
@@ -38,8 +43,11 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private TextView mItemPrice;
     private CheckBox mCheckBox;
     private Context mContext;
+    private final String CAR_TYPE;
 
-    public CarServiceRecyclerViewAdapter(List<Object> contents, Context context) {
+    public CarServiceRecyclerViewAdapter(List<CarServicePrice> contents, Context context, String carType) {
+        Log.e(TAG, "CarServiceRecyclerViewAdapter: "+ contents.size());
+        this.CAR_TYPE = carType;
         this.contents = contents;
         this.mContext = context;
     }
@@ -95,44 +103,23 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             case TYPE_HEADER:
                 break;
             case TYPE_CELL:
-                final Object object = contents.get(position);
-                if (contents != null && object instanceof CarCareDetailing) {
-                    CarCareDetailing carCareDetailing = (CarCareDetailing) object;
-                    mCode.setText(carCareDetailing.getCode());
-                    mCheckBox.setText(carCareDetailing.getDesc());
+                final CarServicePrice servicePrice = contents.get(position);
+                if (contents != null && servicePrice != null) {
+                    mCode.setText(servicePrice.getServiceCode());
+                    mCheckBox.setText(servicePrice.getServiceDesc());
+                    if (CAR_TYPE.equalsIgnoreCase(AppConstants.ValidVehicle.CAR_TYPE_SMALL)){
+                        mItemPrice.setText(servicePrice.getPriceSmall());
+                    }else if (CAR_TYPE.equalsIgnoreCase(AppConstants.ValidVehicle.CAR_TYPE_MEDIUM)){
+                        mItemPrice.setText(servicePrice.getPriceMedium());
+                    }else if (CAR_TYPE.equalsIgnoreCase(AppConstants.ValidVehicle.CAR_TYPE_LARGE)){
+                        mItemPrice.setText(servicePrice.getPriceLarge());
+                    }
 
-                    mItemPrice.setText(carCareDetailing.getDesc());
                 }
-
-
-
-
-
-
-
-
-                /*else if (contents != null && object instanceof ServiceRepair) {
-                    ServiceRepair serviceRepair = (ServiceRepair) object;
-                    mCode.setText(serviceRepair.getCode());
-                    mCheckBox.setText(serviceRepair.getDesc());
-                } else if (contents != null && object instanceof TyreWheel) {
-                    TyreWheel tyreWheel = (TyreWheel) object;
-                    mCode.setText(tyreWheel.getCode());
-                    mCheckBox.setText(tyreWheel.getDesc());
-                } else if (contents != null && object instanceof DentPaint) {
-                    DentPaint dentPaint = (DentPaint) object;
-                    mCode.setText(dentPaint.getCode());
-                    mCheckBox.setText(dentPaint.getDesc());
-                } else if (contents != null && object instanceof Accessories) {
-                    Accessories accessories = (Accessories) object;
-                    mCode.setText(accessories.getCode());
-                    mCheckBox.setText(accessories.getDesc());
-                }*/
-
                 mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        EventBus.getDefault().post(new ServiceEventModel(b, object));
+                        EventBus.getDefault().post(new ServiceEventModel(b, servicePrice));
                     }
                 });
                 break;
