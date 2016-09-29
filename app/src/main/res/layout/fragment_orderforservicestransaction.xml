@@ -10,34 +10,34 @@
     card_view:cardUseCompatPadding="true"
     card_view:cardPreventCornerOverlap="true"
     android:foreground="?android:attr/selectableItemBackground"
-    android:clickable="true">
+    android:clickable="true"
+    android:background="@color/material_drawer_dark_primary_icon">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="10dp">
+        android:background="@color/material_drawer_dark_primary_icon">
 
         <FrameLayout
             android:id="@+id/imgView"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_gravity="top"
-            android:background="@color/material_drawer_accent">
+            android:layout_height="wrap_content"
+            android:layout_gravity="top">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dp_10">
+                android:padding="@dimen/dp_10"
+                android:background="@color/common_plus_signin_btn_text_light_disabled">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="45dp"
                         android:layout_gravity="center"
                         android:textAllCaps="true"
-                        android:textSize="20sp"
+                        android:layout_alignParentLeft="true"
+                        android:textSize="22sp"
                         android:id="@+id/carNumber"
-                        android:textColor="@color/white"
-                        android:text="@string/title_activity_test_user_profile"
                         android:paddingBottom="@dimen/dp_10"
                         android:layout_weight="4"/>
                     <TextView
@@ -45,10 +45,11 @@
                         android:layout_height="45dp"
                         android:layout_gravity="center"
                         android:textAllCaps="false"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentLeft="true"
                         android:textSize="20sp"
+                        android:layout_below="@+id/carNumber"
                         android:id="@+id/totalAmount"
-                        android:textColor="@color/white"
+
                         android:paddingLeft="@dimen/dp_10"
                         />
                 <TextView
@@ -57,9 +58,9 @@
                     android:layout_height="45dp"
                     android:textAllCaps="true"
                     android:layout_marginTop="@dimen/dp_10"
-                    android:textColor="@color/white"
-                    android:id="@+id/transactionID"
-                    android:text=""/>
+                    android:layout_alignParentLeft="true"
+                    android:textSize="18sp"
+                    android:id="@+id/transactionID"/>
             </RelativeLayout>
         </FrameLayout>
 
@@ -70,7 +71,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:textSize="18sp"
-            android:textColor="@color/material_drawer_accent"
+
             android:id="@+id/transactionDate" />
 
         <TextView
@@ -79,7 +80,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:textSize="16sp"
-            android:textColor="@color/material_drawer_accent"
             android:id="@+id/transactionStatus" />
     </LinearLayout>
 

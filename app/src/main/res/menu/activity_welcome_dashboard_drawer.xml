@@ -3,9 +3,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_transaction"
+            android:id="@+id/nav_draft_transaction"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Transactions" />
+            android:title="Saved Transactions" />
+        <item
+            android:id="@+id/nav_transaction"
+            android:icon="@drawable/history"
+            android:title="Transaction History" />
 
         <item
             android:id="@+id/nav_manage_profile"

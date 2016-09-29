@@ -40,6 +40,7 @@ import com.urja.motoservice.adapters.VehicleTypeAdapter;
 import com.urja.motoservice.database.CarServicePrice;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.dao.CarServicePriceDao;
+import com.urja.motoservice.database.dao.ServiceRequestDao;
 import com.urja.motoservice.database.dao.ValidVehicleDao;
 import com.urja.motoservice.fragment.TransactionDetailActivityFragment;
 import com.urja.motoservice.fragment.dummy.DummyContent;
@@ -266,6 +267,13 @@ public class WelcomeDashboardActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Menu menu = navigationView.getMenu();
+        MenuItem draftTranMenu =  menu.findItem(R.id.nav_draft_transaction);
+
+        /*ServiceRequestDao serviceRequestDao = DbHelper.getInstance(WelcomeDashboardActivity.this).getServiceRequestDao();
+        if (serviceRequestDao.count() < 1)
+            draftTranMenu.setVisible(false);*/
+
         View hView = navigationView.getHeaderView(0);
         mPersonName = (TextView) hView.findViewById(R.id.person_name);
         mPersonEmail = (TextView) hView.findViewById(R.id.person_email);
@@ -336,6 +344,10 @@ public class WelcomeDashboardActivity extends AppCompatActivity
 
         if (id == R.id.nav_transaction) {
                 intent = new Intent(WelcomeDashboardActivity.this, TransactionDetailActivity.class);
+        } else if (id == R.id.nav_draft_transaction) {//Shows previously saved transaction
+            ServiceRequestDao requestDao = DbHelper.getInstance(WelcomeDashboardActivity.this).getServiceRequestDao();
+            if (requestDao.count() > 0)
+                intent = new Intent(WelcomeDashboardActivity.this, ModifyChoosenServiceRquestActivity.class);
         } else if (id == R.id.nav_manage_profile) {
             intent = new Intent(WelcomeDashboardActivity.this, UpdateProfileActivity.class);
         } else if (id == R.id.nav_signout) {
@@ -349,6 +361,8 @@ public class WelcomeDashboardActivity extends AppCompatActivity
             finish();
         } else if (intent != null) {
             WelcomeDashboardActivity.this.startActivity(intent);
+        }else if (intent == null){
+            Toast.makeText(WelcomeDashboardActivity.this, "No Saved Transactions Available.", Toast.LENGTH_SHORT).show();
         }
 
         // Insert the fragment by replacing any existing fragment
