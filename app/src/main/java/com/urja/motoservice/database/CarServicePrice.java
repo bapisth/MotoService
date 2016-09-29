@@ -12,6 +12,7 @@ public class CarServicePrice {
     private String priceSmall;
     private String priceMedium;
     private String priceLarge;
+    private boolean isChecked;
 
     public CarServicePrice() {
     }
@@ -77,4 +78,11 @@ public class CarServicePrice {
         this.priceLarge = priceLarge;
     }
 
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
 }

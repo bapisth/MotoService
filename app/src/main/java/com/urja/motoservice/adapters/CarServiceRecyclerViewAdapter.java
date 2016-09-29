@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,11 +38,6 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     static final int TYPE_HEADER = 0;
     static final int TYPE_CELL = 1;
-    private TextView mlargeDesc;
-    private TextView mCode;
-    private TextView mItemDesc;
-    private TextView mItemPrice;
-    private CheckBox mCheckBox;
     private Context mContext;
     private final String CAR_TYPE;
     private final String RUPEES = "Rs. ";
@@ -71,27 +67,18 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
+        RecyclerView.ViewHolder viewHolder = null;
 
         switch (viewType) {
             case TYPE_HEADER: {
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_card_big, parent, false);
-                mlargeDesc = (TextView) view.findViewById(R.id.washDetailDesription);
-                mlargeDesc.setText(mContext.getString(R.string.tab_wash_desc));
-                mlargeDesc.setMovementMethod(new ScrollingMovementMethod());
-                return new RecyclerView.ViewHolder(view) {
-                };
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_card_big, parent, false);
+                viewHolder = new HeaderViewHolder(view);
+                return viewHolder;
             }
             case TYPE_CELL: {
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_card_small, parent, false);
-                mCode = (TextView) view.findViewById(R.id.code);
-                mItemDesc = (TextView) view.findViewById(R.id.item_desc);
-                mItemPrice = (TextView) view.findViewById(R.id.item_price);
-                mCheckBox = (CheckBox) view.findViewById(R.id.washDetailCheckBox);
-
-                return new RecyclerView.ViewHolder(view) {
-                };
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_card_small, parent, false);
+                viewHolder = new ContentViewHolder(view);
+                return viewHolder;
             }
         }
         return null;
@@ -102,28 +89,69 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case TYPE_HEADER:
+                HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+                headerViewHolder.mlargeDesc.setText(mContext.getString(R.string.tab_wash_desc));
+                headerViewHolder.mlargeDesc.setMovementMethod(new ScrollingMovementMethod());
                 break;
             case TYPE_CELL:
+                final ContentViewHolder contentViewHolder = (ContentViewHolder) holder;
                 final CarServicePrice servicePrice = contents.get(position);
                 if (contents != null && servicePrice != null) {
-                    mCode.setText(servicePrice.getServiceCode());
-                    mCheckBox.setText(servicePrice.getServiceDesc());
+                    contentViewHolder.mCode.setText(servicePrice.getServiceCode());
+                    contentViewHolder.mCheckBox.setText(servicePrice.getServiceDesc());
                     if (CAR_TYPE.equalsIgnoreCase(AppConstants.ValidVehicle.CAR_TYPE_SMALL)){
-                        mItemPrice.setText(RUPEES+servicePrice.getPriceSmall());
+                        contentViewHolder.mItemPrice.setText(RUPEES+servicePrice.getPriceSmall());
                     }else if (CAR_TYPE.equalsIgnoreCase(AppConstants.ValidVehicle.CAR_TYPE_MEDIUM)){
-                        mItemPrice.setText(RUPEES+servicePrice.getPriceMedium());
+                        contentViewHolder.mItemPrice.setText(RUPEES+servicePrice.getPriceMedium());
                     }else if (CAR_TYPE.equalsIgnoreCase(AppConstants.ValidVehicle.CAR_TYPE_LARGE)){
-                        mItemPrice.setText(RUPEES+servicePrice.getPriceLarge());
+                        contentViewHolder.mItemPrice.setText(RUPEES+servicePrice.getPriceLarge());
                     }
 
                 }
-                mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                //viewHolder.chkSelected.setChecked(stList.get(position).isSelected());
+                contentViewHolder.mCheckBox.setChecked(servicePrice.isChecked());
+                contentViewHolder.mCheckBox.setTag(servicePrice);
+
+                contentViewHolder.mCheckBox.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Log.e(TAG, "onClick: clcik hela" );
+                        CheckBox cb = (CheckBox) v;
+                        CarServicePrice csp = (CarServicePrice) cb.getTag();
+                        csp.setChecked(cb.isChecked());
+                        servicePrice.setChecked(cb.isChecked());
+                        EventBus.getDefault().post(new ServiceEventModel(cb.isChecked(), csp));
+                    }
+                });
+
+                /*contentViewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         EventBus.getDefault().post(new ServiceEventModel(b, servicePrice));
                     }
-                });
+                });*/
                 break;
+        }
+    }
+
+    public class HeaderViewHolder extends RecyclerView.ViewHolder{
+        private final TextView mlargeDesc;
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+            mlargeDesc = (TextView) itemView.findViewById(R.id.washDetailDesription);
+        }
+    }
+
+    public class ContentViewHolder extends RecyclerView.ViewHolder{
+        private final TextView mCode;
+        private final TextView mItemDesc;
+        private final TextView mItemPrice;
+        private final CheckBox mCheckBox;
+        public ContentViewHolder(View view) {
+            super(view);
+            mCode = (TextView) view.findViewById(R.id.code);
+            mItemDesc = (TextView) view.findViewById(R.id.item_desc);
+            mItemPrice = (TextView) view.findViewById(R.id.item_price);
+            mCheckBox = (CheckBox) view.findViewById(R.id.washDetailCheckBox);
         }
     }
 }

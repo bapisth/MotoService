@@ -1,5 +1,7 @@
 package com.urja.motoservice.adapters;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,10 +30,12 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
     private static final int VIEW_TYPE_EMPTY_LIST_PLACEHOLDER = 0;
     private static final int VIEW_TYPE_OBJECT_VIEW = 1;
     private static final String MSG_TOTAL_AMOUNT = "Total Amount: Rs. ";
+    private Context mContext;
 
-    public MyOrderForServicesTransactionRecyclerViewAdapter(List<Transaction> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public MyOrderForServicesTransactionRecyclerViewAdapter(List<Transaction> items, OnListFragmentInteractionListener listener, Context context) {
+        this.mValues = items;
+        this.mListener = listener;
+        this.mContext = context;
     }
 
     @Override
@@ -61,26 +65,38 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
                 TransactionViewHolder transactionViewHolder = (TransactionViewHolder) holder;
                 Transaction transaction = mValues.get(position);
                 transactionViewHolder.mItem = transaction;
-                List<ServiceRequest> requests = transaction.getServiceRequestList();
+                List<ServiceRequest> serviceRequestList = transaction.getServiceRequestList();
+                List<ServiceRequest> requests = serviceRequestList;
                 int totalAmount = 0;
-                for (ServiceRequest request : requests){
-                    int val = Integer.valueOf(request.getVehiclegroup());
-                    totalAmount +=val;
+                if (requests != null){
+                    for (ServiceRequest request : requests){
+                        int val = Integer.valueOf(request.getVehiclegroup());
+                        totalAmount +=val;
+                    }
                 }
+
                 //holder.mIdView.setText(mValues.get(position).id);
                 //holder.mContentView.setText(mValues.get(position).content);
-                String carNumber = transaction.getServiceRequestList().get(0).getCarnumber();
-                transactionViewHolder.mCarNumber.setText(carNumber);
+                if (serviceRequestList!= null){
+                    String carNumber = serviceRequestList.get(0).getCarnumber();
+                    transactionViewHolder.mCarNumber.setText(carNumber);
+                }else {
+                    transactionViewHolder.mCarNumber.setText("N/A");
+                }
                 transactionViewHolder.mTransactionID.setText(transaction.getTransactionId());
 
                 transactionViewHolder.mTransactionDate.setText(transaction.getServiceRequestDate());
-                transactionViewHolder.mTransactionStatus.setText(transaction.getRequestStatus().toUpperCase());
+                String requestStatus = transaction.getRequestStatus();
+                if (requestStatus != "" && requestStatus != null){
+                    transactionViewHolder.mTransactionStatus.setText(requestStatus.toUpperCase());
+                }else {
+                    transactionViewHolder.mTransactionStatus.setText("N/A");
+                }
                 transactionViewHolder.mTotalAmount.setText(MSG_TOTAL_AMOUNT+totalAmount);
                 break;
             case VIEW_TYPE_EMPTY_LIST_PLACEHOLDER:
-                Log.e(TAG, "onBindViewHolder: EMPTY TEXT VIEW" );
                 EmptyTransactionViewHolder emptyTransactionViewHolder = (EmptyTransactionViewHolder) holder;
-                emptyTransactionViewHolder.mEmptyText.setText("No Data Available!");
+                emptyTransactionViewHolder.mEmptyText.setText(mContext.getString(R.string.empty_data));
                 break;
         }
 

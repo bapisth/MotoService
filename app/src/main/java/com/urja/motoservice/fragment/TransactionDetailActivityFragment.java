@@ -1,5 +1,6 @@
 package com.urja.motoservice.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -73,6 +74,10 @@ public class TransactionDetailActivityFragment extends Fragment {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
 
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Downloading Transactions...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
 
         firebaseRootReference.getmTransactionDatabaseRef().child(currentLoggedInUser).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -94,6 +99,7 @@ public class TransactionDetailActivityFragment extends Fragment {
                     recyclerView.setVisibility(View.VISIBLE);
                     emptyView.setVisibility(View.GONE);
                 }
+                progressDialog.dismiss();
                 adapter.notifyDataSetChanged();
             }
 
@@ -121,7 +127,7 @@ public class TransactionDetailActivityFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             Log.e(TAG, "onCreateView: mTransactionList.size() :"+mTransactionList.size() );
-            adapter = new MyOrderForServicesTransactionRecyclerViewAdapter(mTransactionList, mListener);
+            adapter = new MyOrderForServicesTransactionRecyclerViewAdapter(mTransactionList, mListener, getActivity());
             recyclerView.setAdapter(adapter);
         }
 
