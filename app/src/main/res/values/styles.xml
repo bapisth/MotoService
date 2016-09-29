@@ -11,11 +11,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <!--<item name="android:itemTextAppearance">@style/AppTheme.ItemStyle</item>-->
         <!--<item name="android:alertDialogTheme">@style/AppTheme.AlertStyle</item>-->
-        <item name="android:popupMenuStyle">@style/AppTheme.MenuStyle</item>
-        <item name="android:dialogTheme">@style/AppDialogTheme</item>
-        <!-- Apply default style for alert dialogs -->
-        <item name="android:alertDialogTheme">@style/AppAlertTheme</item>
-        <item name="android:windowTitleStyle">@style/DialogWindowTitle</item>
+
 
         <!--Material Viewpager-->
         <!--<item name="android:textColorPrimary">@color/colorPrimary</item>-->

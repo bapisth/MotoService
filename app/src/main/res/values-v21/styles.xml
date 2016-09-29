@@ -13,6 +13,11 @@
         <!-- colorAccent is used as the default value for colorControlActivated
              which is used to tint widgets -->
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:popupMenuStyle">@style/AppTheme.MenuStyle</item>
+        <item name="android:dialogTheme">@style/AppDialogTheme</item>
+        <!-- Apply default style for alert dialogs -->
+        <item name="android:alertDialogTheme">@style/AppAlertTheme</item>
+        <item name="android:windowTitleStyle">@style/DialogWindowTitle</item>
 
         <!-- You can also set colorControlNormal, colorControlActivated
              colorControlHighlight & colorSwitchThumbNormal. -->

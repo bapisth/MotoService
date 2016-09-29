@@ -1,13 +1,16 @@
 package com.urja.motoservice;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.github.clans.fab.FloatingActionMenu;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
@@ -174,9 +178,9 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
             public HeaderDesign getHeaderDesign(int page) {
                 switch (page) {
                     case 0:
-                        return HeaderDesign.fromColorResAndUrl(
-                                R.color.colorPrimary,
-                                "https://fs01.androidpit.info/a/63/0e/android-l-wallpapers-630ea6-h900.jpg");
+
+                        HeaderDesign headerDesign = HeaderDesign.fromColorAndDrawable(getResources().getColor(R.color.colorPrimary), ContextCompat.getDrawable(ChooseServiceActivity.this, R.drawable.welcomescreen_bg));
+                        return headerDesign;
                     case 1:
                         return HeaderDesign.fromColorResAndUrl(
                                 R.color.blue,
@@ -202,7 +206,9 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
         });
 
         mViewPager.getViewPager().setOffscreenPageLimit(mViewPager.getViewPager().getAdapter().getCount());
-        mViewPager.getPagerTitleStrip().setViewPager(mViewPager.getViewPager());
+        PagerSlidingTabStrip pagerTitleStrip = mViewPager.getPagerTitleStrip();
+        pagerTitleStrip.setVisibility(View.INVISIBLE);
+        //pagerTitleStrip.setViewPager(mViewPager.getViewPager());
 
         View logo = findViewById(R.id.logo_white);
         if (logo != null) {
