@@ -47,6 +47,8 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         this.CAR_TYPE = carType;
         this.contents = contents;
         this.mContext = context;
+        for(CarServicePrice servicePrice : contents)
+            servicePrice.setChecked(false);
     }
 
     @Override
