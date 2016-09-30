@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.urja.motoservice.model.TransactionComplete;
 
@@ -29,11 +28,6 @@ public class CustomerCarDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customer_car_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        /*Ask4CarNumberDialogFragment  ask4CarNumberDialogFragment = new Ask4CarNumberDialogFragment();
-        ask4CarNumberDialogFragment.show(getSupportFragmentManager(), TAG);
-        ask4CarNumberDialogFragment.setCancelable(false);*/
     }
 
     @Override
@@ -53,9 +47,4 @@ public class CustomerCarDetailsActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
-
-    /*@Override
-    public void onSubmit(String carNumber) {
-        this.mCarNumber =  carNumber;
-    }*/
 }

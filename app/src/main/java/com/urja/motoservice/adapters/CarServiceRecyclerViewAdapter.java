@@ -3,24 +3,15 @@ package com.urja.motoservice.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.urja.motoservice.R;
 import com.urja.motoservice.database.CarServicePrice;
-import com.urja.motoservice.model.Accessories;
-import com.urja.motoservice.model.CarCareDetailing;
-import com.urja.motoservice.model.DentPaint;
 import com.urja.motoservice.model.ServiceEventModel;
-import com.urja.motoservice.model.ServiceRepair;
-import com.urja.motoservice.model.TyreWheel;
-import com.urja.motoservice.model.WashDetailing;
 import com.urja.motoservice.utils.AppConstants;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,7 +34,6 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private final String RUPEES = "Rs. ";
 
     public CarServiceRecyclerViewAdapter(List<CarServicePrice> contents, Context context, String carType) {
-        Log.e(TAG, "CarServiceRecyclerViewAdapter: "+ contents.size());
         this.CAR_TYPE = carType;
         this.contents = contents;
         this.mContext = context;
@@ -117,7 +107,6 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
                 contentViewHolder.mCheckBox.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Log.e(TAG, "onClick: clcik hela" );
                         CheckBox cb = (CheckBox) v;
                         CarServicePrice csp = (CarServicePrice) cb.getTag();
                         csp.setChecked(cb.isChecked());
@@ -125,13 +114,6 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         EventBus.getDefault().post(new ServiceEventModel(cb.isChecked(), csp));
                     }
                 });
-
-                /*contentViewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        EventBus.getDefault().post(new ServiceEventModel(b, servicePrice));
-                    }
-                });*/
                 break;
         }
     }

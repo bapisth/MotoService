@@ -4,22 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.urja.motoservice.adapters.MyOrderForServicesTransactionRecyclerViewAdapter;
 import com.urja.motoservice.adapters.TransactionDetailRecyclerViewAdapter;
 import com.urja.motoservice.model.Transaction;
 import com.urja.motoservice.utils.AppConstants;
@@ -63,13 +57,10 @@ public class TransactionDetailActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.transactionDetailList);
         emptyView = (TextView) findViewById(R.id.transaction_detail_empty_view);
 
-
-
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Downloading Transactions...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
-        Toast.makeText(TransactionDetailActivity.this, "transactionId = "+ transactionId, Toast.LENGTH_SHORT).show();
 
         firebaseRootReference.getmTransactionDatabaseRef().child(currentLoggedInUser).child(transactionId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -99,10 +90,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         // Set the adapter
         if (recyclerView instanceof RecyclerView) {
-            Context context = recyclerView.getContext();/*
-            RecyclerView recyclerView = (RecyclerView) view;*/
+            Context context = recyclerView.getContext();
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            Log.e(TAG, "onCreateView: mTransactionList.size() :"+mTransactionList.size() );
             adapter = new TransactionDetailRecyclerViewAdapter(mTransactionList, this);
             recyclerView.setAdapter(adapter);
         }

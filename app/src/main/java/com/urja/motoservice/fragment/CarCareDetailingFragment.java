@@ -6,25 +6,19 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.florent37.materialviewpager.header.MaterialViewPagerHeaderDecorator;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.R;
 import com.urja.motoservice.adapters.CarServiceRecyclerViewAdapter;
 import com.urja.motoservice.database.CarServicePrice;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.dao.CarServicePriceDao;
-import com.urja.motoservice.model.CarCareDetailing;
-import com.urja.motoservice.model.WashDetailing;
 import com.urja.motoservice.utils.DatabaseConstants;
 
 import java.util.ArrayList;
@@ -57,8 +51,6 @@ public class CarCareDetailingFragment extends Fragment {
         super.onCreate(savedInstanceState);
         carServicePriceDao = DbHelper.getInstance(getActivity()).getCarServicePriceDao();
         mContentItems = carServicePriceDao.loadAll();
-        Log.e(TAG, "onCreate: mContentItems.size = "+mContentItems.size() );
-
     }
 
     @Override
@@ -82,8 +74,6 @@ public class CarCareDetailingFragment extends Fragment {
 
         //Use this now
         mRecyclerView.addItemDecoration(new MaterialViewPagerHeaderDecorator());
-
-        Log.e(TAG, "onViewCreated: mContentItems.size = "+mContentItems.size() );
         mAdapter = new CarServiceRecyclerViewAdapter(mContentItems, getActivity(), CAR_TYPE);
 
         //mAdapter = new RecyclerViewMaterialAdapter();
@@ -97,25 +87,6 @@ public class CarCareDetailingFragment extends Fragment {
 
     private void fetchServiceData(CarCareDetailingFragment carCareDetailingFragment) {
         mContentItems = carServicePriceDao.loadAll();
-        Log.e(TAG, "fetchServiceData: mContentItems.size = "+mContentItems.size() );
         mAdapter.notifyDataSetChanged();
-        /*mCarServiceWashTypesRef.orderByKey().addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "onDataChange: Key=" + snapshot.getKey());
-                    Log.d(TAG, "onDataChange: value=" + snapshot.getValue());
-                    CarCareDetailing carCareDetailing = snapshot.getValue(CarCareDetailing.class);
-                    carCareDetailing.setCode(snapshot.getKey());
-                    mContentItems.add(carCareDetailing);
-                }
-                mAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });*/
-
     }
 }

@@ -4,15 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,11 +20,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.model.Customer;
 import com.urja.motoservice.model.CustomerAddress;
-import com.urja.motoservice.model.ProfileUpdatedEvent;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
 import com.urja.motoservice.utils.DatabaseConstants;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +36,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
     private DatabaseReference mCustomerAddressRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CUSTOMER_ADDRESS);
 
     private EditText mName, mMobile, mAddress, mStreet, mPinCode;
-    //private ImageView mEditName, mEditMobile, mEditAddress, mEditStreet, mEditPinCode;
     private Button mButton;
     private Customer mCustomer;
     private CustomerAddress mCustomerAddress;
@@ -73,30 +65,10 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         mStreet = (EditText) findViewById(R.id.street);
         mPinCode = (EditText) findViewById(R.id.pincode);
 
-        /*mEditName = (ImageView) findViewById(R.id.editName);
-        mEditMobile = (ImageView) findViewById(R.id.editMobile);
-        mEditAddress = (ImageView) findViewById(R.id.editAddress);
-        mEditStreet = (ImageView) findViewById(R.id.editStreet);
-        mEditPinCode = (ImageView) findViewById(R.id.editPincode);*/
-
         mButton = (Button) findViewById(R.id.updateProfile);
-
-
-        /*//Make the EditText readonly untill user taps on Edit Image
-        mName.setEnabled(false);
-        mName.setFocusable(true);
-        mMobile.setEnabled(false);
-        mMobile.setFocusable(true);
-        mAddress.setEnabled(false);
-        mAddress.setFocusable(true);
-        mStreet.setEnabled(false);
-        mStreet.setFocusable(true);
-        mPinCode.setEnabled(false);
-        mPinCode.setFocusable(false);*/
 
         //Populate the data from the database
         currentUserId = CurrentLoggedInUser.getCurrentFirebaseUser().getUid();
-        Log.e(TAG, "onCreate: CurrentUserId"+currentUserId );
         Query customerQuery = mCustomerRef.child(currentUserId).orderByKey();
         customerQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -119,7 +91,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mCustomerAddress = dataSnapshot.getValue(CustomerAddress.class);
-                Log.e(TAG, "onDataChange: Customer Address "+mCustomerAddress.getAddress());
                 String address = mCustomerAddress.getAddress();
                 String street = mCustomerAddress.getStreet();
                 String pincode = mCustomerAddress.getPincode();
@@ -136,13 +107,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         });
 
         mButton.setOnClickListener(this);
-        /*mEditAddress.setOnClickListener(this);
-        mEditName.setOnClickListener(this);
-        mEditStreet.setOnClickListener(this);
-        mEditPinCode.setOnClickListener(this);
-        mEditMobile.setOnClickListener(this);*/
-
-
     }
 
     @Override
@@ -153,48 +117,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
                 startActivity(new Intent(this, WelcomeDashboardActivity.class));
                 finish();
                 break;
-            /*case R.id.editName:
-                    mName.setEnabled(true);
-                    mName.requestFocus();
-
-                    mMobile.setEnabled(false);
-                    mAddress.setEnabled(false);
-                    mStreet.setEnabled(false);
-                    mPinCode.setEnabled(false);
-
-                break;
-            case R.id.editAddress:
-                mName.setEnabled(false);
-                mMobile.setEnabled(false);
-                mAddress.setEnabled(true);
-                mAddress.requestFocus();
-                mStreet.setEnabled(false);
-                mPinCode.setEnabled(false);
-                break;
-            case R.id.editMobile:
-                mName.setEnabled(false);
-                mMobile.setEnabled(true);
-                mMobile.requestFocus();
-                mAddress.setEnabled(false);
-                mStreet.setEnabled(false);
-                mPinCode.setEnabled(false);
-                break;
-            case R.id.editStreet:
-                mName.setEnabled(false);
-                mMobile.setEnabled(false);
-                mAddress.setEnabled(false);
-                mStreet.setEnabled(true);
-                mStreet.requestFocus();
-                mPinCode.setEnabled(false);
-                break;
-            case R.id.editPincode:
-                mName.setEnabled(false);
-                mMobile.setEnabled(false);
-                mAddress.setEnabled(false);
-                mStreet.setEnabled(false);
-                mPinCode.setEnabled(true);
-                mPinCode.requestFocus();
-                break;*/
         }
     }
 
@@ -229,9 +151,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 updatedCustomerAddressToServer = true;
-
-
-
             }
         });
 

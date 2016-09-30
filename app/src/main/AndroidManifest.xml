@@ -43,16 +43,6 @@
             android:launchMode="singleTop"
             android:parentActivityName=".WelcomeDashboardActivity"
             android:theme="@style/AppTheme.TextAppearance" />
-        <!--
-        <activity
-            android:name=".ConfirmRequestActivity"
-            android:label="@string/title_activity_choose_service"
-            android:parentActivityName=".ChooseServiceActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-            &lt;!&ndash; android:parentActivityName=".ChooseServiceActivity" &ndash;&gt;
-        </activity>
-        -->
         <activity
             android:name=".ModifyChoosenServiceRquestActivity"
             android:label="@string/title_activity_choose_service"
@@ -82,7 +72,7 @@
 
         <activity
             android:name=".TransactionListActivity"
-            android:label="@string/title_activity_transaction_detail"
+            android:label="@string/title_activity_transaction_list"
             android:parentActivityName=".WelcomeDashboardActivity"
             android:theme="@style/AppTheme" />
         <activity
@@ -92,7 +82,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".TransactionDetailActivity"
-            android:label="@string/title_activity_transaction_list"
+            android:label="@string/title_activity_transaction_detail"
             android:parentActivityName=".TransactionListActivity"
             android:theme="@style/AppTheme">
             <meta-data

@@ -1,13 +1,14 @@
 package com.urja.motoservice;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.urja.motoservice.fragment.TransactionListActivityFragment;
-import com.urja.motoservice.fragment.dummy.DummyContent;
+import com.urja.motoservice.utils.AppConstants;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -31,7 +32,9 @@ public class TransactionListActivity extends AppCompatActivity implements Transa
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-
+    public void onListFragmentInteraction(String transactionId) {
+        Intent intent = new Intent(TransactionListActivity.this, TransactionDetailActivity.class);
+        intent.putExtra(AppConstants.TRANSACTIOIN_ID, transactionId);
+        startActivity(intent);
     }
 }

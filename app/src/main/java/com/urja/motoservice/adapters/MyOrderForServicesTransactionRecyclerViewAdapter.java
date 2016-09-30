@@ -1,22 +1,18 @@
 package com.urja.motoservice.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.urja.motoservice.R;
-import com.urja.motoservice.TransactionDetailActivity;
 import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.fragment.TransactionListActivityFragment.OnListFragmentInteractionListener;
 import com.urja.motoservice.fragment.dummy.DummyContent.DummyItem;
 import com.urja.motoservice.model.Transaction;
-import com.urja.motoservice.utils.AppConstants;
 
 import java.util.List;
 
@@ -67,7 +63,7 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
         switch (holder.getItemViewType()){
             case VIEW_TYPE_OBJECT_VIEW:
                 TransactionViewHolder transactionViewHolder = (TransactionViewHolder) holder;
-                Transaction transaction = mValues.get(position);
+                final Transaction transaction = mValues.get(position);
                 transactionViewHolder.mItem = transaction;
 
                 List<ServiceRequest> serviceRequestList = transaction.getServiceRequestList();
@@ -83,14 +79,10 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
                     transactionViewHolder.mTransactionStatus.setText("N/A");
                 }
                 transactionViewHolder.mTotalAmount.setText(MSG_TOTAL_AMOUNT+transaction.getTotalAmount());
-
-                Log.e(TAG, "onBindViewHolder: mTransactionId = "+mTransactionId);
-                transactionViewHolder.mTransactionIdContainer.setOnClickListener(new View.OnClickListener() {
+                transactionViewHolder.mTransactionContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(mContext, TransactionDetailActivity.class);
-                        intent.putExtra(AppConstants.TRANSACTIOIN_ID, mTransactionId);
-                        mContext.startActivity(intent);
+                        mListener.onListFragmentInteraction(transaction.getTransactionId());
                     }
                 });
                 break;
@@ -123,7 +115,7 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
         public final TextView mTransactionStatus;
         public final TextView mTotalAmount;
         public Transaction mItem;
-        public final CardView mTransactionIdContainer;
+        public final CardView mTransactionContainer;
 
         public TransactionViewHolder(View view) {
             super(view);
@@ -133,7 +125,7 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
             mTransactionDate = (TextView) view.findViewById(R.id.transactionDate);
             mTransactionStatus = (TextView) view.findViewById(R.id.transactionStatus);
             mTotalAmount = (TextView) view.findViewById(R.id.totalAmount);
-            mTransactionIdContainer = (CardView) view.findViewById(R.id.transactionIdContainer);
+            mTransactionContainer = (CardView) view.findViewById(R.id.transactionContainer);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.urja.motoservice;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -17,12 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.urja.motoservice.adapters.SectionAdapter;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
-import com.urja.motoservice.model.ServiceTypeSection;
 import com.urja.motoservice.model.TransactionComplete;
 import com.urja.motoservice.utils.AppConstants;
 
@@ -43,6 +40,8 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+//import com.chad.library.adapter.base.BaseQuickAdapter;
+
 public class ModifyChoosenServiceRquestActivity extends AppCompatActivity {
 
     static final boolean GRID_LAYOUT = false;
@@ -50,7 +49,6 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity {
     private List<ServiceRequest> mServiceRequestList = null;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private List<ServiceTypeSection> mContentItems = new ArrayList<>();
     private Toolbar mToolbar;
     private Button mButton;
     private String mCurrentUserId = null;
@@ -244,9 +242,6 @@ public class ModifyChoosenServiceRquestActivity extends AppCompatActivity {
     private void readServiceRequestData(SectionAdapter sectionAdapter) {
         mServiceRequestList = mServiceRequestDao.loadAll();
         mServiceRequestList = mServiceRequestDao.queryBuilder().orderAsc(ServiceRequestDao.Properties.Vehiclegroup).list();
-
-        List<ServiceTypeSection> serviceTypeSections = null;
-        ServiceTypeSection serviceTypeSection = null;
         mGridCollapseSectionAdapter.notifyDataSetChanged();
     }
 

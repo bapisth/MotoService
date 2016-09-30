@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -171,16 +170,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     mCustomerRef.orderByKey().equalTo(currentUser.getUid()).addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String previousChildKey) {
-                            Log.d(TAG, "onChildAdded: " + dataSnapshot.getKey());
                             mCustomer = dataSnapshot.getValue(Customer.class);
                             mCurrrentKey = dataSnapshot.getKey();
                             if (mCurrrentKey != null && currentUser != null && mCurrrentKey.equalsIgnoreCase(currentUser.getUid()))
                                 if (mCustomer != null) {
-
-                                    Log.d(TAG, "onChildAdded: Name=" + mCustomer.getName());
-                                    Log.d(TAG, "onChildAdded: currentKey=" + mCurrrentKey);
-                                    Log.d(TAG, "onChildAdded: previousChildKey=" + previousChildKey);
-
                                     CurrentLoggedInUser.setCurrentFirebaseUser(currentUser);
                                     CurrentLoggedInUser.setName(mCustomer.getName());
                                     CurrentLoggedInUser.setMobile(mCustomer.getMobile());
@@ -196,22 +189,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         @Override
                         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
                         }
 
                         @Override
                         public void onChildRemoved(DataSnapshot dataSnapshot) {
-
                         }
 
                         @Override
                         public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-
                         }
 
                     });

@@ -1,17 +1,8 @@
 package com.urja.motoservice.adapters;
 
-import android.support.v7.widget.CardView;
-import android.view.View;
-import android.widget.TextView;
-
 //import com.chad.library.adapter.base.BaseSectionQuickAdapter;
 //import com.chad.library.adapter.base.BaseViewHolder;
-import com.urja.motoservice.R;
-import com.urja.motoservice.database.ServiceRequest;
-import com.urja.motoservice.model.ServiceTypeSection;
 
-import java.util.List;
-import java.util.Random;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper

@@ -1,7 +1,5 @@
 package com.urja.motoservice.utils;
 
-import com.urja.motoservice.model.Customer;
-
 /**
  * Created by BAPI1 on 9/2/2016.
  */

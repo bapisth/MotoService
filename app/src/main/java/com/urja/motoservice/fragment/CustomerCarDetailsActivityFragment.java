@@ -9,7 +9,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -165,14 +164,10 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot transactionDataSnapshot, String s) {
                 counter++;
-                Log.e(TAG, "onChildAdded: previous key = "+ s );
-                Log.e(TAG, "onChildAdded: Current Key = "+ transactionDataSnapshot.getKey() );
-
                 final String transactionId = transactionDataSnapshot.getKey();
                 final String rootRefpath = transactionDataSnapshot.getRef().getRoot().toString();
                 final String transactionRefpath = transactionDataSnapshot.getRef().toString();
                 mCustomerRef = FirebaseRootReference.get_instance().getmCustomerDatabaseRef();
-
 
                 mCustomerRef.child(mCurrentUserId).child(AppConstants.TableColumns.CustomerTable.NAME).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -204,7 +199,6 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                     //Do Nothing
-                Log.e(TAG, "onChildChanged: Key = "+s );
             }
 
             @Override
@@ -318,7 +312,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
 
     private void addTransactionToServer(FragmentActivity activity) {
         final ProgressDialog progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Adding Transaction data...");
+        progressDialog.setMessage("Requesting Services...");
         progressDialog.show();
         if (mCurrentUserId == null)
             mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();

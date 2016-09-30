@@ -2,12 +2,11 @@ package com.urja.motoservice.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.R;
 import com.urja.motoservice.adapters.MyOrderForServicesTransactionRecyclerViewAdapter;
 import com.urja.motoservice.database.ServiceRequest;
-import com.urja.motoservice.fragment.dummy.DummyContent;
 import com.urja.motoservice.model.Transaction;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
 import com.urja.motoservice.utils.FirebaseRootReference;
@@ -170,6 +168,6 @@ public class TransactionListActivityFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyContent.DummyItem item);
+        void onListFragmentInteraction(String transactionId);
     }
 }

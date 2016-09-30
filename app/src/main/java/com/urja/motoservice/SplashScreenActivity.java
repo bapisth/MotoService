@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +33,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
     // Set Duration of the Splash Screen
-    private final long delay = 1000;
+    private final long delay = 100;
     private FirebaseAuth mAuth;
     private UserSession mUserSession;
     private Customer mCustomer;
@@ -64,7 +62,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                 if (NetworkService.Network) {
                     mAuth = FirebaseAuth.getInstance();
                     final FirebaseUser currentUser = mAuth.getCurrentUser();
-                    Log.e(TAG, "onCreate: currentUser" + currentUser);
                     if (mAuth != null && currentUser != null) {
                         mUserSession = new UserSession();
 
@@ -73,34 +70,25 @@ public class SplashScreenActivity extends AppCompatActivity {
                         mCustomerRef.child(currentUser.getUid()).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                Log.d(TAG, "KAN KALA SE: " + dataSnapshot.getKey());
                                 mCustomer = dataSnapshot.getValue(Customer.class);
-                                Log.e(TAG, "onDataChange: mCustomer:"+mCustomer );
                                 mCurrrentKey = dataSnapshot.getKey();
                                 if (mCurrrentKey != null && currentUser != null && mCurrrentKey.equalsIgnoreCase(currentUser.getUid())){
                                     if (mCustomer != null) {
-                                        Log.d(TAG, "onChildAdded: Name=" + mCustomer.getName());
-                                        Log.d(TAG, "onChildAdded: currentKey=" + mCurrrentKey);
-
                                         CurrentLoggedInUser.setCurrentFirebaseUser(currentUser);
                                         CurrentLoggedInUser.setName(mCustomer.getName());
                                         CurrentLoggedInUser.setMobile(mCustomer.getMobile());
                                         //startActivity(new Intent(SplashScreenActivity.this, DashboardActivity.class));
                                         startActivity(new Intent(SplashScreenActivity.this, WelcomeDashboardActivity.class));
                                         finish();
-
                                     }
                                 }else {
                                     Toast.makeText(SplashScreenActivity.this, "Having Some trouble!!Please try again later.", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
-
-
                             }
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-
                             }
                         });
 

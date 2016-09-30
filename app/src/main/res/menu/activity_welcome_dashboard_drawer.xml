@@ -13,7 +13,7 @@
 
         <item
             android:id="@+id/nav_manage_profile"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/face_profile"
             android:title="Profile" />
         <!--<item
             android:id="@+id/nav_help"
@@ -21,7 +21,7 @@
             android:title="Help" />-->
         <item
             android:id="@+id/nav_signout"
-            android:icon="@drawable/signout"
+            android:icon="@drawable/logout"
             android:title="Signout" />
     </group>
 

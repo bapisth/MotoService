@@ -97,15 +97,6 @@ public class TransactionDetailRecyclerViewAdapter extends RecyclerView.Adapter<R
                     transactionViewHolder.mTransactionStatus.setText("N/A");
                 }
                 transactionViewHolder.mTotalAmount.setText(MSG_TOTAL_AMOUNT+totalAmount);
-
-                transactionViewHolder.mTransactionIdContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(mContext, TransactionDetailActivity.class);
-                        intent.putExtra(AppConstants.TRANSACTIOIN_ID, mTransactionId);
-                        mContext.startActivity(intent);
-                    }
-                });
                 break;
             case VIEW_TYPE_EMPTY_LIST_PLACEHOLDER:
                 EmptyTransactionViewHolder emptyTransactionViewHolder = (EmptyTransactionViewHolder) holder;
@@ -146,7 +137,7 @@ public class TransactionDetailRecyclerViewAdapter extends RecyclerView.Adapter<R
             mTransactionDate = (TextView) view.findViewById(R.id.transactionDate);
             mTransactionStatus = (TextView) view.findViewById(R.id.transactionStatus);
             mTotalAmount = (TextView) view.findViewById(R.id.totalAmount);
-            mTransactionIdContainer = (CardView) view.findViewById(R.id.transactionIdContainer);
+            mTransactionIdContainer = (CardView) view.findViewById(R.id.transactionContainer);
         }
     }
 

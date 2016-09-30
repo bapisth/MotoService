@@ -1,9 +1,7 @@
 package com.urja.motoservice;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -26,22 +24,19 @@ import com.github.florent37.materialviewpager.header.HeaderDesign;
 import com.urja.motoservice.database.CarServicePrice;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
-import com.urja.motoservice.database.dao.CarServicePriceDao;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
 import com.urja.motoservice.fragment.AccessoriesFragment;
 import com.urja.motoservice.fragment.Ask4CarNumberDialogFragment;
+import com.urja.motoservice.fragment.CarCareDetailingFragment;
 import com.urja.motoservice.fragment.DentPaintFragment;
 import com.urja.motoservice.fragment.ServiceRepairFragment;
 import com.urja.motoservice.fragment.TyreWheelFragment;
-import com.urja.motoservice.fragment.CarCareDetailingFragment;
 import com.urja.motoservice.model.Accessories;
-import com.urja.motoservice.model.CarCareDetailing;
 import com.urja.motoservice.model.DentPaint;
 import com.urja.motoservice.model.ServiceEventModel;
 import com.urja.motoservice.model.ServiceRepair;
 import com.urja.motoservice.model.TransactionComplete;
 import com.urja.motoservice.model.TyreWheel;
-import com.urja.motoservice.model.WashDetailing;
 import com.urja.motoservice.utils.AppConstants;
 
 import org.greenrobot.eventbus.EventBus;

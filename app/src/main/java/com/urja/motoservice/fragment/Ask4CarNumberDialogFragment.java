@@ -12,12 +12,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.urja.motoservice.R;
 import com.urja.motoservice.WelcomeDashboardActivity;
-import com.urja.motoservice.utils.AppConstants;
 
 public class Ask4CarNumberDialogFragment extends DialogFragment implements View.OnClickListener {
     private static final String TAG = Ask4CarNumberDialogFragment.class.getSimpleName();
@@ -84,7 +81,7 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(getActivity(), "Activity Result", Toast.LENGTH_SHORT).show();
+        //
     }
 
     public void onClick(View v) {

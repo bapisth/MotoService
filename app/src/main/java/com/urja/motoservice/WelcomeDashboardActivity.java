@@ -40,7 +40,6 @@ import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.dao.CarServicePriceDao;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
 import com.urja.motoservice.fragment.TransactionListActivityFragment;
-import com.urja.motoservice.fragment.dummy.DummyContent;
 import com.urja.motoservice.model.CarCareDetailing;
 import com.urja.motoservice.model.Customer;
 import com.urja.motoservice.model.Size;
@@ -293,36 +292,6 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         }
     }
 
-    /**
-     * No Menu Needed
-     * @param item
-     * @return
-     */
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.welcome_dashboard, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
-
-
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -353,10 +322,6 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         }else if (intent == null){
             Toast.makeText(WelcomeDashboardActivity.this, "No Saved Transactions Available.", Toast.LENGTH_SHORT).show();
         }
-
-        // Insert the fragment by replacing any existing fragment
-        /*FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -398,8 +363,8 @@ public class WelcomeDashboardActivity extends AppCompatActivity
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-
+    public void onListFragmentInteraction(String transactionId) {
+        //Do Nothing
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
