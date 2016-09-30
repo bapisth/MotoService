@@ -22,10 +22,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DashboardDataActivity"
-            android:label="Dashboard Data Activity"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".SignupActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme" />

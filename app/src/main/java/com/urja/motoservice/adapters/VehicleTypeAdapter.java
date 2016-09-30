@@ -12,7 +12,6 @@ import android.graphics.Rect;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -36,6 +35,7 @@ import java.util.List;
 public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.MyViewHolder> {
 
     private static final String TAG = VehicleTypeAdapter.class.getSimpleName();
+    String carSize = "";
     private Context mContext;
     private List<Vehicle> mVehicleList;
     private LayoutInflater mLayoutInflater;
@@ -47,21 +47,6 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
     private ViewGroup mViewGroup;
     private long mServiceID = -1;
     private String code = "";
-    String carSize = "";
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
-        public ImageView thumbnail, overflow;
-
-        public MyViewHolder(View view) {
-            super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            count = (TextView) view.findViewById(R.id.price);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            //overflow = (ImageView) view.findViewById(R.id.overflow);
-        }
-    }
-
 
     public VehicleTypeAdapter(Context mContext, List<Vehicle> vehicleList) {
         this.mContext = mContext;
@@ -87,8 +72,6 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
         }
 
         holder.count.setText(carSize); //remove
-
-        Log.e(TAG, "onBindViewHolder: " + vehicle.getDownloadPath());
         // loading album cover using Glide library
         Glide.with(mContext).load(vehicle.getDownloadPath()).into(holder.thumbnail);
 
@@ -101,14 +84,6 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
                 mContext.startActivity(intent);
             }
         });
-
-        /*holder.overflow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPopupMenu(holder.overflow, position);
-                //showPopupWindow(holder.overflow);
-            }
-        });*/
     }
 
     private PopupWindow showPopupWindow(View view) {
@@ -183,7 +158,6 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
         mPopupWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, xPos, yPos);
     }
 
-
     /**
      * Showing popup menu when tapping on 3 dots
      */
@@ -196,6 +170,24 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
         mServiceID = mVehicleList.get(position).getCode();
         popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
         popup.show();
+    }
+
+    @Override
+    public int getItemCount() {
+        return mVehicleList.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView title, count;
+        public ImageView thumbnail, overflow;
+
+        public MyViewHolder(View view) {
+            super(view);
+            title = (TextView) view.findViewById(R.id.title);
+            count = (TextView) view.findViewById(R.id.price);
+            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            //overflow = (ImageView) view.findViewById(R.id.overflow);
+        }
     }
 
     /**
@@ -218,11 +210,5 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
             }
             return false;
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        Log.e("XA", "getItemCount: " + mVehicleList.size());
-        return mVehicleList.size();
     }
 }
