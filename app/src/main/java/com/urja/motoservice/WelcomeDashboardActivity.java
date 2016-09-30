@@ -30,36 +30,25 @@ import android.widget.Toast;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.adapters.VehicleTypeAdapter;
 import com.urja.motoservice.database.CarServicePrice;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.dao.CarServicePriceDao;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
-import com.urja.motoservice.database.dao.ValidVehicleDao;
-import com.urja.motoservice.fragment.TransactionDetailActivityFragment;
+import com.urja.motoservice.fragment.TransactionListActivityFragment;
 import com.urja.motoservice.fragment.dummy.DummyContent;
 import com.urja.motoservice.model.CarCareDetailing;
-import com.urja.motoservice.model.CarCareDetailingService;
 import com.urja.motoservice.model.Customer;
-import com.urja.motoservice.model.ProfileUpdatedEvent;
 import com.urja.motoservice.model.Size;
-import com.urja.motoservice.model.TransactionComplete;
 import com.urja.motoservice.model.Vehicle;
 import com.urja.motoservice.utils.AlertDialog;
 import com.urja.motoservice.utils.AppConstants;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
-import com.urja.motoservice.utils.DatabaseConstants;
 import com.urja.motoservice.utils.FirebaseRootReference;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +56,7 @@ import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class WelcomeDashboardActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, TransactionDetailActivityFragment.OnListFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, TransactionListActivityFragment.OnListFragmentInteractionListener {
 
     private TextView mPersonName;
     private TextView mPersonEmail;
@@ -343,7 +332,7 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         Fragment fragment = null;
 
         if (id == R.id.nav_transaction) {
-                intent = new Intent(WelcomeDashboardActivity.this, TransactionDetailActivity.class);
+                intent = new Intent(WelcomeDashboardActivity.this, TransactionListActivity.class);
         } else if (id == R.id.nav_draft_transaction) {//Shows previously saved transaction
             ServiceRequestDao requestDao = DbHelper.getInstance(WelcomeDashboardActivity.this).getServiceRequestDao();
             if (requestDao.count() > 0)

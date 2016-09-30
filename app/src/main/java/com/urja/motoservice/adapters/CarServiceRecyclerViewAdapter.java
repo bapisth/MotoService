@@ -101,6 +101,7 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 if (contents != null && servicePrice != null) {
                     contentViewHolder.mCode.setText(servicePrice.getServiceCode());
                     contentViewHolder.mCheckBox.setText(servicePrice.getServiceDesc());
+
                     if (CAR_TYPE.equalsIgnoreCase(AppConstants.ValidVehicle.CAR_TYPE_SMALL)){
                         contentViewHolder.mItemPrice.setText(RUPEES+servicePrice.getPriceSmall());
                     }else if (CAR_TYPE.equalsIgnoreCase(AppConstants.ValidVehicle.CAR_TYPE_MEDIUM)){
@@ -145,13 +146,11 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     public class ContentViewHolder extends RecyclerView.ViewHolder{
         private final TextView mCode;
-        private final TextView mItemDesc;
         private final TextView mItemPrice;
         private final CheckBox mCheckBox;
         public ContentViewHolder(View view) {
             super(view);
             mCode = (TextView) view.findViewById(R.id.code);
-            mItemDesc = (TextView) view.findViewById(R.id.item_desc);
             mItemPrice = (TextView) view.findViewById(R.id.item_price);
             mCheckBox = (CheckBox) view.findViewById(R.id.washDetailCheckBox);
         }

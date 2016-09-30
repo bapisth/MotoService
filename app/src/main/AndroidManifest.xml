@@ -81,15 +81,24 @@
             android:enabled="true" />
 
         <activity
-            android:name=".TransactionDetailActivity"
+            android:name=".TransactionListActivity"
             android:label="@string/title_activity_transaction_detail"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".WelcomeDashboardActivity"/>
+            android:parentActivityName=".WelcomeDashboardActivity"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".UpdateProfileActivity"
             android:label="@string/title_activity_update_profile"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".WelcomeDashboardActivity"></activity>
+            android:parentActivityName=".WelcomeDashboardActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".TransactionDetailActivity"
+            android:label="@string/title_activity_transaction_list"
+            android:parentActivityName=".TransactionListActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.urja.motoservice.TransactionListActivity" />
+        </activity>
     </application>
 
 </manifest>

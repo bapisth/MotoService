@@ -11,7 +11,8 @@
     card_view:cardPreventCornerOverlap="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
-    android:background="@color/material_drawer_dark_primary_icon">
+    android:background="@color/material_drawer_dark_primary_icon"
+    android:id="@+id/transactionIdContainer">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,14 +47,15 @@
                         android:layout_height="45dp"
                         android:layout_gravity="center"
                         android:textAllCaps="false"
+                        android:layout_below="@+id/carNumber"
                         android:layout_alignParentLeft="true"
                         android:textSize="20sp"
                         android:textColor="@color/white"
-                        android:layout_below="@+id/carNumber"
+
                         android:id="@+id/totalAmount"
 
                         android:paddingLeft="@dimen/dp_10"
-                        />
+                        /><!--android:layout_below="@+id/carNumber"-->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_below="@id/totalAmount"

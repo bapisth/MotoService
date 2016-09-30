@@ -18,12 +18,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.R;
 import com.urja.motoservice.adapters.MyOrderForServicesTransactionRecyclerViewAdapter;
-import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.fragment.dummy.DummyContent;
-import com.urja.motoservice.model.CarPickAddress;
 import com.urja.motoservice.model.Transaction;
-import com.urja.motoservice.model.Vehicle;
-import com.urja.motoservice.utils.AppConstants;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
 import com.urja.motoservice.utils.FirebaseRootReference;
 
@@ -33,10 +29,10 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class TransactionDetailActivityFragment extends Fragment {
+public class TransactionListActivityFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
-    private static final String TAG = TransactionDetailActivityFragment.class.getSimpleName();
+    private static final String TAG = TransactionListActivityFragment.class.getSimpleName();
 
     private int mColumnCount = 0;
     private OnListFragmentInteractionListener mListener;
@@ -52,13 +48,13 @@ public class TransactionDetailActivityFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public TransactionDetailActivityFragment() {
+    public TransactionListActivityFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static TransactionDetailActivityFragment newInstance(int columnCount) {
-        TransactionDetailActivityFragment fragment = new TransactionDetailActivityFragment();
+    public static TransactionListActivityFragment newInstance(int columnCount) {
+        TransactionListActivityFragment fragment = new TransactionListActivityFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -84,11 +80,20 @@ public class TransactionDetailActivityFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot snapshot : children) {
+                    int totalAmount = 0;
+                    Transaction transaction = null;
+                    int i= 0;
                     for (DataSnapshot dss:snapshot.getChildren()){
-                        Transaction transaction = dss.getValue(Transaction.class);
-                        transaction.setTransactionId(dss.getKey());
-                        mTransactionList.add(transaction);
+                        transaction = dss.getValue(Transaction.class);
+                        transaction.setTransactionId(snapshot.getKey());
+                        String vehiclegroup = transaction.getServiceRequestList().get(i).getVehiclegroup();//Have kept Price in vehicle Group
+                        Log.e(TAG, "onDataChange: Amount = "+ vehiclegroup);
+                        if (vehiclegroup != null && vehiclegroup=="")
+                            totalAmount += Integer.valueOf(vehiclegroup);
+                        transaction.getServiceRequestList().get(i).setVehiclegroup(String.valueOf(totalAmount));
+                        i++;
                     }
+                    mTransactionList.add(transaction);
 
                 }
                 if (mTransactionList.isEmpty()) {

@@ -28,7 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.R;
-import com.urja.motoservice.TransactionDetailActivity;
+import com.urja.motoservice.TransactionListActivity;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
@@ -322,7 +322,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         progressDialog.show();
         if (mCurrentUserId == null)
             mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final DatabaseReference transactionDataRef = mTransactionRef.child(mCurrentUserId);
+        final DatabaseReference transactionDataRef = mTransactionRef.child(mCurrentUserId).push(); //Create Only One Transaction Id
         List<ServiceRequest> readServiceRequestData = readServiceRequestData();
         OrderForServicesTransaction orderForServicesTransaction = new OrderForServicesTransaction(readServiceRequestData, true, new Date());
 
@@ -351,7 +351,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
             List<ServiceRequest> entryValue = entry.getValue();
             System.out.println(carNumber + "/" + entryValue);
 
-            final DatabaseReference carNumberPush = transactionDataRef.child(carNumber).push();
+            final DatabaseReference carNumberPush = transactionDataRef.child(carNumber);
             final Task<Void> transactionDateTask = carNumberPush.child(AppConstants.Transaction.COLUMN_SERVICE_REQUEST_DATE).setValue(transactionDate);
             final Task<Void> transactionStatusTask = carNumberPush.child(AppConstants.Transaction.COLUMN_REQUEST_STATUS).setValue(AppConstants.STATUS_OPEN);
             final Task<Void> value = carNumberPush.child(AppConstants.Transaction.COLUMN_SERVICE_REQUESTLIST).setValue(entryValue);
@@ -371,7 +371,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
                                 EventBus.getDefault().post(new TransactionComplete(true, ""));
                                 ActivityCompat.finishAffinity(getActivity());
                                 //Intent intent = new Intent(getActivity(), WelcomeDashboardActivity.class);
-                                Intent intent = new Intent(getActivity(), TransactionDetailActivity.class);
+                                Intent intent = new Intent(getActivity(), TransactionListActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
                                 getActivity().finish();

@@ -20,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:weightSum="10">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,21 +33,22 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/washDetailCheckBox"
                     android:theme="@style/CheckBoxStyle"
+                    android:layout_weight="8"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/washDetailCheckBox"
-                    android:layout_toRightOf="@id/washDetailCheckBox"
-                    android:id="@+id/item_desc"/>
+                    android:id="@+id/item_price"
+                    android:layout_weight="2"
+                    android:layout_marginLeft="20dp"/>
 
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_price"
                 android:layout_alignParentBottom="true"
                 android:paddingLeft="5dp"
-                />
+                />-->
 
         </LinearLayout>
 

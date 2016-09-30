@@ -1,41 +1,114 @@
 package com.urja.motoservice;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
-import com.urja.motoservice.fragment.TransactionDetailActivityFragment;
-import com.urja.motoservice.fragment.dummy.DummyContent;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.urja.motoservice.adapters.MyOrderForServicesTransactionRecyclerViewAdapter;
+import com.urja.motoservice.adapters.TransactionDetailRecyclerViewAdapter;
+import com.urja.motoservice.model.Transaction;
+import com.urja.motoservice.utils.AppConstants;
+import com.urja.motoservice.utils.CurrentLoggedInUser;
+import com.urja.motoservice.utils.FirebaseRootReference;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TransactionDetailActivity extends AppCompatActivity implements TransactionDetailActivityFragment.OnListFragmentInteractionListener {
+public class TransactionDetailActivity extends AppCompatActivity {
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
+    private static final String TAG = TransactionDetailActivity.class.getSimpleName();
+
+    private List<Transaction> mTransactionList = new ArrayList<>();
+    FirebaseRootReference firebaseRootReference = null;
+    private String currentLoggedInUser;
+    private String transactionId;
+    private TransactionDetailRecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
+    private TextView emptyView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transaction_detail);
+        setContentView(R.layout.activity_transactionid_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar supportActionBar = getSupportActionBar();
-        supportActionBar.setHomeButtonEnabled(true);
-        supportActionBar.setDisplayHomeAsUpEnabled(true);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        firebaseRootReference = FirebaseRootReference.get_instance();
+
+        //Transaction Details
+        currentLoggedInUser = CurrentLoggedInUser.getCurrentFirebaseUser().getUid();
+
+        Intent intent = getIntent();
+        transactionId = intent.getStringExtra(AppConstants.TRANSACTIOIN_ID);
+
+        recyclerView = (RecyclerView) findViewById(R.id.transactionDetailList);
+        emptyView = (TextView) findViewById(R.id.transaction_detail_empty_view);
+
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Downloading Transactions...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
+        firebaseRootReference.getmTransactionDatabaseRef().child(currentLoggedInUser).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot snapshot : children) {
+                    if (snapshot.getKey().equalsIgnoreCase(transactionId)){
+                        Transaction transaction = null;
+                        for (DataSnapshot dss:snapshot.getChildren()){
+                            transaction = dss.getValue(Transaction.class);
+                            transaction.setTransactionId(snapshot.getKey());
+                            mTransactionList.add(transaction);
+                        }
+                    }
+                }
+                if (mTransactionList.isEmpty()) {
+                    recyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
+                progressDialog.dismiss();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        // Set the adapter
+        if (recyclerView instanceof RecyclerView) {
+            Context context = recyclerView.getContext();/*
+            RecyclerView recyclerView = (RecyclerView) view;*/
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            Log.e(TAG, "onCreateView: mTransactionList.size() :"+mTransactionList.size() );
+            adapter = new TransactionDetailRecyclerViewAdapter(mTransactionList, this);
+            recyclerView.setAdapter(adapter);
+        }
     }
 
-    @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-
-    }
 }

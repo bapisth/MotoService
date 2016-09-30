@@ -24,20 +24,18 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TransactionDetailRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG = MyOrderForServicesTransactionRecyclerViewAdapter.class.getSimpleName();
+    private static final String TAG = TransactionDetailRecyclerViewAdapter.class.getSimpleName();
     private final List<Transaction> mValues;
-    private final OnListFragmentInteractionListener mListener;
     private static final int VIEW_TYPE_EMPTY_LIST_PLACEHOLDER = 0;
     private static final int VIEW_TYPE_OBJECT_VIEW = 1;
     private static final String MSG_TOTAL_AMOUNT = "Total Amount: Rs. ";
     private Context mContext;
     private String mTransactionId;
 
-    public MyOrderForServicesTransactionRecyclerViewAdapter(List<Transaction> items, OnListFragmentInteractionListener listener, Context context) {
+    public TransactionDetailRecyclerViewAdapter(List<Transaction> items, Context context) {
         this.mValues = items;
-        this.mListener = listener;
         this.mContext = context;
     }
 
@@ -81,12 +79,13 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
 
                 //holder.mIdView.setText(mValues.get(position).id);
                 //holder.mContentView.setText(mValues.get(position).content);
-                /*if (serviceRequestList!= null){
+                if (serviceRequestList!= null){
                     String carNumber = serviceRequestList.get(0).getCarnumber();
                     transactionViewHolder.mCarNumber.setText(carNumber);
                 }else {
                     transactionViewHolder.mCarNumber.setText("N/A");
-                }*/
+                }
+
                 mTransactionId = transaction.getTransactionId();
                 transactionViewHolder.mTransactionID.setText(mTransactionId);
 
@@ -113,18 +112,6 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
                 emptyTransactionViewHolder.mEmptyText.setText(mContext.getString(R.string.empty_data));
                 break;
         }
-
-
-        /*holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
-        });*/
     }
 
     @Override
@@ -143,7 +130,7 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
 
     public class TransactionViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        /*public final TextView mCarNumber;*/
+        public final TextView mCarNumber;
         public final TextView mTransactionID;
         public final TextView mTransactionDate;
         public final TextView mTransactionStatus;
@@ -154,7 +141,7 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
         public TransactionViewHolder(View view) {
             super(view);
             mView = view;
-            /*mCarNumber = (TextView) view.findViewById(R.id.carNumber);*/
+            mCarNumber = (TextView) view.findViewById(R.id.carNumber);
             mTransactionID = (TextView) view.findViewById(R.id.transactionID);
             mTransactionDate = (TextView) view.findViewById(R.id.transactionDate);
             mTransactionStatus = (TextView) view.findViewById(R.id.transactionStatus);
