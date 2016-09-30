@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,7 +33,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
     private static final String TAG = TransactionDetailActivity.class.getSimpleName();
 
-    private List<Transaction> mTransactionList = new ArrayList<>();
+    private List<Transaction> mTransactionList = null;
     FirebaseRootReference firebaseRootReference = null;
     private String currentLoggedInUser;
     private String transactionId;
@@ -51,6 +52,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         firebaseRootReference = FirebaseRootReference.get_instance();
+        mTransactionList = new ArrayList<>();
 
         //Transaction Details
         currentLoggedInUser = CurrentLoggedInUser.getCurrentFirebaseUser().getUid();
@@ -67,20 +69,17 @@ public class TransactionDetailActivity extends AppCompatActivity {
         progressDialog.setMessage("Downloading Transactions...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
+        Toast.makeText(TransactionDetailActivity.this, "transactionId = "+ transactionId, Toast.LENGTH_SHORT).show();
 
-        firebaseRootReference.getmTransactionDatabaseRef().child(currentLoggedInUser).addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseRootReference.getmTransactionDatabaseRef().child(currentLoggedInUser).child(transactionId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                Transaction transaction = null;
                 for (DataSnapshot snapshot : children) {
-                    if (snapshot.getKey().equalsIgnoreCase(transactionId)){
-                        Transaction transaction = null;
-                        for (DataSnapshot dss:snapshot.getChildren()){
-                            transaction = dss.getValue(Transaction.class);
-                            transaction.setTransactionId(snapshot.getKey());
-                            mTransactionList.add(transaction);
-                        }
-                    }
+                    transaction = snapshot.getValue(Transaction.class);
+                    transaction.setTransactionId(snapshot.getKey());
+                    mTransactionList.add(transaction);
                 }
                 if (mTransactionList.isEmpty()) {
                     recyclerView.setVisibility(View.GONE);
@@ -95,9 +94,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
 
         // Set the adapter

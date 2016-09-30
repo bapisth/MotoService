@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,22 +72,6 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
 
                 List<ServiceRequest> serviceRequestList = transaction.getServiceRequestList();
                 List<ServiceRequest> requests = serviceRequestList;
-                int totalAmount = 0;
-                if (requests != null){
-                    for (ServiceRequest request : requests){
-                        int val = Integer.valueOf(request.getVehiclegroup());
-                        totalAmount +=val;
-                    }
-                }
-
-                //holder.mIdView.setText(mValues.get(position).id);
-                //holder.mContentView.setText(mValues.get(position).content);
-                /*if (serviceRequestList!= null){
-                    String carNumber = serviceRequestList.get(0).getCarnumber();
-                    transactionViewHolder.mCarNumber.setText(carNumber);
-                }else {
-                    transactionViewHolder.mCarNumber.setText("N/A");
-                }*/
                 mTransactionId = transaction.getTransactionId();
                 transactionViewHolder.mTransactionID.setText(mTransactionId);
 
@@ -97,8 +82,9 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
                 }else {
                     transactionViewHolder.mTransactionStatus.setText("N/A");
                 }
-                transactionViewHolder.mTotalAmount.setText(MSG_TOTAL_AMOUNT+totalAmount);
+                transactionViewHolder.mTotalAmount.setText(MSG_TOTAL_AMOUNT+transaction.getTotalAmount());
 
+                Log.e(TAG, "onBindViewHolder: mTransactionId = "+mTransactionId);
                 transactionViewHolder.mTransactionIdContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -113,18 +99,6 @@ public class MyOrderForServicesTransactionRecyclerViewAdapter extends RecyclerVi
                 emptyTransactionViewHolder.mEmptyText.setText(mContext.getString(R.string.empty_data));
                 break;
         }
-
-
-        /*holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
-        });*/
     }
 
     @Override

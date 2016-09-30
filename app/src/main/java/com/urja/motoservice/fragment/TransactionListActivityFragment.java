@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.urja.motoservice.R;
 import com.urja.motoservice.adapters.MyOrderForServicesTransactionRecyclerViewAdapter;
+import com.urja.motoservice.database.ServiceRequest;
 import com.urja.motoservice.fragment.dummy.DummyContent;
 import com.urja.motoservice.model.Transaction;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
@@ -86,15 +87,13 @@ public class TransactionListActivityFragment extends Fragment {
                     for (DataSnapshot dss:snapshot.getChildren()){
                         transaction = dss.getValue(Transaction.class);
                         transaction.setTransactionId(snapshot.getKey());
-                        String vehiclegroup = transaction.getServiceRequestList().get(i).getVehiclegroup();//Have kept Price in vehicle Group
-                        Log.e(TAG, "onDataChange: Amount = "+ vehiclegroup);
-                        if (vehiclegroup != null && vehiclegroup=="")
-                            totalAmount += Integer.valueOf(vehiclegroup);
-                        transaction.getServiceRequestList().get(i).setVehiclegroup(String.valueOf(totalAmount));
-                        i++;
+                        List<ServiceRequest> serviceRequestList = transaction.getServiceRequestList();
+                        for (ServiceRequest serviceRequest :transaction.getServiceRequestList()){
+                            totalAmount += Integer.valueOf(serviceRequest.getVehiclegroup());
+                        }
                     }
+                    transaction.setTotalAmount(String.valueOf(totalAmount));
                     mTransactionList.add(transaction);
-
                 }
                 if (mTransactionList.isEmpty()) {
                     recyclerView.setVisibility(View.GONE);
@@ -131,7 +130,6 @@ public class TransactionListActivityFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            Log.e(TAG, "onCreateView: mTransactionList.size() :"+mTransactionList.size() );
             adapter = new MyOrderForServicesTransactionRecyclerViewAdapter(mTransactionList, mListener, getActivity());
             recyclerView.setAdapter(adapter);
         }
