@@ -34,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.urja.motoservice.adapters.VehicleTypeAdapter;
 import com.urja.motoservice.database.CarServicePrice;
 import com.urja.motoservice.database.DbHelper;
@@ -57,25 +58,22 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class WelcomeDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TransactionListActivityFragment.OnListFragmentInteractionListener {
 
+    private static final String TAG = WelcomeDashboardActivity.class.getSimpleName();
+    private static final int PROFILE_SETTING = 100000;
+    private static String mName = "";
+    private static String mMobile;
+    private static String mCurrentUserId;
+    private final int IDENTIFIER_SIGNOUT = 101;
     private TextView mPersonName;
     private TextView mPersonEmail;
     private String mEmail;
-
-    private static final String TAG = WelcomeDashboardActivity.class.getSimpleName();
     private FirebaseAuth mAuth = null;
-    private static final int PROFILE_SETTING = 100000;
     private Toolbar mToolbar;
-    private final int IDENTIFIER_SIGNOUT = 101;
     private ProgressBar mProgressBar;
     private DatabaseReference mVehicleTypesRef;
     private DatabaseReference mCustomerDatabaseRef;
     private DatabaseReference transactionDataRef;
     private DatabaseReference mCarCareDetailingDatabaseRef;
-
-    private static String mName = "";
-    private static String mMobile;
-    private static String mCurrentUserId;
-
     private RecyclerView recyclerView;
     private VehicleTypeAdapter adapter;
     private List<Vehicle> mVehicleList;
@@ -150,6 +148,9 @@ public class WelcomeDashboardActivity extends AppCompatActivity
             carServicePriceList = new ArrayList<>();
             populateCarServicePriceTable(carServicePriceDao);
         }
+
+        /*Anytime We can Retrieve the Token*/
+        Toast.makeText(WelcomeDashboardActivity.this, "Token = " + FirebaseInstanceId.getInstance().getToken(), Toast.LENGTH_SHORT).show();
 
     }
 

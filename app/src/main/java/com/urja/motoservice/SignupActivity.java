@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.urja.motoservice.model.Customer;
 import com.urja.motoservice.model.CustomerAddress;
 import com.urja.motoservice.utils.AlertDialog;
@@ -34,6 +35,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+    FirebaseUser mCurrentUser;
     private EditText inputEmail, inputPassword, fullName, mobile;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private Customer mCustomer;
@@ -44,9 +47,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private DatabaseReference mdatabaseRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mCustomerRef = mdatabaseRootRef.child(DatabaseConstants.TABLE_CUSTOMER);// Add Name and Phone number to 'Customer' object
     private DatabaseReference mCustomerAddressRef = mdatabaseRootRef.child(DatabaseConstants.TABLE_CUSTOMER_ADDRESS);
-    private static final String TAG = MainActivity.class.getSimpleName();
     private ProgressDialog mProgressDialog;
-    FirebaseUser mCurrentUser;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -160,7 +161,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             mProgressDialog.dismiss();
                             //startActivity(new Intent(SignupActivity.this, MainActivity.class));
                             startActivity(new Intent(SignupActivity.this, WelcomeDashboardActivity.class));
-                            finish();
+                            finishAffinity();//Close other Activities, Issue : Login Screen is visible if we go back from WelcomeDashboardActivity
                         }
                     }
                 });
@@ -179,6 +180,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         mCustomer = new Customer();
         mCustomer.setName(fullName);
         mCustomer.setMobile("");
+        mCustomer.setRegToken(FirebaseInstanceId.getInstance().getToken());//Keep the token So that From Admin We can Send Message.
 
         mCustomerAddress = new CustomerAddress();
         mCustomerAddress.setAddress("");

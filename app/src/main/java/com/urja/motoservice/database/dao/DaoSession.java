@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.urja.motoservice.database.CarServicePrice;
 import com.urja.motoservice.database.ServiceRequest;
+import com.urja.motoservice.database.UserTransactionAddress;
 import com.urja.motoservice.database.ValidVehicle;
 
 import java.util.Map;
@@ -34,6 +35,10 @@ public class DaoSession extends AbstractDaoSession {
 
     private final ValidVehicleDao validVehicleDao;
 
+    private final DaoConfig userTransactionAddressDaoConfig;
+
+    private final UserTransactionAddressDao userTransactionAddressDao;
+
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
@@ -61,12 +66,21 @@ public class DaoSession extends AbstractDaoSession {
         validVehicleDao = new ValidVehicleDao(validVehicleDaoConfig, this);
 
         registerDao(ValidVehicle.class, validVehicleDao);
+
+        /*-------------UserTransactionAddress-----------*/
+        userTransactionAddressDaoConfig = daoConfigMap.get(UserTransactionAddressDao.class).clone();
+        userTransactionAddressDaoConfig.initIdentityScope(type);
+
+        userTransactionAddressDao = new UserTransactionAddressDao(userTransactionAddressDaoConfig, this);
+
+        registerDao(UserTransactionAddress.class, userTransactionAddressDao);
     }
 
     public void clear() {
         serviceRequestDaoConfig.getIdentityScope().clear();
         carServicePriceDaoConfig.getIdentityScope().clear();
         validVehicleDaoConfig.getIdentityScope().clear();
+        userTransactionAddressDaoConfig.getIdentityScope().clear();
     }
 
     public ServiceRequestDao getServiceRequestDao() {
@@ -79,6 +93,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public ValidVehicleDao getValidVehicleDao() {
         return validVehicleDao;
+    }
+
+    public UserTransactionAddressDao getUserTransactionAddressDao() {
+        return userTransactionAddressDao;
     }
 
 }

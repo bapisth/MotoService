@@ -7,6 +7,7 @@ import com.urja.motoservice.database.dao.CarServicePriceDao;
 import com.urja.motoservice.database.dao.DaoMaster;
 import com.urja.motoservice.database.dao.DaoSession;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
+import com.urja.motoservice.database.dao.UserTransactionAddressDao;
 import com.urja.motoservice.database.dao.ValidVehicleDao;
 
 /**
@@ -15,14 +16,15 @@ import com.urja.motoservice.database.dao.ValidVehicleDao;
 
 public class DbHelper {
     public static DbHelper instance;
-    private DaoMaster daoMaster;
-    private DaoSession daoSession;
-    private SQLiteDatabase db;
-    private DaoMaster.DevOpenHelper helper;
 
     static {
         instance = null;
     }
+
+    private DaoMaster daoMaster;
+    private DaoSession daoSession;
+    private SQLiteDatabase db;
+    private DaoMaster.DevOpenHelper helper;
 
     public DbHelper(Context context) {
         this.helper = null;
@@ -56,5 +58,9 @@ public class DbHelper {
 
     public ValidVehicleDao  getValidVehicleDao(){
         return this.daoSession.getValidVehicleDao();
+    }
+
+    public UserTransactionAddressDao getUserTransactionAddressDao() {
+        return this.daoSession.getUserTransactionAddressDao();
     }
 }

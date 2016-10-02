@@ -172,4 +172,8 @@
 
     <string name="keyboard_signin">Sign In</string>
     <string name="keyboard_signup">Sign Up</string>
+
+    <string name="choose_previous_address">Choose Previously used Address</string>
+
+
 </resources>

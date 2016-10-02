@@ -6,6 +6,16 @@ package com.urja.motoservice.model;
 public class Customer {
     private String name;
     private String mobile;
+    private String regToken;
+
+    public Customer() {
+    }
+
+    public Customer(String name, String mobile, String regToken) {
+        this.name = name;
+        this.mobile = mobile;
+        this.regToken = regToken;
+    }
 
     public String getName() {
         return name;
@@ -21,5 +31,13 @@ public class Customer {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getRegToken() {
+        return regToken;
+    }
+
+    public void setRegToken(String regToken) {
+        this.regToken = regToken;
     }
 }

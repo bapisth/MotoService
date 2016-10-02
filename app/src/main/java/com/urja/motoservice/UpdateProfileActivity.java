@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.urja.motoservice.model.Customer;
 import com.urja.motoservice.model.CustomerAddress;
 import com.urja.motoservice.utils.CurrentLoggedInUser;
@@ -30,21 +31,18 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class UpdateProfileActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = UpdateProfileActivity.class.getSimpleName();
-
+    String currentUserId = "";
+    boolean updatedCustomerToServer = false;
+    boolean updatedCustomerAddressToServer = false;
     private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mCustomerRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CUSTOMER);
     private DatabaseReference mCustomerAddressRef = mDatabaseRootRef.child(DatabaseConstants.TABLE_CUSTOMER_ADDRESS);
-
     private EditText mName, mMobile, mAddress, mStreet, mPinCode;
     private Button mButton;
     private Customer mCustomer;
     private CustomerAddress mCustomerAddress;
     private Query customerAddressQuery;
     private Query customerQuery;
-    String currentUserId="";
-
-    boolean updatedCustomerToServer = false;
-    boolean updatedCustomerAddressToServer = false;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -126,6 +124,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         String updateMobile = mMobile.getText().toString();
         mCustomer.setName(updateName);
         mCustomer.setMobile(updateMobile);
+        mCustomer.setRegToken(FirebaseInstanceId.getInstance().getToken());
 
         mCustomerAddress = new CustomerAddress();
         String updateAddress = mAddress.getText().toString();

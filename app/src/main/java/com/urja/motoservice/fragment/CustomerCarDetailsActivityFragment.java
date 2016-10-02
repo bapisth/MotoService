@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +32,9 @@ import com.urja.motoservice.R;
 import com.urja.motoservice.TransactionListActivity;
 import com.urja.motoservice.database.DbHelper;
 import com.urja.motoservice.database.ServiceRequest;
+import com.urja.motoservice.database.UserTransactionAddress;
 import com.urja.motoservice.database.dao.ServiceRequestDao;
+import com.urja.motoservice.database.dao.UserTransactionAddressDao;
 import com.urja.motoservice.model.AdminNotification;
 import com.urja.motoservice.model.CustomerTransactionAddress;
 import com.urja.motoservice.model.OrderForServicesTransaction;
@@ -51,9 +55,15 @@ import java.util.Map;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class CustomerCarDetailsActivityFragment extends Fragment {
+public class CustomerCarDetailsActivityFragment extends Fragment implements AddressDialogFragment.UserAddressDialogListener {
 
     private static final String TAG = CustomerCarDetailsActivityFragment.class.getSimpleName();
+    private static final String IMMEDIATE = "immediate";
+    private static final String CASH_ON_DELIVERY = "cashOnDelivery";
+    private static String PREVIOUS_KEY = "";
+    DateFormat df = null;
+    Date today = null;
+    String transactionDate = "";
     private Button mConfirm;
     private EditText mCustomerAddressline1;
     private EditText mCustomerAaddressline2;
@@ -76,19 +86,11 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     private String carNumber;
     private ServiceRequest carServiceRequest;
     private String customerName = "";
-
-    private static final String IMMEDIATE = "immediate";
-    private static final String CASH_ON_DELIVERY = "cashOnDelivery";
     private DatabaseReference mTransactionRef = FirebaseRootReference.get_instance().getmTransactionDatabaseRef();
     private DatabaseReference mAdminNotificationRef = null;
     private DatabaseReference mCustomerRef = null;
-    private static String PREVIOUS_KEY = "";
-
-    DateFormat df = null;
-    Date today = null;
-    String transactionDate = "";
-
     private ServiceRequestDao serviceRequestDao = null;
+    private UserTransactionAddressDao userTransactionAddressDao = null;
     private List<ServiceRequest> serviceRequestList = null;
     private int TOTAL_AMOUNT = 0;
 
@@ -100,12 +102,27 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         serviceRequestDao = DbHelper.getInstance(getActivity()).getServiceRequestDao();
+        userTransactionAddressDao = DbHelper.getInstance(getActivity()).getUserTransactionAddressDao();
         serviceRequestList = serviceRequestDao.loadAll();
-        for (ServiceRequest serviceRequest : serviceRequestList){
+        for (ServiceRequest serviceRequest : serviceRequestList) {
             int val = Integer.valueOf(serviceRequest.getVehiclegroup());
-            TOTAL_AMOUNT +=val;
+            TOTAL_AMOUNT += val;
         }
+
+        long count = userTransactionAddressDao.count();
+        if (count > 0)
+            showAddressDialog(getActivity());
     }
+
+    private void showAddressDialog(FragmentActivity activity) {
+        DialogFragment addressDialogFragment = AddressDialogFragment.newInstance(getString(R.string.choose_previous_address));
+        FragmentManager fragmentManager = getFragmentManager();
+
+        /*SETS the target fragment for use later when sending results*/
+        addressDialogFragment.setTargetFragment(CustomerCarDetailsActivityFragment.this, 300);
+        addressDialogFragment.show(fragmentManager, "fragment_user_address");
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -131,7 +148,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
         mCustomerMobileNumber = (EditText) view.findViewById(R.id.customer_mobile_number);
         mTotalAmount = (TextView) view.findViewById(R.id.total_amount);
 
-        mTotalAmount.setText("Rs. "+TOTAL_AMOUNT);
+        mTotalAmount.setText("Rs. " + TOTAL_AMOUNT);
         //mPaymentTypeGroup = (RadioGroup) view.findViewById(R.id.payment_type_group);
 
         //Listner for the Confirm Button
@@ -144,10 +161,25 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
                     mCustomerTransactionAddress.setAddressLine2(mCustomerAaddressline2.getText().toString());
                     mCustomerTransactionAddress.setLandmark(mCustomerLandmark.getText().toString());
                     mCustomerTransactionAddress.setCity(mCustomerCity.getText().toString());
-                    mCustomerTransactionAddress.setState(mCustomerCity.getText().toString());
+                    mCustomerTransactionAddress.setState(mCustomerState.getText().toString());
                     mCustomerTransactionAddress.setPin(mCustomerPin.getText().toString());
                     mCustomerTransactionAddress.setCarNumber(mCustomerCarNumber.getText().toString());
                     mCustomerTransactionAddress.setMobileNumber(mCustomerMobileNumber.getText().toString());
+
+                    /*Add to the database*/
+                    UserTransactionAddress transactionAddress = new UserTransactionAddress();
+                    transactionAddress.setAddressLine1(mCustomerAddressline1.getText().toString());
+                    transactionAddress.setAddressLine2(mCustomerAaddressline2.getText().toString());
+                    transactionAddress.setLandmark(mCustomerLandmark.getText().toString());
+                    transactionAddress.setCity(mCustomerCity.getText().toString());
+                    transactionAddress.setState(mCustomerState.getText().toString());
+                    transactionAddress.setPin(mCustomerPin.getText().toString());
+                    transactionAddress.setCarNumber(mCustomerCarNumber.getText().toString());
+                    transactionAddress.setMobileNumber(mCustomerMobileNumber.getText().toString());
+
+                    userTransactionAddressDao.deleteAll();
+                    userTransactionAddressDao.insertOrReplace(transactionAddress);
+
                     addTransactionToServer(getActivity());
                 } else
                     Toast.makeText(getActivity(), "Fields Cannont be Blank!", Toast.LENGTH_SHORT).show();
@@ -159,8 +191,9 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     private void listenCustomerTransactionEvent(final String mCurrentUserId, final String carNumber) {
         mTransactionRef = FirebaseRootReference.get_instance().getmTransactionDatabaseRef();
         //limitToLast(countNumberOfCar) : That is fetch last number of car added records
-        mTransactionRef.child(mCurrentUserId).child(carNumber).limitToLast(1).addChildEventListener(new ChildEventListener() {
+        mTransactionRef.child(mCurrentUserId).limitToLast(1).addChildEventListener(new ChildEventListener() {
             int counter = 0;
+
             @Override
             public void onChildAdded(DataSnapshot transactionDataSnapshot, String s) {
                 counter++;
@@ -172,21 +205,18 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
                 mCustomerRef.child(mCurrentUserId).child(AppConstants.TableColumns.CustomerTable.NAME).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot customerDataSnapshot) {
-                        if (!(PREVIOUS_KEY.equalsIgnoreCase(transactionId))){
-                            PREVIOUS_KEY = transactionId;
-                            mAdminNotificationRef = FirebaseRootReference.get_instance().getmAdminNotificationRef();
-                            customerName = customerDataSnapshot.getValue(String.class);
-                            AdminNotification adminNotification = new AdminNotification();
-                            adminNotification.setUnread(true);
-                            adminNotification.setTransactionId(transactionId);
-                            adminNotification.setCustomerId(mCurrentUserId);
-                            adminNotification.setCustomerName(customerName);
-                            adminNotification.setCustomerVehicleNumber(carNumber);
-                            adminNotification.setRootRef(rootRefpath);
-                            adminNotification.setTransactionRef(transactionRefpath);
-                            mAdminNotificationRef.push().setValue(adminNotification);
-                        }
-
+                        PREVIOUS_KEY = transactionId;
+                        mAdminNotificationRef = FirebaseRootReference.get_instance().getmAdminNotificationRef();
+                        customerName = customerDataSnapshot.getValue(String.class);
+                        AdminNotification adminNotification = new AdminNotification();
+                        adminNotification.setUnread(true);
+                        adminNotification.setTransactionId(transactionId);
+                        adminNotification.setCustomerId(mCurrentUserId);
+                        adminNotification.setCustomerName(customerName);
+                        adminNotification.setCustomerVehicleNumber(carNumber);
+                        adminNotification.setRootRef(rootRefpath);
+                        adminNotification.setTransactionRef(transactionRefpath);
+                        mAdminNotificationRef.push().setValue(adminNotification);
                     }
 
                     @Override
@@ -198,7 +228,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    //Do Nothing
+                //Do Nothing
             }
 
             @Override
@@ -255,9 +285,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
     }
 
     private boolean checkPaymentType() {
-        if (mPaymentOptionChecked == null || mPaymentOptionChecked == "")
-            return false;
-        return true;
+        return !(mPaymentOptionChecked == null || mPaymentOptionChecked == "");
     }
 
     private boolean checkEditText(EditText et) {
@@ -378,5 +406,17 @@ public class CustomerCarDetailsActivityFragment extends Fragment {
 
     }
 
+    @Override
+    public void onOkPopulateAddress(boolean populate) {
+        UserTransactionAddress userTransactionAddress = userTransactionAddressDao.queryBuilder().unique();
+        mCustomerAddressline1.setText(userTransactionAddress.getAddressLine1());
+        mCustomerAaddressline2.setText(userTransactionAddress.getAddressLine2());
+        mCustomerLandmark.setText(userTransactionAddress.getLandmark());
+        mCustomerCity.setText(userTransactionAddress.getCity());
+        mCustomerState.setText(userTransactionAddress.getState());
+        mCustomerPin.setText(userTransactionAddress.getPin());
+        mCustomerCarNumber.setText(userTransactionAddress.getCarNumber());
+        mCustomerMobileNumber.setText(userTransactionAddress.getMobileNumber());
 
+    }
 }
