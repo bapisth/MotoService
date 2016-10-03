@@ -15,14 +15,21 @@ public interface AppConstants {
     String CHAR_SPLITER = "#||@@@||#";
     String CAR_CARE_DETAILING = "CarCareDetailing";
 
-    public interface TableColumns{
-        public interface CustomerTable{//Make sure all the name is same as of the Models name
+    String CAR_TYPE_NAME = "CarTypeName";
+    String TRANSACTIOIN_ID = "transaction_id";
+    String STATUS_OPEN = "open";
+    String STATUS_PROGRESS = "progress";
+    String STATUS_CLOSED = "progress";
+    String CAR_SMALL = "s";
+    String CAR_MEDIUM = "m";
+    String CAR_LARGE = "l";
+
+    interface TableColumns {
+        interface CustomerTable {//Make sure all the name is same as of the Models name
             String NAME = "name";
             String MOBILE = "mobile";
         }
     }
-
-    String TRANSACTIOIN_ID = "transaction_id";
 
     interface Transaction{
         String COLUMN_CARPICKADDRESS = "CarPickAddress";
@@ -32,14 +39,12 @@ public interface AppConstants {
         String COLUMN_REQUEST_STATUS= "requestStatus";
 
     }
-
     interface AdminNotification{
         String isUnread = "isUnread";
         String customerName = "customerName";
         String customerTransactionId = "customerTransactionId";
         String customerId = "customerId";
     }
-
     interface ValidVehicle{
         String CAR_TYPE_SMALL = "small";
         String CAR_TYPE_MEDIUM = "medium";
@@ -47,13 +52,5 @@ public interface AppConstants {
         String VALID_VEHICLE_DESC = "desc";
         String VALID_VEHICLE_SIZE = "size";
     }
-
-    String STATUS_OPEN = "open";
-    String STATUS_PROGRESS = "progress";
-    String STATUS_CLOSED = "progress";
-
-    String CAR_SMALL = "s";
-    String CAR_MEDIUM = "m";
-    String CAR_LARGE = "l";
 
 }

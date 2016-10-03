@@ -23,18 +23,18 @@ import java.util.List;
  */
 public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG = CarServiceRecyclerViewAdapter.class.getSimpleName();
-
-    List<CarServicePrice> contents;
-
     static final int TYPE_HEADER = 0;
     static final int TYPE_CELL = 1;
-    private Context mContext;
+    private static final String TAG = CarServiceRecyclerViewAdapter.class.getSimpleName();
     private final String CAR_TYPE;
+    private final String CAR_TYPE_NAME;
     private final String RUPEES = "Rs. ";
+    List<CarServicePrice> contents;
+    private Context mContext;
 
-    public CarServiceRecyclerViewAdapter(List<CarServicePrice> contents, Context context, String carType) {
+    public CarServiceRecyclerViewAdapter(List<CarServicePrice> contents, Context context, String carType, String carTypeName) {
         this.CAR_TYPE = carType;
+        this.CAR_TYPE_NAME = carTypeName;
         this.contents = contents;
         this.mContext = context;
         for(CarServicePrice servicePrice : contents)
@@ -81,8 +81,13 @@ public class CarServiceRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case TYPE_HEADER:
+                final CarServicePrice servicePriceHead = contents.get(position);
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
-                headerViewHolder.mlargeDesc.setText(mContext.getString(R.string.tab_wash_desc));
+
+
+                String text = String.format(mContext.getString(R.string.tab_car_service_detail), CAR_TYPE_NAME);
+                headerViewHolder.mlargeDesc.setText(text);
+
                 headerViewHolder.mlargeDesc.setMovementMethod(new ScrollingMovementMethod());
                 break;
             case TYPE_CELL:

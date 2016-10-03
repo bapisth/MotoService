@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.InputFilter;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,17 +19,10 @@ import com.urja.motoservice.WelcomeDashboardActivity;
 
 public class Ask4CarNumberDialogFragment extends DialogFragment implements View.OnClickListener {
     private static final String TAG = Ask4CarNumberDialogFragment.class.getSimpleName();
-
-
-    public interface Ask4CarNumberDialogListener {
-        void onSubmit(String carNumber, String carType);
-    }
-
     private Ask4CarNumberDialogListener mListener;
     private EditText mCarNumber;
     private Button mOkButton;
     private Button mCancelButton;
-
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.car_number_fragment_layout, null);
@@ -37,6 +31,7 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
         window.setTitleColor(getResources().getColor(R.color.colorAccent));
 
         mCarNumber = (EditText) view.findViewById(R.id.car_number);
+        mCarNumber.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
         mOkButton = (Button) view.findViewById(R.id.ok_button);
         mCancelButton = (Button) view.findViewById(R.id.cancel_button);
 
@@ -45,7 +40,6 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
 
         return view;
     }
-
 
     @Override
     public void onResume() {
@@ -101,6 +95,10 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
                 break;
         }
 
+    }
+
+    public interface Ask4CarNumberDialogListener {
+        void onSubmit(String carNumber, String carType);
     }
 
 

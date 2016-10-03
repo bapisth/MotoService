@@ -72,9 +72,29 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
     private com.github.clans.fab.FloatingActionButton mNext;
     private List<FloatingActionMenu> menus = new ArrayList<>();
     private String mVehicleGroupId;
+    private String mCarTypeName;
     private String mCarNumber = null;
     private String mCarType = null;
     private boolean backFromModifyService = false;
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.add_more:
+                    //Save the Older data if has some before goinh back
+                    ServiceRequestDao serviceRequestDao = removeDuplicateService();
+                    serviceRequestDao.insertOrReplaceInTx(mServiceRequestList);
+                    Intent intent = new Intent(ChooseServiceActivity.this, WelcomeDashboardActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);
+                    finish();
+                    break;
+                case R.id.next:
+                    goToServiceCheckList();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -104,6 +124,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
         Intent intent = getIntent();
         Log.d(TAG, "onCreate: " + intent.getStringExtra(AppConstants.CAR_ID));
         mVehicleGroupId = intent.getStringExtra(AppConstants.CAR_ID);
+        mCarTypeName = intent.getStringExtra(AppConstants.CAR_TYPE_NAME);
         //mVehicleGroupId = intent.getLongExtra(AppConstants.CAR_ID, -1);
 
         mViewPager = (MaterialViewPager) findViewById(R.id.materialViewPager);
@@ -127,7 +148,7 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
                 Log.e(TAG, "getItem: position=" + position);
                 switch (position % 1) {
                     case 0:
-                        fragment = CarCareDetailingFragment.newInstance(mVehicleGroupId);
+                        fragment = CarCareDetailingFragment.newInstance(mVehicleGroupId, mCarTypeName);
                         break;
                     case 1:
                         fragment = ServiceRepairFragment.newInstance();
@@ -320,26 +341,6 @@ public class ChooseServiceActivity extends AppCompatActivity implements Ask4CarN
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
-
-    private View.OnClickListener clickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.add_more:
-                    //Save the Older data if has some before goinh back
-                    ServiceRequestDao serviceRequestDao = removeDuplicateService();
-                    serviceRequestDao.insertOrReplaceInTx(mServiceRequestList);
-                    Intent intent = new Intent(ChooseServiceActivity.this, WelcomeDashboardActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivity(intent);
-                    finish();
-                    break;
-                case R.id.next:
-                    goToServiceCheckList();
-                    break;
-            }
-        }
-    };
 
     @Override
     public void onSubmit(String carNumber, String carType) {

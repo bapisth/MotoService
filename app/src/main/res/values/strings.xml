@@ -127,12 +127,7 @@
     <string name="title_activity_choose_service">Choose Service</string>
     <string name="tab_accessories">Accessories</string>
 
-    <string name="tab_wash_desc">
-        "Interiro Vaccum Cleaning, Exterior Foam Wash, "
-        "Upholstery Wet Wiping, Beading Polish, MATS Cleaning, "
-        "Dash Board Dressing, Tyre Dressing, Floor Cleaning, Boot Cleaning, "
-        "Cleaning and Polish of Interior plastic parts, Glass Cleaning and Wash"
-    </string>
+    <string name="tab_car_service_detail">Service list and prices for %1$s cars are listed below.</string>
     <string name="title_activity_confirm_request">Confirm Request</string>
     <string name="title_activity_customer_car_details">Enter Details</string>
     <string name="message_network_not_available">

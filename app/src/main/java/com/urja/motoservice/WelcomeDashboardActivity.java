@@ -34,7 +34,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.urja.motoservice.adapters.VehicleTypeAdapter;
 import com.urja.motoservice.database.CarServicePrice;
 import com.urja.motoservice.database.DbHelper;
@@ -129,6 +128,29 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         recyclerView = (RecyclerView) findViewById(R.id.vehicle_recycler_view);
         mVehicleList = new ArrayList<>();
         adapter = new VehicleTypeAdapter(this, mVehicleList);
+        adapter.setOnCardClickListner(new VehicleTypeAdapter.OnCardClickListner() {
+            @Override
+            public void OnCardClicked(Vehicle vehicle, int position) {
+                Log.e(TAG, "OnCardClicked: CarType = " + vehicle.getCarType());
+                String carSize = "";
+                String code = Long.toString(vehicle.getCode());
+                switch (code) {
+                    case "1":
+                        carSize = AppConstants.ValidVehicle.CAR_TYPE_SMALL;
+                        break;
+                    case "2":
+                        carSize = AppConstants.ValidVehicle.CAR_TYPE_MEDIUM;
+                        break;
+                    case "3":
+                        carSize = AppConstants.ValidVehicle.CAR_TYPE_LARGE;
+                        break;
+                }
+                Intent intent = new Intent(WelcomeDashboardActivity.this, ChooseServiceActivity.class);
+                intent.putExtra(AppConstants.CAR_ID, carSize);
+                intent.putExtra(AppConstants.CAR_TYPE_NAME, vehicle.getCarType());
+                startActivity(intent);
+            }
+        });
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -150,7 +172,7 @@ public class WelcomeDashboardActivity extends AppCompatActivity
         }
 
         /*Anytime We can Retrieve the Token*/
-        Toast.makeText(WelcomeDashboardActivity.this, "Token = " + FirebaseInstanceId.getInstance().getToken(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(WelcomeDashboardActivity.this, "Token = " + FirebaseInstanceId.getInstance().getToken(), Toast.LENGTH_SHORT).show();
 
     }
 

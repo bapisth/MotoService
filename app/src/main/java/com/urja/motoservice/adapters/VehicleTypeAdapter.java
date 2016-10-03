@@ -36,6 +36,7 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
 
     private static final String TAG = VehicleTypeAdapter.class.getSimpleName();
     String carSize = "";
+    OnCardClickListner onCardClickListner;
     private Context mContext;
     private List<Vehicle> mVehicleList;
     private LayoutInflater mLayoutInflater;
@@ -62,7 +63,7 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        Vehicle vehicle = mVehicleList.get(position);
+        final Vehicle vehicle = mVehicleList.get(position);
         holder.title.setText(vehicle.getCarType());
         code = Long.toString(vehicle.getCode());
         switch (code){
@@ -78,10 +79,7 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, ChooseServiceActivity.class);
-                //intent.putExtra(AppConstants.CAR_ID, mServiceID);
-                intent.putExtra(AppConstants.CAR_ID, carSize);
-                mContext.startActivity(intent);
+                onCardClickListner.OnCardClicked(vehicle, position);
             }
         });
     }
@@ -175,6 +173,14 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
     @Override
     public int getItemCount() {
         return mVehicleList.size();
+    }
+
+    public void setOnCardClickListner(OnCardClickListner onCardClickListner) {
+        this.onCardClickListner = onCardClickListner;
+    }
+
+    public interface OnCardClickListner {
+        void OnCardClicked(Vehicle vehicle, int position);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
