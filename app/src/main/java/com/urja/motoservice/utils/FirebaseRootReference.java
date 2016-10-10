@@ -15,6 +15,7 @@ public class FirebaseRootReference {
     private DatabaseReference mVehicleTypesRef;
     private DatabaseReference mAdminNotificationRef;
     private DatabaseReference mCarCareDetailingRef;
+    private DatabaseReference mTransactionIdRef;
 
 
 
@@ -35,6 +36,7 @@ public class FirebaseRootReference {
                     _instance.setmVehicleTypesRef(rootRef.child(DatabaseConstants.TABLE_VEHICLE + "/" + DatabaseConstants.TABLE_VEHICLE_TYPE));
                     _instance.setmAdminNotificationRef(rootRef.child(DatabaseConstants.TABLE_ADMIN_NOTIFICATION));
                     _instance.setmCarCareDetailingRef(rootRef.child(DatabaseConstants.TABLE_CAR_SERVICE+"/"+DatabaseConstants.CAR_CARE_DETAILING));
+                    _instance.setmTransactionIdRef(rootRef.child(DatabaseConstants.TABLE_TRANSACTION_ID_REF));
                 }
             }
         }
@@ -103,5 +105,13 @@ public class FirebaseRootReference {
 
     public void setmCarCareDetailingRef(DatabaseReference mCarCareDetailingRef) {
         this.mCarCareDetailingRef = mCarCareDetailingRef;
+    }
+
+    public DatabaseReference getmTransactionIdRef() {
+        return mTransactionIdRef;
+    }
+
+    public void setmTransactionIdRef(DatabaseReference mTransactionIdRef) {
+        this.mTransactionIdRef = mTransactionIdRef;
     }
 }
