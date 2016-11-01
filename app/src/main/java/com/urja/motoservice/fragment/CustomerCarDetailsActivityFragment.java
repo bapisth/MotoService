@@ -202,7 +202,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment implements Addr
                 final String transactionRefpath = transactionDataSnapshot.getRef().toString();
                 mCustomerRef = FirebaseRootReference.get_instance().getmCustomerDatabaseRef();
 
-                mCustomerRef.child(mCurrentUserId).child(AppConstants.TableColumns.CustomerTable.NAME).addListenerForSingleValueEvent(new ValueEventListener() {
+                mCustomerRef.child(mCurrentUserId).child(AppConstants.TableColumns.CustomerTable.NAME).limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot customerDataSnapshot) {
                         PREVIOUS_KEY = transactionId;
