@@ -23,6 +23,8 @@ import com.urja.motoservice.utils.CurrentLoggedInUser;
 import com.urja.motoservice.utils.FirebaseRootReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -41,6 +43,8 @@ public class TransactionListActivityFragment extends Fragment {
     private MyOrderForServicesTransactionRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
     private TextView emptyView;
+    private static final String REQUEST_STATUS = "requestStatus";
+    private static final String OPEN = "open";
 
 
     /**
@@ -74,7 +78,7 @@ public class TransactionListActivityFragment extends Fragment {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
 
-        firebaseRootReference.getmTransactionDatabaseRef().child(currentLoggedInUser).addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseRootReference.getmTransactionDatabaseRef().child(currentLoggedInUser).orderByChild(REQUEST_STATUS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
@@ -101,6 +105,13 @@ public class TransactionListActivityFragment extends Fragment {
                     recyclerView.setVisibility(View.VISIBLE);
                     emptyView.setVisibility(View.GONE);
                 }
+                /*Collections.sort(mTransactionList, new Comparator<Transaction>() {
+                    @Override
+                    public int compare(Transaction t1, Transaction t2) {
+                        return t1.getRequestStatus().compareTo(t2.getRequestStatus());
+                    }
+                });*/
+                Collections.sort(mTransactionList);
                 progressDialog.dismiss();
                 adapter.notifyDataSetChanged();
             }

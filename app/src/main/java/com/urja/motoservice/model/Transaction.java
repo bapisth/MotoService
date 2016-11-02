@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by BAPI1 on 9/18/2016.
  */
-public class Transaction {
+public class Transaction implements Comparable<Transaction> {
     private CarPickAddress CarPickAddress;
     private String requestStatus;
     private String serviceRequestDate;
@@ -73,5 +73,10 @@ public class Transaction {
 
     public void setTotalAmount(String totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    @Override
+    public int compareTo(Transaction transaction) {
+        return transaction.getRequestStatus().compareTo(requestStatus);
     }
 }

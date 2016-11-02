@@ -166,10 +166,13 @@ public class WelcomeDashboardActivity extends AppCompatActivity
 
         //initialize carprice table
         carServicePriceDao = DbHelper.getInstance(WelcomeDashboardActivity.this).getCarServicePriceDao();
-        if (carServicePriceDao.loadAll().size()<1){
+        /*if (carServicePriceDao.loadAll().size()<1){
             carServicePriceList = new ArrayList<>();
             populateCarServicePriceTable(carServicePriceDao);
-        }
+        }*/
+        carServicePriceList = new ArrayList<>();
+        carServicePriceDao.deleteAll();
+        populateCarServicePriceTable(carServicePriceDao);
 
         /*Anytime We can Retrieve the Token*/
         //Toast.makeText(WelcomeDashboardActivity.this, "Token = " + FirebaseInstanceId.getInstance().getToken(), Toast.LENGTH_SHORT).show();
@@ -181,7 +184,6 @@ public class WelcomeDashboardActivity extends AppCompatActivity
      * @param carServicePriceDao
      */
     private void populateCarServicePriceTable(final CarServicePriceDao carServicePriceDao) {
-        Log.e(TAG, "populateCarServicePriceTable: " );
         mCarCareDetailingDatabaseRef = FirebaseRootReference.get_instance().getmCarCareDetailingRef();
         mCarCareDetailingDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             CarServicePrice carServicePrice = null;

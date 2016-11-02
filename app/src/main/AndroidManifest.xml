@@ -32,7 +32,6 @@
         <activity
             android:name=".VehicleServiceListActivity"
             android:label="VehicleServiceListActivity"
-            android:parentActivityName=".DashboardDataActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ChooseServiceActivity"

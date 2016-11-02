@@ -4,7 +4,7 @@ package com.urja.motoservice.model;
  * Created by BAPI1 on 8/16/2016.
  */
 
-public class Vehicle {
+public class Vehicle implements Comparable<Vehicle> {
     private Long code;
     private String downloadPath;
     private String path;
@@ -50,5 +50,13 @@ public class Vehicle {
 
     public void setCarType(String carType) {
         this.carType = carType;
+    }
+
+    @Override
+    public int compareTo(Vehicle vehicle) {
+        if (carType.equalsIgnoreCase(vehicle.getCarType()))
+            return 0;
+        else
+            return 1;
     }
 }

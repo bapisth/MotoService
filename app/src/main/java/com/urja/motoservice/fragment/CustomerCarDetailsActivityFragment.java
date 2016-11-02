@@ -112,6 +112,66 @@ public class CustomerCarDetailsActivityFragment extends Fragment implements Addr
         long count = userTransactionAddressDao.count();
         if (count > 0)
             showAddressDialog(getActivity());
+
+        mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mTransactionRef = FirebaseRootReference.get_instance().getmTransactionDatabaseRef();
+        mTransactionRef.child(mCurrentUserId).limitToLast(1).addChildEventListener(new ChildEventListener() {
+            int counter = 0;
+
+            @Override
+            public void onChildAdded(DataSnapshot transactionDataSnapshot, String s) {
+                counter++;
+                final String transactionId = transactionDataSnapshot.getKey();
+                final String rootRefpath = transactionDataSnapshot.getRef().getRoot().toString();
+                final String transactionRefpath = transactionDataSnapshot.getRef().toString();
+                mCustomerRef = FirebaseRootReference.get_instance().getmCustomerDatabaseRef();
+
+                mCustomerRef.child(mCurrentUserId).child(AppConstants.TableColumns.CustomerTable.NAME).limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot customerDataSnapshot) {
+                        if (!(PREVIOUS_KEY.equalsIgnoreCase(transactionId))){
+                            PREVIOUS_KEY = transactionId;
+                            mAdminNotificationRef = FirebaseRootReference.get_instance().getmAdminNotificationRef();
+                            customerName = customerDataSnapshot.getValue(String.class);
+                            AdminNotification adminNotification = new AdminNotification();
+                            adminNotification.setUnread(true);
+                            adminNotification.setTransactionId(transactionId);
+                            adminNotification.setCustomerId(mCurrentUserId);
+                            adminNotification.setCustomerName(customerName);
+                            adminNotification.setCustomerVehicleNumber(carNumber);
+                            adminNotification.setRootRef(rootRefpath);
+                            adminNotification.setTransactionRef(transactionRefpath);
+                            mAdminNotificationRef.push().setValue(adminNotification);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                //Do Nothing
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void showAddressDialog(FragmentActivity activity) {
@@ -188,7 +248,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment implements Addr
 
     }
 
-    private void listenCustomerTransactionEvent(final String mCurrentUserId, final String carNumber) {
+    /*private void listenCustomerTransactionEvent(final String mCurrentUserId, final String carNumber) {
         mTransactionRef = FirebaseRootReference.get_instance().getmTransactionDatabaseRef();
         //limitToLast(countNumberOfCar) : That is fetch last number of car added records
         mTransactionRef.child(mCurrentUserId).limitToLast(1).addChildEventListener(new ChildEventListener() {
@@ -246,7 +306,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment implements Addr
 
             }
         });
-    }
+    }*/
 
     private boolean isFormValid() {
         //check AddressLine1
@@ -386,7 +446,7 @@ public class CustomerCarDetailsActivityFragment extends Fragment implements Addr
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             carAddedToServerCounter += 1;
-                            listenCustomerTransactionEvent(mCurrentUserId, carNumber); // Add data to Notification Object
+                            //listenCustomerTransactionEvent(mCurrentUserId, carNumber); // Add data to Notification Object
                             if (carAddedToServerCounter == countNumberOfCar) {
                                 mServiceRequestDao.deleteAll();
                                 progressDialog.dismiss();

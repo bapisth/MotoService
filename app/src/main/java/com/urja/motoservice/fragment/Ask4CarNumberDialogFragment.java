@@ -17,6 +17,9 @@ import android.widget.EditText;
 import com.urja.motoservice.R;
 import com.urja.motoservice.WelcomeDashboardActivity;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Ask4CarNumberDialogFragment extends DialogFragment implements View.OnClickListener {
     private static final String TAG = Ask4CarNumberDialogFragment.class.getSimpleName();
     private Ask4CarNumberDialogListener mListener;
@@ -84,9 +87,14 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
                 if ((mCarNumber.getText().toString().length() < 1 || mCarNumber.getText().toString().equals(""))) {
                     mCarNumber.setError("Required!!");
                     return;
-                }else {
+                }else if (isValidCarNumber(mCarNumber.getText().toString())){
                     mListener.onSubmit(mCarNumber.getText().toString(), "");
                     this.dismiss();
+                }
+                else {
+                    return;
+                    /*mListener.onSubmit(mCarNumber.getText().toString(), "");
+                    this.dismiss();*/
                 }
                 break;
             case R.id.cancel_button:
@@ -95,6 +103,18 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
                 break;
         }
 
+    }
+
+    private boolean isValidCarNumber(String vehicleNumber) {
+        //String patternType = "^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$";
+        String patternType = "^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$";
+        Pattern pattern = Pattern.compile(patternType);
+        Matcher m = pattern.matcher(vehicleNumber);
+        if (m.find()){
+            return true;
+        }
+        mCarNumber.setError("Not a Valid Car Number!!");
+        return false;
     }
 
     public interface Ask4CarNumberDialogListener {

@@ -30,6 +30,7 @@ import com.urja.motoservice.R;
 import com.urja.motoservice.model.Vehicle;
 import com.urja.motoservice.utils.AppConstants;
 
+import java.util.Collections;
 import java.util.List;
 
 public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.MyViewHolder> {
@@ -52,6 +53,7 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
     public VehicleTypeAdapter(Context mContext, List<Vehicle> vehicleList) {
         this.mContext = mContext;
         this.mVehicleList = vehicleList;
+        Collections.sort(mVehicleList);
     }
 
     @Override
