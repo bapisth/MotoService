@@ -107,7 +107,7 @@ public class Ask4CarNumberDialogFragment extends DialogFragment implements View.
 
     private boolean isValidCarNumber(String vehicleNumber) {
         //String patternType = "^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$";
-        String patternType = "^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$";
+        String patternType = "^[A-Z]{2}[0-9]{2}[A-Z]{0,2}[0-9]{4}$";
         Pattern pattern = Pattern.compile(patternType);
         Matcher m = pattern.matcher(vehicleNumber);
         if (m.find()){
